@@ -20,5 +20,6 @@ router.get('/:id', (req, res, next) => {
 router.put('/played/:id', (req, res, next) => {
   Song.findById(Number(req.params.id))
     .then(song => song.incrementPlaycount())
+    .then(song => res.sendStatus(204))
     .catch(next)
 })
