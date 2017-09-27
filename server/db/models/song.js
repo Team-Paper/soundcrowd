@@ -26,4 +26,8 @@ Song.prototype.like = function (userId) {
   return this.addUser(userId);
 }
 
+Song.prototype.unlike = function (userId) {
+  return this.removeUser(userId);
+}
+
 module.exports = Song;

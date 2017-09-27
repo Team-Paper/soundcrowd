@@ -32,3 +32,12 @@ router.put('/like/:id',(req, res, next) => {
     .then(song => res.sendStatus(200))
     .catch(next)
 })
+
+//"unlike" a song
+router.put('/unlike/:id',(req, res, next) => {
+  if (!req.user) res.sendStatus(401);
+  else Song.findById(Number(req.params.id))
+    .then(song => song.unlike(req.user.id))
+    .then(song => res.sendStatus(200))
+    .catch(next)
+})
