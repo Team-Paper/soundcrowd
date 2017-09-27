@@ -16,6 +16,15 @@ const User = db.define('user', {
   },
   googleId: {
     type: Sequelize.STRING
+  },
+  facebookId: {
+    type: Seqeulize.STRING
+  },
+  bio: {
+    type: Sequelize.STRING
+  },
+  userImage: {
+    type: Sequelize.STRING
   }
 })
 
