@@ -15,4 +15,9 @@ const Song = db.define('song', {
   }
 })
 
+Song.prototype.incrementPlaycount = () => {
+  this.playcount++;
+  return this.save();
+}
+
 module.exports = Song;
