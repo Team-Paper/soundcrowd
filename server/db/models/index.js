@@ -17,8 +17,8 @@ const Comment = require('./comment')
  User.belongsToMany(Song, {through: 'likes'});
 
  //Comments table is a join table with additional info on it
- Song.belongsToMany(User, {through: Comment});
- User.belongsToMany(Song, {through: Comment});
+ Comment.belongsTo(User);
+ Comment.belongsTo(Song);
 
 
 /**
