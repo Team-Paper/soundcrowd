@@ -16,6 +16,11 @@ const Comment = require('./comment')
  Song.belongsToMany(User, {through: 'likes'});
  User.belongsToMany(Song, {through: 'likes'});
 
+ //Comments table is a join table with additional info on it
+ Song.belongsToMany(User, {through: Comment});
+ User.belongsToMany(Song, {through: Comment});
+
+
 /**
  * We'll export all of our models here, so that any time a module needs a model,
  * we can just require it from 'db/models'
