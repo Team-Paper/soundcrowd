@@ -8,11 +8,18 @@ const Song = db.define('song', {
     allowNull: false
   },
   length: Sequelize.FLOAT,
-  playcount: Sequelize.INTEGER,
+  playcount: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
+  },
   title: {
     type: Sequelize.STRING,
     allowNull: false
   }
 })
+
+Song.prototype.incrementPlaycount = function () {
+  return this.update({ playcount: this.playcount + 1 });
+}
 
 module.exports = Song;
