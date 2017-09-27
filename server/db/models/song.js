@@ -7,7 +7,7 @@ const Song = db.define('song', {
     unique: true,
     allowNull: false
   },
-  length: Sequelize.NUMBER,
+  length: Sequelize.FLOAT,
   playcount: Sequelize.INTEGER,
   title: {
     type: Sequelize.STRING,

@@ -9,6 +9,13 @@ const Comment = require('./comment')
  *    BlogPost.belongsTo(User)
  */
 
+ //each song can belong to many users as collaborators
+ Song.belongsToMany(User, {through: 'collaborators', as: 'artist'});
+
+ //'Likes' tables is just a join table
+ Song.belongsToMany(User, {through: 'likes'});
+ User.belongsToMany(Song, {through: 'likes'});
+
 /**
  * We'll export all of our models here, so that any time a module needs a model,
  * we can just require it from 'db/models'
