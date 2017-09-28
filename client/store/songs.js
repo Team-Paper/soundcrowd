@@ -4,7 +4,7 @@ import axios from 'axios'
  * ACTION TYPES
  */
 const GET_SONG = 'GET_USER';
-const REMOVE_SONG = 'REMOVE_USER';
+const REMOVE_SONG = 'REMOVE_SONG';
 const GET_SOME_SONGS = 'GET_SOME_SONGS';
 
 
@@ -40,7 +40,6 @@ const fetchSong = (id) => {
       .catch(console.error.bind(console))
   }
 }
-
 
 
 /**
