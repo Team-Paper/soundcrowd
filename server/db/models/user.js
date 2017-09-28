@@ -18,7 +18,7 @@ const User = db.define('user', {
     type: Sequelize.STRING
   },
   facebookId: {
-    type: Seqeulize.STRING
+    type: Sequelize.STRING
   },
   bio: {
     type: Sequelize.STRING
