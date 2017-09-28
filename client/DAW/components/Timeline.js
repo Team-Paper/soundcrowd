@@ -1,33 +1,35 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Grid, Segment } from 'semantic-ui-react';
 import context from '../context';
-import { Grid, Header, List, Segment } from 'semantic-ui-react';
 
 class Timeline extends React.Component {
 
-  playSound() {
-
-  }
-
-  togglePlay() {
-
-
-  }
-
-  addSoundClip() {
-
-    // dispatch something
-  }
-
-  tick() {
-
-  }
-
-  checkAndPlay() {
-
-  }
+//   playSound() {
+//
+//   }
+//
+//   togglePlay() {
+//
+//
+//   }
+//
+//   addSoundClip() {
+//
+//     // dispatch something
+//   }
+//
+//   tick() {
+//
+//   }
+//
+//   checkAndPlay() {
+//
+//   }
 
   render() {
+    const { clips, tracks } = this.props;
     return (
       <div>
         { tracks.map((track, index) => (
@@ -48,12 +50,26 @@ class Timeline extends React.Component {
       </div>
     );
   }
-};
+}
 
 const mapState = (state, ownProps) => ({
+  clips: [
+    { url: '/GetToDaChoppa.mp3', startTime: 0, track: null },
+    { url: '/NotATumah.mp3', startTime: 0.5, track: 1 },
+  ],
+  tracks: [
+    { id: 1, volume: 100, isMuted: false },
+  ],
+});
 
-})
-
-const mapDispatch = dispatch => ({})
+const mapDispatch = dispatch => ({});
 
 export default connect(mapState, mapDispatch)(Timeline);
+
+/**
+ * PROP TYPES
+ */
+Timeline.propTypes = {
+  clips: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
