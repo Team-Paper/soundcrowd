@@ -12,16 +12,19 @@ class Timeline extends React.Component {
     super(props);
     this.checkAndPlay = this.checkAndPlay.bind(this);
     this.playSound = this.playSound.bind(this);
+    this.tick = this.tick.bind(this);
   }
 
   componentDidMount() {
     // calling createSoundClips here for testing purposes, but will need to be done after project files array is retrieved
-    const { setFiles, createSoundClips } = this.props;
+    const { setFiles, createSoundClips, clips } = this.props;
     setFiles([
       { id: 1, url: '/NotATumah.mp3' },
       { id: 2, url: '/GetToDaChoppa.mp3' },
     ])
-    createSoundClips(files);
+    createSoundClips(clips);
+
+    setTimeout(() => this.tick(), 2000);
   }
 
   playSound(buffer, startTime) {
@@ -35,7 +38,8 @@ class Timeline extends React.Component {
   }
 
   togglePlay() {
-
+    // toggle tick
+    // dispatch...
   }
 
   addSoundClip() {
@@ -44,17 +48,22 @@ class Timeline extends React.Component {
   }
 
   tick() {
-    const { time, playedAt, start, setTime, isPlaying } = this.props;
+    const { time, playedAt, start, setTime, isPlaying, tempo } = this.props;
     setTime((context.currentTime - playedAt) + start);
     const timeSubDivide = 60 / tempo;
     this.checkAndPlay(time);
+    console.log('time is', time);
+    setTimeout(this.tick, 0);
   }
 
   checkAndPlay(time) {
     const { soundClips } = this.props;
+    console.log('soundClips are', soundClips);
+    // console.log('checked!');
     soundClips.forEach((soundClip, index) => {
-      if (time > soundClip.time) {
-        this.playSound(soundClip.sound.buffer, this.time - soundClip.time);
+      console.log('time is ', time, 'and startTime is', soundClip.startTime)
+      if (time > soundClip.startTime) {
+        this.playSound(soundClip.sound.buffer, this.time - soundClip.startTime);
         console.log('sound played at', time);
       }
     });
@@ -73,7 +82,7 @@ class Timeline extends React.Component {
               <Segment.Group horizontal>
                 {
                   clips.filter(clip => clip.track === track.id)
-                    .map(clip => <Segment>{clip.url} starting at {clip.startTime}</Segment>)
+                    .map(clip => <Segment key={clip.url}>{clip.url} starting at {clip.startTime}</Segment>)
                 }
               </Segment.Group>
             </Grid.Column>
@@ -94,7 +103,7 @@ const mapState = (state, ownProps) => ({
   files: state.files,
   clips: [
     { url: '/GetToDaChoppa.mp3', startTime: 0, track: null },
-    { url: '/NotATumah.mp3', startTime: 0.5, track: 1 },
+    { url: '/NotATumah.mp3', startTime: 3, track: 1 },
   ],
   tracks: [
     { id: 1, volume: 100, isMuted: false },
@@ -102,7 +111,7 @@ const mapState = (state, ownProps) => ({
 });
 
 const mapDispatch = dispatch => ({
-  setTime: () => dispatch(setTime()),
+  setTime: (time) => dispatch(setTime(time)),
   setFiles: (files) => dispatch(setFiles(files)),
   createSoundClips: (files) => dispatch(createSoundClips(files)),
 });

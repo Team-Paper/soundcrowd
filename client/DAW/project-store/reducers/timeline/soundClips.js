@@ -1,3 +1,6 @@
+import axios from 'axios';
+import context from '../../../context';
+
 // ACTION TYPES
 const SET_SOUND_CLIPS = 'SET_SOUND_CLIPS';
 const ADD_SOUND_CLIP = 'ADD_SOUND_CLIP';
@@ -32,7 +35,11 @@ export const createSoundClips = (files) => dispatch => {
       .then(res => res.data)
       .then(responseAudio => context.decodeAudioData(responseAudio))
       .then(audio => {
-        addSoundClip({ sound: audio, time: file.startTime });
+        let buffer = context.createBufferSource();
+        console.log('decoding audio data');
+        buffer.connect(context.destination);
+        buffer.buffer = audio;
+        addSoundClip({ sound: buffer, time: file.startTime });
       })
   }))
   .catch(console.error);
