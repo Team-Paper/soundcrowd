@@ -75,7 +75,7 @@ Timeline.prototype.tick = function() {
   // console.log('time is', this.time)
   // console.log('tick!');
   this.checkAndPlay(now);
-  this.isPlaying && setTimeout(this._tick, 0);
+  this.isPlaying && setTimeout(this._tick, 20);
 };
 
 Timeline.prototype.checkAndPlayClick = function(timeSubDivide) {
