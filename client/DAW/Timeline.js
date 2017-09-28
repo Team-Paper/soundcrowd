@@ -1,4 +1,21 @@
 import axios from 'axios';
+import store from './project-store';
+
+class Timeline {
+  constructor() {
+    store.subscribe(() => store.getState())
+    const state = store.getState()
+
+    this.isPlaying = state.timeline.isPlaying
+  }
+
+
+
+}
+
+
+
+
 
 let project = {
   clips: [
@@ -90,7 +107,7 @@ Timeline.prototype.checkAndPlay = function(now) {
   /* this may get inefficient for large arrays. ToDo: add lookahead scheduling to push onto this array just before time is scheduled, and have Timeline on a webworker so it never gets interrupted (per https://www.html5rocks.com/en/tutorials/audio/scheduling/)
   */
   this.soundClips.forEach((soundClip, index) => {
-    if(now > soundClip.time) {
+    if(now + 10 > soundClip.time) {
       // console.log('tempo is', this.tempo)
       // console.dir(soundClip.sound);
       Timeline.playSound(soundClip.sound.buffer, this.time - soundClip.time);

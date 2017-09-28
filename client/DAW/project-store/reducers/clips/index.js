@@ -11,6 +11,8 @@ export const setClips = clips => ({
 // REDUCER
 export default function reducer(clips = [], action) {
   switch(action.type) {
+    case SET_CLIPS:
+      return action.clips;
     default:
       return clips;
   }

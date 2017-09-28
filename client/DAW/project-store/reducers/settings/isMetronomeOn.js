@@ -13,6 +13,6 @@ export default function reducer(isMetronomeOn = false, action) {
     case SET_IS_METRONOME_ON:
       return action.isMetronomeOn;
     default:
-      return isMetronomeOn
+      return isMetronomeOn;
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import DAW from '../DAW'
+import DAW from '../DAW/components'
 
 /**
  * COMPONENT
