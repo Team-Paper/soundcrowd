@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {withRouter, Link} from 'react-router-dom'
+import {Menu} from 'semantic-ui-react'
 import {logout} from '../store'
 
 /**
@@ -15,22 +16,28 @@ const Main = (props) => {
 
   return (
     <div>
-      <h1>BOILERMAKER</h1>
-      <nav>
+      <Menu floated fixed="top" stackable >
+      <Menu.Item header>SOUNDCROWD</Menu.Item>
         {
           isLoggedIn
-            ? <div>
-              {/* The navbar will show these links after you log in */}
-              <Link to='/home'>Home</Link>
-              <a href='#' onClick={handleClick}>Logout</a>
-            </div>
-            : <div>
-              {/* The navbar will show these links before you log in */}
-              <Link to='/login'>Login</Link>
-              <Link to='/signup'>Sign Up</Link>
-            </div>
+            ? <Menu.Menu>
+                <Menu.Item as={Link} to="/home">
+                  Home
+                </Menu.Item>
+                <Menu.Item onClick={handleClick}>
+                  Logout
+                </Menu.Item>
+            </Menu.Menu>
+            : <Menu.Menu>
+                <Menu.Item as={Link} to="/login">
+                  Login
+                </Menu.Item>
+                <Menu.Item as={Link} to="/signup">
+                  Sign Up
+                </Menu.Item>
+              </Menu.Menu>
         }
-      </nav>
+      </Menu>
       <hr />
       {children}
     </div>
