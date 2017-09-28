@@ -3,13 +3,22 @@ import store from './project-store';
 
 class Timeline {
   constructor() {
-    store.subscribe(() => store.getState())
+    store.subscribe(this.subscribe)
     const state = store.getState()
 
-    this.isPlaying = state.timeline.isPlaying
+    this.isPlaying = state.timeline.isPlaying;
+    this.subscribe();
   }
 
+  subscribe() {
+    const newState = store.getState();
+    if (this.isPlaying !== newState.timeline.isPlaying) this.togglePlay();
+  }
 
+  togglePlay() {
+
+    store.dispatch()
+  }
 
 }
 

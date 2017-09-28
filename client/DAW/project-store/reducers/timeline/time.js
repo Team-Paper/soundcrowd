@@ -8,7 +8,7 @@ export const setTime = time => ({
 });
 
 // REDUCER
-export default function reducer(time = [], action) {
+export default function reducer(time = 0, action) {
   switch(action.type) {
     case SET_TIME:
       return action.time;
