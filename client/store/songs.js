@@ -3,7 +3,7 @@ import axios from 'axios'
 /**
  * ACTION TYPES
  */
-const GET_SONG = 'GET_USER';
+const GET_SONG = 'GET_SONG';
 const REMOVE_SONG = 'REMOVE_SONG';
 const GET_SOME_SONGS = 'GET_SOME_SONGS';
 
@@ -57,9 +57,9 @@ export const fetchUserSongs = (userId) => {
 export default function (state = defaultSongs, action) {
   switch (action.type) {
     case GET_SONG:
-      return [...state, action.song];
+      return state.slice().push(action.song);
     case GET_SOME_SONGS:
-      return [...state, ...action.songs];
+      return [].concat(action.songs, state);
     case REMOVE_SONG:
       return state.filter(song => song.id !== action.song.id);
     default:
