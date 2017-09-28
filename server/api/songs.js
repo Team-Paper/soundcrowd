@@ -1,10 +1,18 @@
 const router = require('express').Router()
-const {Song} = require('../db/models')
+const { Song } = require('../db/models')
 module.exports = router
 
 //get all songs
 router.get('/', (req, res, next) => {
   Song.findAll()
+    .then(songs => res.json(songs))
+    .catch(next)
+})
+
+//get a number of top-liked songs
+router.get('/top/:number', (req, res, next) => {
+  const limit = Number(req.params.number);
+  Song.findAll({ order: [['playcount', 'DESC']], limit: limit })
     .then(songs => res.json(songs))
     .catch(next)
 })
@@ -25,7 +33,7 @@ router.put('/played/:id', (req, res, next) => {
 })
 
 //"like" a song
-router.put('/like/:id',(req, res, next) => {
+router.put('/like/:id', (req, res, next) => {
   if (!req.user) res.sendStatus(401);
   else Song.findById(Number(req.params.id))
     .then(song => song.like(req.user.id))
@@ -34,7 +42,7 @@ router.put('/like/:id',(req, res, next) => {
 })
 
 //"unlike" a song
-router.put('/unlike/:id',(req, res, next) => {
+router.put('/unlike/:id', (req, res, next) => {
   if (!req.user) res.sendStatus(401);
   else Song.findById(Number(req.params.id))
     .then(song => song.unlike(req.user.id))
