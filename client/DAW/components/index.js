@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Grid, Header, List, Segment } from 'semantic-ui-react';
+import Timeline from './Timeline';
+import context from '../context';
 
 /**
  * COMPONENT
@@ -19,21 +21,7 @@ export const DAW = (props) => {
         </List>
       </Grid.Column>
       <Grid.Column width={13}>
-        { tracks.map((track, index) => (
-          <Grid key={track.id}>
-            <Grid.Column width={2}>
-              Track #{index + 1}
-            </Grid.Column>
-            <Grid.Column width={14}>
-              <Segment.Group horizontal>
-                {
-                  clips.filter(clip => clip.track === track.id)
-                    .map(clip => <Segment>{clip.url} starting at {clip.startTime}</Segment>)
-                }
-              </Segment.Group>
-            </Grid.Column>
-          </Grid>
-        )) }
+        <Timeline />
       </Grid.Column>
     </Grid>
   );
