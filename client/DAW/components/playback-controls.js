@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Icon, Menu } from 'semantic-ui-react';
 import context from '../context';
 import { setIsPlaying } from '../project-store/reducers/timeline/isPlaying';
+import { setStart } from '../project-store/reducers/timeline/playedAt';
 
 const PlaybackControls = (props) => {
   const { isPlaying, togglePlay } = props;
@@ -29,11 +30,11 @@ const mapDispatch = dispatch => ({
   togglePlay(isPlaying) {
     if (!isPlaying) {
       dispatch(setIsPlaying(true));
-      // playedAt = context.currentTime;
+      dispatch(setStart(context.currentTime));
       // _tick();
     } else {
       dispatch(setIsPlaying(false));
-      // playedAt = null;
+      dispatch(setStart(null));
       // must cancel this_tick();
     }
   },
