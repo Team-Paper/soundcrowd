@@ -1,34 +1,41 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
+import {Grid, Header} from 'semantic-ui-react'
 
 /**
  * COMPONENT
  */
-export const UserHome = (props) => {
-  const {email} = props
+export const Project = (props) => {
+  const {project} = props
 
   return (
-    <div>
-      <h3>Welcome, {email}</h3>
-    </div>
+    <Grid divided>
+      <Grid.Column width={3}>
+        <Header as='h3'>{project.name}</Header>
+        <p>library goes here</p>
+      </Grid.Column>
+      <Grid.Column width={9}>
+        Timeline Goes Here
+      </Grid.Column>
+    </Grid>
   )
 }
 
 /**
  * CONTAINER
  */
-const mapState = (state) => {
+const mapState = () => {
   return {
-    email: state.user.email
+    project: { name: 'Current Project' },
   }
 }
 
-export default connect(mapState)(UserHome)
+export default connect(mapState)(Project)
 
 /**
  * PROP TYPES
  */
-UserHome.propTypes = {
-  email: PropTypes.string
+Project.propTypes = {
+  project: PropTypes.object.isRequired,
 }
