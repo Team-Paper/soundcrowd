@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Grid, Header} from 'semantic-ui-react'
+import {Grid, Header, List} from 'semantic-ui-react'
 
 /**
  * COMPONENT
@@ -13,7 +13,9 @@ export const DAW = (props) => {
     <Grid divided>
       <Grid.Column width={3}>
         <Header as='h3'>{name}</Header>
-        <p>library goes here</p>
+        <List>
+          { library.map(item => <List.Item key={item.id}>{item.url}</List.Item>) }
+        </List>
       </Grid.Column>
       <Grid.Column width={9}>
         Timeline Goes Here
