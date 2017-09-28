@@ -1,14 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Icon, Menu } from 'semantic-ui-react'
+import { Icon, Menu } from 'semantic-ui-react';
+import context from '../context';
+import { setIsPlaying } from '../project-store/reducers/timeline/isPlaying';
 
 const PlaybackControls = (props) => {
-  const { togglePlay } = props;
+  const { isPlaying, togglePlay } = props;
   return (
     <Menu compact icon>
-      <Menu.Item name="play" onClick={togglePlay}>
-        <Icon name="play" />
-      </Menu.Item>
+      {
+        isPlaying ?
+          <Menu.Item name="pause" onClick={() => togglePlay(isPlaying)}>
+            <Icon name="pause" />
+          </Menu.Item> :
+          <Menu.Item name="play" onClick={() => togglePlay(isPlaying)}>
+            <Icon name="play" />
+          </Menu.Item>
+      }
     </Menu>
   );
 };
@@ -18,8 +26,16 @@ const mapState = state => ({
 });
 
 const mapDispatch = dispatch => ({
-  togglePlay() {
-    console.log('toggled');
+  togglePlay(isPlaying) {
+    if (!isPlaying) {
+      dispatch(setIsPlaying(true));
+      // playedAt = context.currentTime;
+      // _tick();
+    } else {
+      dispatch(setIsPlaying(false));
+      // playedAt = null;
+      // must cancel this_tick();
+    }
   },
 });
 
