@@ -10,7 +10,10 @@ const Comment = require('./comment')
  */
 
  //each song can belong to many users as collaborators
+ //each collaborator can have many songs
  Song.belongsToMany(User, {through: 'collaborators', as: 'artist'});
+ User.belongsToMany(Song, {through: 'collaborators', as: 'compositions' });
+
 
  //'Likes' tables is just a join table
  Song.belongsToMany(User, {through: 'likes'});
