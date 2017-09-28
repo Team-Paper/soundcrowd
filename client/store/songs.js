@@ -61,7 +61,7 @@ export default function (state = defaultSongs, action) {
     case GET_SOME_SONGS:
       return [...state, ...action.songs];
     case REMOVE_SONG:
-      return [...state].filter(song => song.id !== action.song.id);
+      return state.filter(song => song.id !== action.song.id);
     default:
       return state;
   }
