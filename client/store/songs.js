@@ -7,7 +7,6 @@ const GET_SONG = 'GET_USER';
 const REMOVE_SONG = 'REMOVE_SONG';
 const GET_SOME_SONGS = 'GET_SOME_SONGS';
 
-
 /**
  * INITIAL STATE
  */
@@ -25,27 +24,37 @@ const getSomeSongs = songs => ({ type: GET_SOME_SONGS, songs });
  * THUNK CREATORS
  */
 
-const fetchTopSongs = (numSongs) => {
+export const fetchTopSongs = (numSongs) => {
   return (dispatch) => {
     return axios.get(`/api/songs/top/${numSongs}`)
+      .then(res => res.data)
       .then(songs => dispatch(getSomeSongs(songs)))
       .catch(console.error.bind(console))
   }
 }
 
-const fetchSong = (id) => {
+export const fetchSong = (id) => {
   return (dispatch) => {
     return axios.get(`/api/songs/${id}`)
+      .then(res => res.data)
       .then(song => dispatch(getSong(song)))
       .catch(console.error.bind(console))
   }
 }
 
+export const fetchUserSongs = (userId) => {
+  return (dispatch) => {
+    return axios.get(`/api/users/${userId}/songs`)
+      .then(res => res.data)
+      .then(songs => dispatch(getSomeSongs(songs)))
+      .catch(console.error.bind(console))
+  }
+}
 
 /**
  * REDUCER
  */
-export default function (state = defaultUser, action) {
+export default function (state = defaultSongs, action) {
   switch (action.type) {
     case GET_SONG:
       return [...state, action.song];
