@@ -1,11 +1,9 @@
-import React from 'react'
-import DAW from '../DAW/components'
+import React from 'react';
+import DAW from '../DAW/';
 
 /**
  * COMPONENT
  */
-export const Project = () => {
-  return <DAW />
-}
+export const Project = () => (<DAW />);
 
-export default Project
+export default Project;
