@@ -16,7 +16,7 @@ const Main = (props) => {
 
   return (
     <div>
-      <Menu floated fixed="top" stackable >
+      <Menu stackable >
       <Menu.Item header>SOUNDCROWD</Menu.Item>
         {
           isLoggedIn
@@ -38,7 +38,6 @@ const Main = (props) => {
               </Menu.Menu>
         }
       </Menu>
-      <hr />
       {children}
     </div>
   )
