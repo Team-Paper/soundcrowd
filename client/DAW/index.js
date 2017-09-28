@@ -7,7 +7,7 @@ import {Grid, Header} from 'semantic-ui-react'
  * COMPONENT
  */
 export const DAW = (props) => {
-  const {name} = props
+  const {name, clips, library, tracks, settings} = props
 
   return (
     <Grid divided>
@@ -29,6 +29,17 @@ const mapState = () => {
   // return state.project
   return {
     name: 'Current Project',
+    clips: [
+      { url: '/GetToDaChoppa.mp3', startTime: 0, track: null },
+      { url: '/NotATumah.mp3', startTime: .5, track: 1 }
+    ],
+    library: [
+      { id: 1, url: '/NotATumah.mp3' }
+    ],
+    tracks: [
+      { id: 1, volume: 100, isMuted: false }
+    ],
+    settings: { tempo: 60, isMetronomeOn: false },
   }
 }
 
@@ -39,4 +50,8 @@ export default connect(mapState)(DAW)
  */
 DAW.propTypes = {
   name: PropTypes.string.isRequired,
+  clips: PropTypes.array.isRequired,
+  library: PropTypes.array.isRequired,
+  tracks: PropTypes.array.isRequired,
+  settings: PropTypes.object.isRequired,
 }
