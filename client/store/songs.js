@@ -7,7 +7,6 @@ const GET_SONG = 'GET_USER';
 const REMOVE_SONG = 'REMOVE_SONG';
 const GET_SOME_SONGS = 'GET_SOME_SONGS';
 
-
 /**
  * INITIAL STATE
  */
@@ -41,6 +40,13 @@ const fetchSong = (id) => {
   }
 }
 
+const fetchUserSongs = (userId) => {
+  return (dispatch) => {
+    return axios.get(`/api/users/${userId}/songs`)
+      .then(songs => dispatch(getSomeSongs(songs)))
+      .catch(console.error.bind(console))
+  }
+}
 
 /**
  * REDUCER
