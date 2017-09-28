@@ -5,6 +5,7 @@ import { Grid, Segment } from 'semantic-ui-react';
 import context from '../context';
 import { setTime } from '../project-store/reducers/timeline/time';
 import { setFiles } from '../project-store/reducers/files';
+import { createSoundClips } from '../project-store/reducers/timeline/soundClips';
 
 class Timeline extends React.Component {
   constructor(props){
@@ -15,7 +16,12 @@ class Timeline extends React.Component {
 
   componentDidMount() {
     // calling createSoundClips here for testing purposes, but will need to be done after project files array is retrieved
-
+    const { setFiles, createSoundClips } = this.props;
+    setFiles([
+      { id: 1, url: '/NotATumah.mp3' },
+      { id: 2, url: '/GetToDaChoppa.mp3' },
+    ])
+    createSoundClips(files);
   }
 
   playSound(buffer, startTime) {
@@ -97,7 +103,8 @@ const mapState = (state, ownProps) => ({
 
 const mapDispatch = dispatch => ({
   setTime: () => dispatch(setTime()),
-  setFiles: () => dispatch(setTime()),
+  setFiles: (files) => dispatch(setFiles(files)),
+  createSoundClips: (files) => dispatch(createSoundClips(files)),
 });
 
 export default connect(mapState, mapDispatch)(Timeline);
