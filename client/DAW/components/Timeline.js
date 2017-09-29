@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Grid, Segment } from 'semantic-ui-react';
-import { PlaybackControls } from '../components';
+import { PlaybackControls, TrackList } from '../components';
 import context from '../context';
 import { setTime } from '../project-store/reducers/timeline/time';
 import { setFiles } from '../project-store/reducers/files';
@@ -75,23 +75,9 @@ class Timeline extends React.Component {
   render() {
     const { clips, tracks } = this.props;
     return (
-      <div>
+      <div style={{ position: 'relative', overflowX: 'scroll' }}>
         <PlaybackControls />
-        { tracks.map((track, index) => (
-          <Grid key={track.id}>
-            <Grid.Column width={2}>
-              Track #{index + 1}
-            </Grid.Column>
-            <Grid.Column width={14}>
-              <Segment.Group horizontal>
-                {
-                  clips.filter(clip => clip.track === track.id)
-                    .map(clip => <Segment key={clip.url}>{clip.url} starting at {clip.startTime}</Segment>)
-                }
-              </Segment.Group>
-            </Grid.Column>
-          </Grid>
-        )) }
+        <TrackList tracks={tracks} clips={clips} />
       </div>
     );
   }
@@ -106,11 +92,13 @@ const mapState = (state, ownProps) => ({
   soundClips: state.timeline.soundClips,
   files: state.files,
   clips: [
-    { url: '/GetToDaChoppa.mp3', startTime: 4, track: null },
-    { url: '/NotATumah.mp3', startTime: 3, track: 1 },
+    { url: '/GetToDaChoppa.mp3', startTime: 4, track: 2, duration: 1.7284353741496599 },
+    { url: '/NotATumah.mp3', startTime: 3, track: 1, duration: 3.197097505668934 },
+    { url: '/GetToDaChoppa.mp3', startTime: 10, track: 1, duration: 1.7284353741496599 },
   ],
   tracks: [
     { id: 1, volume: 100, isMuted: false },
+    { id: 2, volume: 100, isMuted: false },
   ],
 });
 
