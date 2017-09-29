@@ -57,7 +57,7 @@ export const fetchUserSongs = (userId) => {
 export default function (state = defaultSongs, action) {
   switch (action.type) {
     case GET_SONG:
-      return state.slice().push(action.song);
+      return [...state, action.song];
     case GET_SOME_SONGS:
       return [].concat(action.songs, state);
     case REMOVE_SONG:
