@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Grid, Segment } from 'semantic-ui-react';
+import { PlaybackControls } from '../components';
 import context from '../context';
 import { setTime } from '../project-store/reducers/timeline/time';
 import { setFiles } from '../project-store/reducers/files';
@@ -75,6 +76,7 @@ class Timeline extends React.Component {
     const { clips, tracks } = this.props;
     return (
       <div>
+        <PlaybackControls />
         { tracks.map((track, index) => (
           <Grid key={track.id}>
             <Grid.Column width={2}>
