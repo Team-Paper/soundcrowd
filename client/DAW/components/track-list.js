@@ -3,22 +3,35 @@ import React from 'react';
 import { Track } from '../components';
 
 const styles = {
-  trackList: {
-    position: 'relative',
-    marginTop: '4em',
-    boxShadow: '0 -1px 0 0 rgba(34,36,38,.15)',
+  trackList(width) {
+    return {
+      position: 'relative',
+      width: `${width}px`,
+      marginTop: '4em',
+      paddingTop: '1em',
+      boxShadow: '0 -1px 0 0 rgba(34,36,38,.15)',
+    };
   },
 };
 
+const getWidth = (clips, zoom) => {
+  let end = 10; // seconds (min-duration)
+  clips.forEach((clip) => {
+    end = Math.max(end, clip.startTime + clip.duration);
+  });
+  return (zoom * end) + 180; // 180 = control card width
+};
 
 const TrackList = (props) => {
   const { tracks, clips } = props;
+  const zoom = 200; // pixels per second
   return (
-    <div style={styles.trackList}>
+    <div style={styles.trackList(getWidth(clips, zoom))}>
       { tracks.map((track, index) => (
         <Track
           key={track.id}
           index={index}
+          zoom={zoom}
           clips={clips.filter(clip => clip.track === track.id)}
         />
       )) }

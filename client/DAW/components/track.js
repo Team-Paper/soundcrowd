@@ -6,27 +6,34 @@ const styles = {
   track: {
     position: 'relative',
     height: '10em',
-    margin: '1em 0',
+    marginBottom: '1em',
     boxShadow: '0 1px 0 0 rgba(34,36,38,.15)',
   },
   trackControls: {
     position: 'fixed',
-    width: '12em',
+    width: '180px',
     height: '10em',
     margin: '0',
   },
   trackTimeline: {
-    // minWidth: '100%',
-    width: '2000px',
+    position: 'relative',
     height: '100%',
-    marginLeft: '12em',
-    background: '#22a3ef',
+    marginLeft: '180px',
+  },
+  clip(clip, zoom) {
+    return {
+      position: 'absolute',
+      left: `${clip.startTime * zoom}px`,
+      width: `${clip.duration * zoom}px`,
+      height: '100%',
+      background: '#22a3ef',
+    };
   },
 };
 
 
 const Track = (props) => {
-  const { index, clips } = props;
+  const { index, clips, zoom } = props;
   return (
     <div className="track" style={styles.track}>
       <Card style={styles.trackControls}>
@@ -41,7 +48,7 @@ const Track = (props) => {
       </Card>
       <div style={styles.trackTimeline}>
         { clips.map(clip => (
-          <div key={clip.url}>
+          <div key={clip.url} style={styles.clip(clip, zoom)}>
             {clip.url} starting at {clip.startTime}
           </div>
         )) }

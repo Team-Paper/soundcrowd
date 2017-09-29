@@ -92,11 +92,13 @@ const mapState = (state, ownProps) => ({
   soundClips: state.timeline.soundClips,
   files: state.files,
   clips: [
-    { url: '/GetToDaChoppa.mp3', startTime: 4, track: null },
-    { url: '/NotATumah.mp3', startTime: 3, track: 1 },
+    { url: '/GetToDaChoppa.mp3', startTime: 4, track: 2, duration: 1.7284353741496599 },
+    { url: '/NotATumah.mp3', startTime: 3, track: 1, duration: 3.197097505668934 },
+    { url: '/GetToDaChoppa.mp3', startTime: 10, track: 1, duration: 1.7284353741496599 },
   ],
   tracks: [
     { id: 1, volume: 100, isMuted: false },
+    { id: 2, volume: 100, isMuted: false },
   ],
 });
 
