@@ -5,7 +5,7 @@ import { Grid, Segment } from 'semantic-ui-react';
 import context from '../context';
 import { setTime } from '../project-store/reducers/timeline/time';
 import { setFiles } from '../project-store/reducers/files';
-import { createSoundClips } from '../project-store/reducers/timeline/soundClips';
+import { createSoundClips, removeSoundClip } from '../project-store/reducers/timeline/soundClips';
 
 class Timeline extends React.Component {
   constructor(props){
@@ -34,7 +34,7 @@ class Timeline extends React.Component {
     }
     source.buffer = buffer;
     source.connect(context.destination);
-    source.start(playTime, startTime);
+    source.start(0, startTime);
   }
 
   togglePlay() {
@@ -49,21 +49,23 @@ class Timeline extends React.Component {
 
   tick() {
     const { time, playedAt, start, setTime, isPlaying, tempo } = this.props;
+    // const now = (context.currentTime - playedAt) + start
     setTime((context.currentTime - playedAt) + start);
     const timeSubDivide = 60 / tempo;
     this.checkAndPlay(time);
-    console.log('time is', time);
+    // console.log('time is', time);
     setTimeout(this.tick, 0);
   }
 
   checkAndPlay(time) {
-    const { soundClips } = this.props;
-    console.log('soundClips are', soundClips);
+    const { soundClips, removeSoundClip } = this.props;
+    // console.log('soundClips are', soundClips);
     // console.log('checked!');
     soundClips.forEach((soundClip, index) => {
-      console.log('time is ', time, 'and startTime is', soundClip.startTime)
-      if (time > soundClip.startTime) {
-        this.playSound(soundClip.sound.buffer, this.time - soundClip.startTime);
+      // console.log('time is ', time, 'and startTime is', soundClip.time)
+      if (time > soundClip.time) {
+        this.playSound(soundClip.sound.buffer, this.time - soundClip.time);
+        removeSoundClip(soundClip);
         console.log('sound played at', time);
       }
     });
@@ -102,7 +104,7 @@ const mapState = (state, ownProps) => ({
   soundClips: state.timeline.soundClips,
   files: state.files,
   clips: [
-    { url: '/GetToDaChoppa.mp3', startTime: 0, track: null },
+    { url: '/GetToDaChoppa.mp3', startTime: 4, track: null },
     { url: '/NotATumah.mp3', startTime: 3, track: 1 },
   ],
   tracks: [
@@ -114,6 +116,7 @@ const mapDispatch = dispatch => ({
   setTime: (time) => dispatch(setTime(time)),
   setFiles: (files) => dispatch(setFiles(files)),
   createSoundClips: (files) => dispatch(createSoundClips(files)),
+  removeSoundClip: soundClip => dispatch(removeSoundClip(soundClip)),
 });
 
 export default connect(mapState, mapDispatch)(Timeline);
