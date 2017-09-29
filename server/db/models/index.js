@@ -22,6 +22,8 @@ const Comment = require('./comment')
  //Comments table is a join table with additional info on it
  Comment.belongsTo(User);
  Comment.belongsTo(Song);
+ Song.hasMany(Comment);
+ User.hasMany(Comment);
 
 
 /**
