@@ -6,13 +6,19 @@ import context from '../context';
 import { setTime } from '../project-store/reducers/timeline/time';
 import { setFiles } from '../project-store/reducers/files';
 import { createSoundClips, removeSoundClip } from '../project-store/reducers/timeline/soundClips';
+import { play, pause } from '../project-store/reducers/timeline/isPlaying';
+import { setPlayedAt } from '../project-store/reducers/timeline/playedAt';
 
 class Timeline extends React.Component {
   constructor(props){
     super(props);
+    this.state = {
+      playing: [],
+    }
     this.checkAndPlay = this.checkAndPlay.bind(this);
     this.playSound = this.playSound.bind(this);
     this.tick = this.tick.bind(this);
+    this.togglePlay = this.togglePlay.bind(this);
   }
 
   componentDidMount() {
@@ -24,7 +30,9 @@ class Timeline extends React.Component {
     ])
     createSoundClips(clips);
 
-    setTimeout(() => this.tick(), 2000);
+    // these test playing and pausing
+    setTimeout(() => this.togglePlay(), 1000);
+    setTimeout(() => this.togglePlay(), 3000);
   }
 
   playSound(buffer, startTime) {
@@ -35,16 +43,23 @@ class Timeline extends React.Component {
     source.buffer = buffer;
     source.connect(context.destination);
     source.start(0, startTime);
+    this.setState({ playing: this.state.playing.concat(source) });
   }
 
   togglePlay() {
-    // toggle tick
-    // dispatch...
-  }
-
-  addSoundClip() {
-
-    // dispatch something
+    const { isPlaying, play, pause, setPlayedAt, soundClips } = this.props;
+    if (!isPlaying) {
+      play();
+      setPlayedAt(context.currentTime);
+      this.tick();
+    } else {
+      pause();
+      this.state.playing.forEach(sound => {
+        sound.stop();
+      });
+      this.setState({ playing: [] });
+      setPlayedAt(null);
+    }
   }
 
   tick() {
@@ -54,7 +69,7 @@ class Timeline extends React.Component {
     const timeSubDivide = 60 / tempo;
     this.checkAndPlay(time);
     // console.log('time is', time);
-    setTimeout(this.tick, 0);
+    isPlaying && setTimeout(this.tick, 0);
   }
 
   checkAndPlay(time) {
@@ -104,8 +119,8 @@ const mapState = (state, ownProps) => ({
   soundClips: state.timeline.soundClips,
   files: state.files,
   clips: [
-    { url: '/GetToDaChoppa.mp3', startTime: 4, track: null },
-    { url: '/NotATumah.mp3', startTime: 3, track: 1 },
+    { url: '/GetToDaChoppa.mp3', startTime: 0, track: null },
+    { url: '/NotATumah.mp3', startTime: 1, track: 1 },
   ],
   tracks: [
     { id: 1, volume: 100, isMuted: false },
@@ -117,6 +132,9 @@ const mapDispatch = dispatch => ({
   setFiles: (files) => dispatch(setFiles(files)),
   createSoundClips: (files) => dispatch(createSoundClips(files)),
   removeSoundClip: soundClip => dispatch(removeSoundClip(soundClip)),
+  play: () => dispatch(play()),
+  pause: () => dispatch(pause()),
+  setPlayedAt: time => dispatch(setPlayedAt(time)),
 });
 
 export default connect(mapState, mapDispatch)(Timeline);
