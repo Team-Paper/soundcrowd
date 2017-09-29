@@ -4,6 +4,7 @@ import context from '../../../context';
 // ACTION TYPES
 const SET_SOUND_CLIPS = 'SET_SOUND_CLIPS';
 const ADD_SOUND_CLIP = 'ADD_SOUND_CLIP';
+const REMOVE_SOUND_CLIP = 'REMOVE_SOUND_CLIP';
 
 // ACTION CREATORS
 export const setSoundClips = soundClips => ({
@@ -14,6 +15,11 @@ export const setSoundClips = soundClips => ({
 export const addSoundClip = soundClip => ({
   type: ADD_SOUND_CLIP,
   soundClip,
+});
+
+export const removeSoundClip = soundClip => ({
+  type: REMOVE_SOUND_CLIP,
+  soundClip,
 })
 
 // REDUCER
@@ -23,6 +29,8 @@ export default function reducer(soundClips = [], action) {
       return action.soundClips;
     case ADD_SOUND_CLIP:
       return soundClips.concat(action.soundClip);
+    case REMOVE_SOUND_CLIP:
+      return soundClips.filter(soundClip => soundClip.time !== action.soundClip.time)
     default:
       return soundClips;
   }
@@ -39,7 +47,7 @@ export const createSoundClips = (files) => dispatch => {
         console.log('decoding audio data');
         buffer.connect(context.destination);
         buffer.buffer = audio;
-        addSoundClip({ sound: buffer, time: file.startTime });
+        dispatch(addSoundClip({ sound: buffer, time: file.startTime }));
       })
   }))
   .catch(console.error);
