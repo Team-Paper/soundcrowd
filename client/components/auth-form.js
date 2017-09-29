@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Form, Container, Input, Button, Label } from 'semantic-ui-react';
 import { auth } from '../store';
 
 /**
@@ -10,23 +11,27 @@ const AuthForm = (props) => {
   const { name, displayName, handleSubmit, error } = props;
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor='email'><small>Email</small></label>
-          <input name='email' type='text' />
-        </div>
-        <div>
-          <label htmlFor='password'><small>Password</small></label>
-          <input name='password' type='password' />
-        </div>
-        <div>
-          <button type='submit'>{displayName}</button>
-        </div>
+    <Container>
+      <Form onSubmit={handleSubmit} name={name}>
+        <Form.Field>
+          <Label htmlFor='email'><small>Email</small></Label>
+          <Input name='email' type='text' />
+        </Form.Field>
+        <Form.Field>
+          <Label htmlFor='password'><small>Password</small></Label>
+          <Input name='password' type='password' />
+        </Form.Field>
+        <Form.Field>
+          <Container textAlign='center'>
+            <Button positive type='submit'>{displayName}</Button>
+          </Container>
+        </Form.Field>
         {error && error.response && <div> {error.response.data} </div>}
-      </form>
-      <a href='/auth/google'>{displayName} with Google</a>
-    </div>
+      </Form>
+      <Container textAlign='center'>
+        <a href='/auth/google'>{displayName} with Google</a>
+      </Container>
+    </Container>
   );
 };
 
