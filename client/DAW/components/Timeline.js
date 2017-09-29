@@ -75,7 +75,7 @@ class Timeline extends React.Component {
   render() {
     const { clips, tracks } = this.props;
     return (
-      <div>
+      <div style={{ position: 'relative', overflowX: 'scroll' }}>
         <PlaybackControls />
         { tracks.map((track, index) => (
           <Track
