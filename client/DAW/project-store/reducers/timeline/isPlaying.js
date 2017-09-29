@@ -32,3 +32,7 @@ export default function reducer(isPlaying = false, action) {
       return isPlaying
   }
 }
+
+export const playThunk = () => dispatch => {
+  return Promise.resolve(dispatch(play()));
+};

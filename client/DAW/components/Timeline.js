@@ -7,8 +7,9 @@ import context from '../context';
 import { setTime } from '../project-store/reducers/timeline/time';
 import { setFiles } from '../project-store/reducers/files';
 import { createSoundClips, removeSoundClip } from '../project-store/reducers/timeline/soundClips';
-import { play, pause } from '../project-store/reducers/timeline/isPlaying';
-import { setPlayedAt } from '../project-store/reducers/timeline/playedAt';
+import { play, pause, playThunk } from '../project-store/reducers/timeline/isPlaying';
+import { setPlayedAt, setPlayedAtThunk } from '../project-store/reducers/timeline/playedAt';
+import { setStartThunk } from '../project-store/reducers/timeline/start';
 
 class Timeline extends React.Component {
   constructor(props){
@@ -32,8 +33,8 @@ class Timeline extends React.Component {
     createSoundClips(clips);
 
     // these test playing and pausing
-    setTimeout(() => this.togglePlay(), 1000);
-    setTimeout(() => this.togglePlay(), 3000);
+    // setTimeout(() => this.togglePlay(), 1000);
+    // setTimeout(() => this.togglePlay(), 3000);
   }
 
   playSound(buffer, startTime) {
@@ -48,18 +49,22 @@ class Timeline extends React.Component {
   }
 
   togglePlay() {
-    const { isPlaying, play, pause, setPlayedAt, soundClips } = this.props;
+    console.log('playing toggled')
+    const { isPlaying, play, pause, setPlayedAt, setPlayedAtThunk, soundClips, playThunk } = this.props;
     if (!isPlaying) {
-      play();
-      setPlayedAt(context.currentTime);
-      this.tick();
+      playThunk()
+        .then(() => setPlayedAtThunk(context.currentTime))
+        .then(() => console.log('isPlaying is', isPlaying))
+        // .then(() => this.tick())
+        .catch(console.error);
+        setTimeout(this.tick, 20);
     } else {
       pause();
       this.state.playing.forEach(sound => {
         sound.stop();
       });
       this.setState({ playing: [] });
-      setPlayedAt(null);
+      // setPlayedAt(null);
     }
   }
 
@@ -88,10 +93,11 @@ class Timeline extends React.Component {
   }
 
   render() {
-    const { clips, tracks } = this.props;
+    const { clips, tracks, time } = this.props;
     return (
       <div>
-        <PlaybackControls />
+        <div>time: { time }</div>
+        <PlaybackControls togglePlay={this.togglePlay} />
         { tracks.map((track, index) => (
           <Grid key={track.id}>
             <Grid.Column width={2}>
@@ -121,8 +127,8 @@ const mapState = (state, ownProps) => ({
   soundClips: state.timeline.soundClips,
   files: state.files,
   clips: [
-    { url: '/GetToDaChoppa.mp3', startTime: 0, track: null },
-    { url: '/NotATumah.mp3', startTime: 1, track: 1 },
+    { url: '/GetToDaChoppa.mp3', startTime: 2, track: null },
+    { url: '/NotATumah.mp3', startTime: 0, track: 1 },
   ],
   tracks: [
     { id: 1, volume: 100, isMuted: false },
@@ -135,8 +141,11 @@ const mapDispatch = dispatch => ({
   createSoundClips: (files) => dispatch(createSoundClips(files)),
   removeSoundClip: soundClip => dispatch(removeSoundClip(soundClip)),
   play: () => dispatch(play()),
+  playThunk: () => dispatch(playThunk()),
   pause: () => dispatch(pause()),
   setPlayedAt: time => dispatch(setPlayedAt(time)),
+  setPlayedAtThunk: time => dispatch(setPlayedAtThunk(time)),
+  setStartThunk: start => dispatch(setStartThunk(start)),
 });
 
 export default connect(mapState, mapDispatch)(Timeline);

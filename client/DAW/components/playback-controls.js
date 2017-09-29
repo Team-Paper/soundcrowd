@@ -7,14 +7,16 @@ import { setStart } from '../project-store/reducers/timeline/playedAt';
 
 const PlaybackControls = (props) => {
   const { isPlaying, togglePlay } = props;
+  console.log('props are', props);
+  console.log('toggleplay is', togglePlay);
   return (
     <Menu compact icon>
       {
         isPlaying ?
-          <Menu.Item name="pause" onClick={() => togglePlay(isPlaying)}>
+          <Menu.Item name="pause" onClick={() => togglePlay()}>
             <Icon name="pause" />
           </Menu.Item> :
-          <Menu.Item name="play" onClick={() => togglePlay(isPlaying)}>
+          <Menu.Item name="play" onClick={() => togglePlay()}>
             <Icon name="play" />
           </Menu.Item>
       }
@@ -26,18 +28,6 @@ const mapState = state => ({
   isPlaying: state.timeline.isPlaying,
 });
 
-const mapDispatch = dispatch => ({
-  togglePlay(isPlaying) {
-    if (!isPlaying) {
-      dispatch(setIsPlaying(true));
-      dispatch(setStart(context.currentTime));
-      // _tick();
-    } else {
-      dispatch(setIsPlaying(false));
-      dispatch(setStart(null));
-      // must cancel this_tick();
-    }
-  },
-});
+const mapDispatch = dispatch => ({});
 
 export default connect(mapState, mapDispatch)(PlaybackControls);
