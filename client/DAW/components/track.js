@@ -14,6 +14,7 @@ const styles = {
     width: '180px',
     height: '10em',
     margin: '0',
+    zIndex: '10',
   },
   trackTimeline: {
     position: 'relative',
