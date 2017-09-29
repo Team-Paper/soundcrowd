@@ -2,7 +2,7 @@
 const SET_PLAYED_AT = 'SET_PLAYED_AT';
 
 // ACTION CREATORS
-export const setStart = playedAt => ({
+export const setPlayedAt = playedAt => ({
   type: SET_PLAYED_AT,
   playedAt
 });
