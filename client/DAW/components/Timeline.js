@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Grid, Segment } from 'semantic-ui-react';
-import { PlaybackControls, Track } from '../components';
+import { PlaybackControls, TrackList } from '../components';
 import context from '../context';
 import { setTime } from '../project-store/reducers/timeline/time';
 import { setFiles } from '../project-store/reducers/files';
@@ -77,13 +77,7 @@ class Timeline extends React.Component {
     return (
       <div style={{ position: 'relative', overflowX: 'scroll' }}>
         <PlaybackControls />
-        { tracks.map((track, index) => (
-          <Track
-            key={track.id}
-            index={index}
-            clips={clips.filter(clip => clip.track === track.id)}
-          />
-        )) }
+        <TrackList tracks={tracks} clips={clips} />
       </div>
     );
   }

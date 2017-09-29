@@ -12,13 +12,14 @@ const styles = {
   trackControls: {
     position: 'fixed',
     width: '12em',
-    marginRight: '2em',
+    height: '10em',
+    margin: '0',
   },
   trackTimeline: {
     // minWidth: '100%',
     width: '2000px',
     height: '100%',
-    paddingLeft: '14em',
+    marginLeft: '12em',
     background: '#22a3ef',
   },
 };
