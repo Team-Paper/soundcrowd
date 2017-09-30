@@ -166,7 +166,6 @@ class Timeline extends React.Component {
 }
 
 const mapState = (state, ownProps) => {
-  console.log('Timeline ownProps is', ownProps);
   return {
   projectId: ownProps.match.params.id,
   time: state.timeline.time,

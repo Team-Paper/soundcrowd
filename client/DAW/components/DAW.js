@@ -10,7 +10,6 @@ import context from '../context';
  */
 export const DAW = (props) => {
   const { name, library, settings } = props;
-  console.log('daw props are', props)
   return (
     <Grid divided>
       <Grid.Column width={3}>

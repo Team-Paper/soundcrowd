@@ -7,8 +7,6 @@ import { setStart } from '../project-store/reducers/timeline/playedAt';
 
 const PlaybackControls = (props) => {
   const { isPlaying, togglePlay } = props;
-  console.log('props are', props);
-  console.log('toggleplay is', togglePlay);
   return (
     <Menu compact icon>
       {
