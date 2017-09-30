@@ -47,7 +47,7 @@ export const createSoundClips = (files) => dispatch => {
         console.log('decoding audio data');
         buffer.connect(context.destination);
         buffer.buffer = audio;
-        dispatch(addSoundClip({ sound: buffer, time: file.startTime }));
+        dispatch(addSoundClip({ sound: buffer, time: file.startTime, played: false }));
       })
   }))
   .catch(console.error);

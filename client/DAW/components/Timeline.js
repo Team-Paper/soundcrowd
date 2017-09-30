@@ -107,6 +107,9 @@ class Timeline extends React.Component {
       this.state.playing.forEach(sound => {
         sound.stop();
       });
+      soundClips.forEach(soundClip => {
+        soundClip.played = false;
+      })
       this.setState({ playing: [] });
     }
   }
@@ -122,15 +125,15 @@ class Timeline extends React.Component {
   }
 
   checkAndPlay(time) {
-    const { soundClips, removeSoundClip } = this.props;
+    const { soundClips, removeSoundClip, isPlaying } = this.props;
     // console.log('soundClips are', soundClips);
     // console.log('checked!');
     soundClips.forEach((soundClip, index) => {
       // console.log('time is ', time, 'and startTime is', soundClip.time)
-      if (time > soundClip.time) {
+      if (soundClip.played === false && isPlaying === true && time > soundClip.time) {
+        soundClip.played = true;
         const playAt = context.currentTime + (soundClip.time - time);
-        this.playSound(soundClip.sound.buffer, this.time - soundClip.time, playAt);
-        removeSoundClip(soundClip);
+        this.playSound(soundClip.sound.buffer, time - soundClip.time, playAt);
         console.log('sound played at', time);
       }
     });
