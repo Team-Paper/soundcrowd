@@ -5,11 +5,15 @@ import { Grid, Segment } from 'semantic-ui-react';
 import { PlaybackControls } from '../components';
 import context from '../context';
 import { setTime } from '../project-store/reducers/timeline/time';
-import { setFiles } from '../project-store/reducers/files';
+import { setFiles, setFilesThunk } from '../project-store/reducers/files';
+import { setClips, setClipsThunk } from '../project-store/reducers/clips';
+import { setTracks } from '../project-store/reducers/tracks';
 import { createSoundClips, removeSoundClip } from '../project-store/reducers/timeline/soundClips';
 import { play, pause, playThunk } from '../project-store/reducers/timeline/isPlaying';
 import { setPlayedAt, setPlayedAtThunk } from '../project-store/reducers/timeline/playedAt';
 import { setStartThunk } from '../project-store/reducers/timeline/start';
+import { setTempo } from '../project-store/reducers/settings/tempo';
+import firebase from '../../firebase';
 
 class Timeline extends React.Component {
   constructor(props){
@@ -21,15 +25,50 @@ class Timeline extends React.Component {
     this.playSound = this.playSound.bind(this);
     this.tick = this.tick.bind(this);
     this.togglePlay = this.togglePlay.bind(this);
+    this.clipsRef = firebase.database().ref(`${this.props.projectId}/clips`);
+    this.filesRef = firebase.database().ref(`${this.props.projectId}/files`);
+    this.tracksRef = firebase.database().ref(`${this.props.projectId}/tracks`);
+    this.settingsRef = firebase.database().ref(`${this.props.projectId}/settings`);
   }
 
   componentDidMount() {
     // calling createSoundClips here for testing purposes, but will need to be done after project files array is retrieved
-    const { setFiles, createSoundClips, clips } = this.props;
-    setFiles([
+    const { setFiles, setFilesThunk, setClips, setClipsThunk, setTracks, setTempo, createSoundClips, clips, projectId } = this.props;
+
+
+
+    // these should be as a result of a 'create' function, not in componentDidMount
+    // this.filesRef.set([
+    //   { id: 1, url: '/NotATumah.mp3' },
+    //   { id: 2, url: '/GetToDaChoppa.mp3' },
+    // ]);
+
+    // subscribe redux to firebase here
+    this.filesRef.on('value', snapshot => {
+      setFiles(snapshot.val());
+    });
+    this.clipsRef.on('value', snapshot => {
+      setClips(snapshot.val());
+    });
+    this.tracksRef.on('value', snapshot => {
+      setTracks(snapshot.val());
+    });
+    this.settingsRef.on('value', snapshot => {
+      setTempo(snapshot.val());
+    });
+
+    setFilesThunk(projectId, [
       { id: 1, url: '/NotATumah.mp3' },
       { id: 2, url: '/GetToDaChoppa.mp3' },
     ])
+    setClipsThunk(projectId, [
+      { url: '/GetToDaChoppa.mp3', startTime: 2, track: null },
+      { url: '/NotATumah.mp3', startTime: 0, track: 1 },
+    ])
+    setTracks([
+      { id: 1, volume: 100, isMuted: false },
+    ])
+    setTempo(60);
     createSoundClips(clips);
 
     // these test playing and pausing
@@ -37,22 +76,27 @@ class Timeline extends React.Component {
     // setTimeout(() => this.togglePlay(), 3000);
   }
 
-  playSound(buffer, startTime) {
+  componentWillUnmount() {
+    this.filesRef.off();
+  }
+
+  playSound(buffer, startTime, playAt) {
     const source = context.createBufferSource();
     if (!startTime) {
       startTime = 0;
     }
     source.buffer = buffer;
     source.connect(context.destination);
-    source.start(0, startTime);
+    source.start(playAt, startTime);
     this.setState({ playing: this.state.playing.concat(source) });
   }
 
   togglePlay() {
     console.log('playing toggled')
-    const { isPlaying, play, pause, setPlayedAt, setPlayedAtThunk, soundClips, playThunk } = this.props;
+    const { isPlaying, play, pause, setPlayedAt, setPlayedAtThunk, soundClips, playThunk, setStartThunk, time } = this.props;
     if (!isPlaying) {
-      playThunk()
+      setStartThunk(time)
+        .then(() => playThunk())
         .then(() => setPlayedAtThunk(context.currentTime))
         .then(() => console.log('isPlaying is', isPlaying))
         // .then(() => this.tick())
@@ -64,7 +108,6 @@ class Timeline extends React.Component {
         sound.stop();
       });
       this.setState({ playing: [] });
-      // setPlayedAt(null);
     }
   }
 
@@ -85,7 +128,8 @@ class Timeline extends React.Component {
     soundClips.forEach((soundClip, index) => {
       // console.log('time is ', time, 'and startTime is', soundClip.time)
       if (time > soundClip.time) {
-        this.playSound(soundClip.sound.buffer, this.time - soundClip.time);
+        const playAt = context.currentTime + (soundClip.time - time);
+        this.playSound(soundClip.sound.buffer, this.time - soundClip.time, playAt);
         removeSoundClip(soundClip);
         console.log('sound played at', time);
       }
@@ -118,7 +162,10 @@ class Timeline extends React.Component {
   }
 }
 
-const mapState = (state, ownProps) => ({
+const mapState = (state, ownProps) => {
+  console.log('Timeline ownProps is', ownProps);
+  return {
+  projectId: ownProps.match.params.id,
   time: state.timeline.time,
   playedAt: state.timeline.playedAt,
   start: state.timeline.start,
@@ -133,11 +180,16 @@ const mapState = (state, ownProps) => ({
   tracks: [
     { id: 1, volume: 100, isMuted: false },
   ],
-});
+}};
 
 const mapDispatch = dispatch => ({
   setTime: (time) => dispatch(setTime(time)),
   setFiles: (files) => dispatch(setFiles(files)),
+  setFilesThunk: (projectId, files) => dispatch(setFilesThunk(projectId, files)),
+  setClips: (clips) => dispatch(setClips(clips)),
+  setClipsThunk: (projectId, clips) => dispatch(setClipsThunk(projectId, clips)),
+  setTracks: (tracks) => dispatch(setTracks(tracks)),
+  setTempo: (tempo) => dispatch(setTempo(tempo)),
   createSoundClips: (files) => dispatch(createSoundClips(files)),
   removeSoundClip: soundClip => dispatch(removeSoundClip(soundClip)),
   play: () => dispatch(play()),

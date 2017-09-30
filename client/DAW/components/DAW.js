@@ -10,7 +10,7 @@ import context from '../context';
  */
 export const DAW = (props) => {
   const { name, library, settings } = props;
-
+  console.log('daw props are', props)
   return (
     <Grid divided>
       <Grid.Column width={3}>
@@ -21,7 +21,7 @@ export const DAW = (props) => {
         </List>
       </Grid.Column>
       <Grid.Column width={13}>
-        <Timeline />
+        <Timeline {...props} />
       </Grid.Column>
     </Grid>
   );
@@ -30,7 +30,7 @@ export const DAW = (props) => {
 /**
  * CONTAINER
  */
-const mapState = () =>
+const mapState = (state, ownProps) =>
   // return state.project
   ({
     name: 'Current Project',
