@@ -1,16 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Container, Grid, Image, Header, Label, Icon, Comment } from 'semantic-ui-react';
-import { fetchSong } from '../store';
+import { fetchSong, fetchSongComments } from '../store';
 
 class SingleSong extends React.Component {
 
   componentDidMount() {
-    this.props.loadSong();
+    this.props.loadData();
   }
 
   componentWillReceiveProps(newProps) {
-    if (!newProps.song) this.props.loadSong();
+    if (!newProps.song) this.props.loadData();
   }
 
   render() {
@@ -36,7 +36,7 @@ class SingleSong extends React.Component {
             </Grid.Column>
 
             <Grid.Column>
-              <Header>Notes:</Header>
+              <Header dividing>Notes:</Header>
               <Container text textAlign='justified'>
                 {song.notes}
               </Container>
@@ -49,6 +49,27 @@ class SingleSong extends React.Component {
                 <Icon name='play' /> {song.playcount}
               </Label>
 
+              <Comment.Group size='large'>
+                <Header as='h3' dividing>Comments</Header>
+
+                {
+                  this.props.comments.map((comment) => {
+                    return (
+                      <Comment key={comment.id}>
+                        <Comment.Avatar src={comment.user.userImage} />
+                        <Comment.Author>
+                          {comment.user.email // this is terrible, they need usernames
+                          }
+                        </Comment.Author>
+                        <Comment.Content>
+                          {comment.text}
+                        </Comment.Content>
+                      </Comment>
+                    );
+                  })
+                }
+              </Comment.Group>
+
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -58,20 +79,23 @@ class SingleSong extends React.Component {
 }
 
 const mapState = (state, ownProps) => {
+  const id = Number(ownProps.match.params.id);
   return {
-    song: state.songs.find(song => Number(ownProps.match.params.id) === song.id),
+    song: state.songs.find(song => id === song.id),
+    comments: state.comments.filter(comment => id === comment.songId),
   };
 };
 
 const mapDispatch = (dispatch, ownProps) => {
   const id = Number(ownProps.match.params.id);
   return {
-    loadSong: () => {
+    loadData: () => {
       dispatch(fetchSong(id));
+      dispatch(fetchSongComments(id));
     },
     play: () => {
       // TODO: add thunks to the store to dispatch a play event to the api
-    }
+    },
   };
 };
 
