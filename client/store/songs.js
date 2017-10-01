@@ -6,6 +6,7 @@ import axios from 'axios'
 const GET_SONG = 'GET_SONG';
 const REMOVE_SONG = 'REMOVE_SONG';
 const GET_SOME_SONGS = 'GET_SOME_SONGS';
+const CLEAR_SONGS = 'CLEAR_SONGS';
 
 /**
  * INITIAL STATE
@@ -15,10 +16,10 @@ const defaultSongs = [];
 /**
  * ACTION CREATORS
  */
-const getSong = song => ({ type: GET_SONG, song });
-const removeSong = song => ({ type: REMOVE_SONG, song });
-const getSomeSongs = songs => ({ type: GET_SOME_SONGS, songs });
-
+export const getSong = song => ({ type: GET_SONG, song });
+export const removeSong = song => ({ type: REMOVE_SONG, song });
+export const getSomeSongs = songs => ({ type: GET_SOME_SONGS, songs });
+export const clearSongs = () => ({ type: CLEAR_SONGS });
 
 /**
  * THUNK CREATORS
@@ -62,6 +63,8 @@ export default function (state = defaultSongs, action) {
       return [].concat(action.songs, state);
     case REMOVE_SONG:
       return state.filter(song => song.id !== action.song.id);
+    case CLEAR_SONGS:
+      return defaultSongs;
     default:
       return state;
   }

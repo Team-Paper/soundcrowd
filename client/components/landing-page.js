@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Item, Header } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import { fetchTopSongs } from '../store';
+import { fetchTopSongs, clearSongs } from '../store';
 
 /**
  * COMPONENT
@@ -12,10 +12,14 @@ class LandingPage extends React.Component {
     if (this.props.fetchData) this.props.fetchData();
   }
 
-  componentWillReceiveProps(newProps) {
-    if (!this.props.fetchData && newProps.fetchData) {
-      newProps.fetchData();
-    }
+  // componentWillReceiveProps(newProps) {
+  //   if (!this.props.fetchData && newProps.fetchData) {
+  //     newProps.fetchData();
+  //   }
+  // }
+
+  componentWillUnmount() {
+    this.props.clearData();
   }
 
   render() {
@@ -65,6 +69,7 @@ const mapDispatch = (dispatch) => {
       // fetches the top 50 songs
       dispatch(fetchTopSongs(50));
     },
+    clearData: () => dispatch(clearSongs()),
   };
 };
 
