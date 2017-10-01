@@ -17,7 +17,7 @@ const Main = (props) => {
   return (
     <div>
       <Menu stackable >
-      <Menu.Item header>SOUNDCROWD</Menu.Item>
+      <Menu.Item header as={Link} to="/">SOUNDCROWD</Menu.Item>
         {
           isLoggedIn
             ? <Menu.Menu>
