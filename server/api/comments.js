@@ -18,11 +18,10 @@ router.get('/:id', (req, res, next) => {
 
 //post a new comment
 router.post('/', (req, res, next) => {
-  console.log("req.body", req.body)
   Comment.create(req.body)
     .then(comment => res.json(comment))
     .catch(next)
-})
+});
 
 //update a comment
 router.put('/:id', (req, res, next) => {
