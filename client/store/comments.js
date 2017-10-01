@@ -31,6 +31,18 @@ export const fetchSongComments = (songId) => {
   };
 };
 
+export const postComment = (comment) => {
+  return (dispatch) => {
+    return axios.post('/api/comments', comment)
+      .then(res => res.data)
+      // Intentially returns the comment passed to postComment
+      // This avoids a ton of eager loading which would be complicated
+      // to implement and would not add much value to the code in other cases
+      .then(({ id }) => dispatch(getComment({ ...comment, id })))
+      .catch(console.error.bind(console));
+  };
+};
+
 /**
  * REDUCER
  */

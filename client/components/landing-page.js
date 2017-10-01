@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Item, Header } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { fetchTopSongs } from '../store';
 
@@ -32,7 +33,9 @@ class LandingPage extends React.Component {
                   <Item.Image src={song.imageUrl || 'http://via.placeholder.com/150x150'} />
                   <Item.Content>
                     <Item.Header>
-                      <Header>#{index + 1}: {song.title}</Header>
+                      <Header>#{index + 1}:
+                        <Link to={`/song/${song.id}`}>{song.title}</Link>
+                      </Header>
                     </Item.Header>
                     <Item.Description>
                       <br /><br />

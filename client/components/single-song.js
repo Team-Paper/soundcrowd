@@ -1,16 +1,43 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Grid, Image, Header, Label, Icon, Comment } from 'semantic-ui-react';
-import { fetchSong, fetchSongComments } from '../store';
+import { Container, Grid, Image, Header, Label, Icon, Comment, Form, Button } from 'semantic-ui-react';
+import { fetchSong, fetchSongComments, postComment } from '../store';
 
 class SingleSong extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      text: '',
+    };
+    this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
 
   componentDidMount() {
     this.props.loadData();
   }
 
-  componentWillReceiveProps(newProps) {
-    if (!newProps.song) this.props.loadData();
+  // componentWillReceiveProps(newProps) {
+  //   if (!newProps.song) this.props.loadData();
+  // }
+
+  handleChange(event) {
+    this.setState({ text: event.target.value });
+  }
+
+  handleCommentSubmit(event) {
+    event.preventDefault();
+
+    const comment = {};
+    comment.text = this.state.text;
+    comment.user = this.props.user;
+    comment.userId = this.props.user.id;
+    comment.songId = this.props.song.id;
+
+    console.log(comment);
+
+    this.props.postComment(comment)
+    this.setState({ text: '' });
   }
 
   render() {
@@ -51,6 +78,10 @@ class SingleSong extends React.Component {
 
               <Comment.Group size='large'>
                 <Header as='h3' dividing>Comments</Header>
+                <Form reply onSubmit={this.handleCommentSubmit}>
+                  <Form.TextArea onChange={this.handleChange} />
+                  <Button content='Add Comment' icon='edit' primary />
+                </Form>
 
                 {
                   this.props.comments.map((comment) => {
@@ -83,6 +114,7 @@ const mapState = (state, ownProps) => {
   return {
     song: state.songs.find(song => id === song.id),
     comments: state.comments.filter(comment => id === comment.songId),
+    user: state.user,
   };
 };
 
@@ -96,6 +128,7 @@ const mapDispatch = (dispatch, ownProps) => {
     play: () => {
       // TODO: add thunks to the store to dispatch a play event to the api
     },
+    postComment: comment => dispatch(postComment(comment)),
   };
 };
 
