@@ -22,9 +22,20 @@ export const getSomeComments = comments => ({ type: GET_SOME_COMMENTS, comments 
  * THUNK CREATORS
  */
 
+// fetch all comments for a song
 export const fetchSongComments = (songId) => {
   return (dispatch) => {
     return axios.get(`/api/songs/${songId}/comments`)
+      .then(res => res.data)
+      .then(comments => dispatch(getSomeComments(comments)))
+      .catch(console.error.bind(console))
+  };
+};
+
+// fetch all comments for a user
+export const fetchUserComments = (userId) => {
+  return (dispatch) => {
+    return axios.get(`/api/users/${userId}/comments`)
       .then(res => res.data)
       .then(comments => dispatch(getSomeComments(comments)))
       .catch(console.error.bind(console))
