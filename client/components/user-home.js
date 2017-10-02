@@ -2,7 +2,6 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Container, Item, Grid, Image, Header, Button } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
 import { fetchUserComments, fetchUserSongs, clearSongs } from '../store';
 import SongView from './song-view';
 
