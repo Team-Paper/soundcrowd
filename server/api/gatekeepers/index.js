@@ -9,7 +9,7 @@
 */
 
 /*
- * This was written by Finn during Grace Shopper and
+ * This was written by Finn (@fterdal) during Grace Shopper and
  * borrowed with minor alterations by Tess during capstone project
 */
 
