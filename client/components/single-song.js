@@ -41,7 +41,7 @@ class SingleSong extends React.Component {
   }
 
   render() {
-    const { song } = this.props;
+    const { song, user } = this.props;
     if (!song) return <div />;
     return (
       <Container>
@@ -78,10 +78,14 @@ class SingleSong extends React.Component {
 
               <Comment.Group size='large'>
                 <Header as='h3' dividing>Comments</Header>
+                { user.id ?
                 <Form reply onSubmit={this.handleCommentSubmit}>
                   <Form.TextArea onChange={this.handleChange} />
                   <Button content='Add Comment' icon='edit' primary />
                 </Form>
+                :
+                <p>Log in or sign up to leave comments</p>
+                }
 
                 {
                   this.props.comments.map((comment) => {
