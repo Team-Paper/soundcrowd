@@ -16,3 +16,7 @@ export default function reducer(start = 0, action) {
       return start;
   }
 }
+
+export const setStartThunk = start => dispatch => {
+  return Promise.resolve(dispatch(setStart(start)));
+};

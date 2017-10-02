@@ -1,3 +1,4 @@
+import firebase from '../../../../firebase';
 
 // ACTION TYPES
 const SET_CLIPS = 'SET_CLIPS';
@@ -17,3 +18,8 @@ export default function reducer(clips = [], action) {
       return clips;
   }
 }
+
+// THUNK CREATORS
+export const setClipsThunk = (projectId, clips) => dispatch => {
+  firebase.database().ref(`${projectId}/clips`).set(clips);
+};

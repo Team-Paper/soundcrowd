@@ -1,4 +1,4 @@
-
+import firebase from '../../../../firebase';
 // ACTION TYPES
 const SET_FILES = 'SET_FILES';
 
@@ -16,4 +16,9 @@ export default function reducer(files = [], action) {
     default:
       return files;
   }
-}
+};
+
+// THUNK CREATORS
+export const setFilesThunk = (projectId, files) => dispatch => {
+  firebase.database().ref(`${projectId}/files`).set(files);
+};
