@@ -4,6 +4,7 @@ module.exports = router
 router.use('/users', require('./users'))
 router.use('/songs', require('./songs'))
 router.use('/comments', require('./comments'))
+router.use('/soundfiles', require('./soundfiles'))
 
 
 router.use((req, res, next) => {

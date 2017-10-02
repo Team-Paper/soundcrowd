@@ -16,9 +16,9 @@ const styles = {
 
 const getWidth = (clips, zoom) => {
   let end = 10; // seconds (min-duration)
-  clips.forEach((clip) => {
-    end = Math.max(end, clip.startTime + clip.duration);
-  });
+  // clips.forEach((clip) => {
+  //   end = Math.max(end, clip.startTime + clip.duration);
+  // });
   return (zoom * end) + 180; // 180 = control card width
 };
 
@@ -27,9 +27,10 @@ const TrackList = (props) => {
   const zoom = 200; // pixels per second
   return (
     <div style={styles.trackList(getWidth(clips, zoom))}>
-      { tracks.map((track, index) => (
+      {
+        Object.entries(tracks).map(([key, track], index) => (
         <Track
-          key={track.id}
+          key={`track-${key}`}
           index={index}
           zoom={zoom}
           clips={clips.filter(clip => clip.track === track.id)}
@@ -40,13 +41,17 @@ const TrackList = (props) => {
 };
 
 const mapState = (state) => {
-  const clips = state.clips.map(clip => ({
-    url: state.files.find(f => f.id === clip.fileId).url,
-    track: clip.track,
-    startTime: clip.startTime,
-    duration: state.timeline.soundClips[clip.fileId] ?
-      state.timeline.soundClips[clip.fileId].duration : 0,
-  }));
+
+  const clips = Object.entries(state.clips).map(([key, clip]) => {
+    let file = Object.entries(state.files).find(([key, f]) => f.id === clip.fileId)[1] || {}
+    return {
+      url: file.url,
+      key,
+      track: clip.track,
+      startTime: clip.startTime,
+      duration: state.timeline.soundClips[clip.fileId] ?
+        state.timeline.soundClips[clip.fileId].duration : 0,
+  }});
   return { clips };
 };
 
