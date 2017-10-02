@@ -4,6 +4,7 @@ import { Item, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { fetchTopSongs, clearSongs } from '../store';
+import SongView from './song-view'
 
 /**
  * COMPONENT
@@ -33,40 +34,7 @@ class LandingPage extends React.Component {
           {
             this.props.songs.map((song, index) => {
               return (
-                <Item key={song.id}>
-                  <Item.Image src={song.imageUrl || 'http://via.placeholder.com/150x150'} />
-                  <Item.Content>
-                    <Item.Header>
-                      <Header>#{index + 1}:
-                        <Link to={`/song/${song.id}`}>{song.title}</Link>
-                      </Header>
-                    </Item.Header>
-                    <Item.Meta>
-                      By: {
-                        song.artist.map((artist, inx) => {
-                          if (inx === 0) {
-                            return (
-                              <Link key={artist.id} to={`/user/${artist.id}`}>
-                                {artist.username}
-                              </Link>
-                            );
-                          }
-                          return (
-                            <Link key={artist.id} to={`/user/${artist.id}`}>
-                              , {artist.username}
-                            </Link>
-                          );
-                        })
-                        // username would be better than email
-                      }
-                    </Item.Meta>
-                    <Item.Description>
-                      <audio controls>
-                        <source src={song.url} type="audio/mp3" />
-                      </audio>
-                    </Item.Description>
-                  </Item.Content>
-                </Item>
+                <SongView key={song.id} index={index} song={song} size='large' />
               );
             })
           }
