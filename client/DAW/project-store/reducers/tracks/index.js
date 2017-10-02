@@ -1,3 +1,5 @@
+import firebase from '../../../../firebase';
+
 // ACTION TYPES
 const SET_TRACKS = 'SET_TRACKS';
 
@@ -16,3 +18,9 @@ export default function reducer(tracks = [], action) {
       return tracks;
   }
 }
+
+// THUNK CREATORS
+export const setTracksThunk = (projectId, tracks) => dispatch => {
+  console.log('setTracksThunk fired', tracks);
+  firebase.database().ref(`${projectId}/tracks`).set(tracks);
+};

@@ -2,53 +2,45 @@ import axios from 'axios';
 import context from '../../../context';
 
 // ACTION TYPES
-const SET_SOUND_CLIPS = 'SET_SOUND_CLIPS';
 const ADD_SOUND_CLIP = 'ADD_SOUND_CLIP';
-const REMOVE_SOUND_CLIP = 'REMOVE_SOUND_CLIP';
 
 // ACTION CREATORS
-export const setSoundClips = soundClips => ({
-  type: SET_SOUND_CLIPS,
-  soundClips
-});
-
-export const addSoundClip = soundClip => ({
+export const addSoundClip = (fileId, soundClip) => ({
   type: ADD_SOUND_CLIP,
   soundClip,
+  fileId,
 });
 
-export const removeSoundClip = soundClip => ({
-  type: REMOVE_SOUND_CLIP,
-  soundClip,
-})
-
 // REDUCER
-export default function reducer(soundClips = [], action) {
+export default function reducer(soundClips = {}, action) {
   switch(action.type) {
-    case SET_SOUND_CLIPS:
-      return action.soundClips;
     case ADD_SOUND_CLIP:
-      return soundClips.concat(action.soundClip);
-    case REMOVE_SOUND_CLIP:
-      return soundClips.filter(soundClip => soundClip.time !== action.soundClip.time)
+      const fileId = action.fileId;
+      const newSoundClips = Object.assign({}, soundClips);
+      newSoundClips[fileId] = action.soundClip;
+      return newSoundClips;
     default:
       return soundClips;
   }
 }
 
 // THUNK CREATORS
-export const createSoundClips = (files) => dispatch => {
+export const createSoundClips = (files, soundClips) => dispatch => {
   return Promise.all(files.map(file => {
-    return axios.get(file.url, { responseType: 'arraybuffer' })
-      .then(res => res.data)
-      .then(responseAudio => context.decodeAudioData(responseAudio))
-      .then(audio => {
-        let buffer = context.createBufferSource();
-        console.log('decoding audio data');
-        buffer.connect(context.destination);
-        buffer.buffer = audio;
-        dispatch(addSoundClip({ sound: buffer, time: file.startTime, played: false }));
-      })
+    if (soundClips.hasOwnProperty(file.id)) {
+      return;
+    } else {
+      return axios.get(file.url, { responseType: 'arraybuffer' })
+        .then(res => res.data)
+        .then(responseAudio => context.decodeAudioData(responseAudio))
+        .then(audio => {
+          let buffer = context.createBufferSource();
+          console.log('decoding audio data');
+          buffer.connect(context.destination);
+          buffer.buffer = audio;
+          dispatch(addSoundClip(file.id, { sound: buffer, played: false }));
+        });
+    }
   }))
   .catch(console.error);
 }
