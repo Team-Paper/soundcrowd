@@ -1,9 +1,24 @@
 const router = require('express').Router()
-module.exports = router
+const User = require('../db/models');
 
-router.use('/users', require('./users'))
-router.use('/songs', require('./songs'))
-router.use('/comments', require('./comments'))
+module.exports = router;
+
+// Grabs the user requested in the param and adds the user object
+// to req. This is needed for the gatekeeper middleware to function.
+router.param('id', (req, res, next, id) => {
+  User.findById(id)
+    .then((user) => {
+      if (!user) res.sendStatus(404)
+      req.userId = user;
+      next();
+      return null;
+    })
+    .catch(next);
+});
+
+router.use('/songs', require('./songs'));
+router.use('/comments', require('./comments'));
+router.use('/users', require('./users'));
 
 
 router.use((req, res, next) => {
