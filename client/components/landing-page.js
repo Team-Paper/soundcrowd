@@ -41,6 +41,14 @@ class LandingPage extends React.Component {
                         <Link to={`/song/${song.id}`}>{song.title}</Link>
                       </Header>
                     </Item.Header>
+                    <Item.Meta>
+                      By: {song.artist.map((artist, index) => {
+                        if (index === 0) return artist.email;
+                        return `, ${artist.email}`;
+                      })
+                        // username would be better than email
+                      }
+                    </Item.Meta>
                     <Item.Description>
                       <br /><br />
                       <audio controls>
