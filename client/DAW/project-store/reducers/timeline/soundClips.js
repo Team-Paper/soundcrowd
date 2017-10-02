@@ -38,7 +38,11 @@ export const createSoundClips = (files, soundClips) => dispatch => {
           console.log('decoding audio data');
           buffer.connect(context.destination);
           buffer.buffer = audio;
-          dispatch(addSoundClip(file.id, { sound: buffer, played: false }));
+          dispatch(addSoundClip(file.id, {
+            sound: buffer,
+            played: false,
+            duration: audio.duration,
+          }));
         });
     }
   }))
