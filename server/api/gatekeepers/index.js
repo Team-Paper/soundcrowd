@@ -9,8 +9,10 @@
 */
 
 /*
- * This was written by Finn (@fterdal) during Grace Shopper and
- * borrowed with minor alterations by Tess during capstone project
+ * This was written by Finn (@fterdal) during the Grace Shopper project
+ * and borrowed with some alterations by Tess (@omnomnomtea)
+ * during capstone project
+ * Original code can be found at github.com/TGFR/Anchor
 */
 
 const isLoggedIn = (req, res, next) => {
