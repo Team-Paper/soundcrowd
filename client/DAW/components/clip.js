@@ -15,12 +15,18 @@ const styles = {
   },
 };
 
+const calculateDiff = zoom => (e, data) => {
+  console.log('coords', data.x, data.y);
+  console.log('diff-x', data.x / zoom);
+};
+
 const Clip = (props) => {
   const { isDragging, clip, zoom } = props;
   return (
     <Draggable
       axis="x"
       bounds="parent"
+      onStop={calculateDiff(zoom)}
     >
       <div style={styles.clip(clip, zoom, isDragging)}>
         {clip.url} starting at {clip.startTime}

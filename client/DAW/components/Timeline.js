@@ -42,6 +42,7 @@ class Timeline extends React.Component {
       createSoundClips(snapshot.val(), soundClips);
     });
     this.clipsRef.on('value', snapshot => {
+      console.log(snapshot.val());
       setClips(snapshot.val());
     });
     this.tracksRef.on('value', snapshot => {
