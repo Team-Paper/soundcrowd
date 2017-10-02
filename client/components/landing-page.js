@@ -44,8 +44,8 @@ class LandingPage extends React.Component {
                     <Item.Meta>
                       By: {
                         song.artist.map((artist, inx) => {
-                          if (inx === 0) return artist.email;
-                          return `, ${artist.email}`;
+                          if (inx === 0) return artist.username;
+                          return `, ${artist.username}`;
                         })
                         // username would be better than email
                       }
