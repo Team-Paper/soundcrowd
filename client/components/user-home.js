@@ -2,8 +2,8 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Container, Item, Grid, Image, Header, Button } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import { fetchUserComments, fetchUserSongs } from '../store';
+import { fetchUserComments, fetchUserSongs, clearSongs } from '../store';
+import SongView from './song-view';
 
 /**
  * COMPONENT
@@ -19,6 +19,10 @@ class UserHome extends React.Component {
     if (!this.props.user && newProps.user) {
       newProps.loadData(newProps.user.id);
     }
+  }
+
+  componentWillUnmount() {
+    this.props.clearData();
   }
 
   render() {
@@ -50,20 +54,7 @@ class UserHome extends React.Component {
               {
                 songs.map((song) => {
                   return (
-                    <Item key={song.id} meta={null}>
-                      <Item.Image src={song.imageUrl || 'http://via.placeholder.com/150x150'} size='tiny' />
-                      <Item.Content>
-                        <Item.Header>
-                          <Header as='h4'><Link to={`/song/${song.id}`}>{song.title}</Link></Header>
-                        </Item.Header>
-                        <Item.Description>
-                          <audio controls>
-                            <source src={song.url} type="audio/mp3" />
-                          </audio>
-                          <Button compact negative icon="delete" />
-                        </Item.Description>
-                      </Item.Content>
-                    </Item>
+                    <SongView key={song.id} song={song} size='tiny' />
                   );
                 })
               }
@@ -82,9 +73,15 @@ class UserHome extends React.Component {
  *  the public userpage
  */
 const mapStateMyPage = (state) => {
+  let userSongs = state.songs.slice();
+  userSongs = userSongs.filter((song) => {
+    // "artist" should be "artists" but Sequelize is pluralizing things weirdly
+    const userIds = song.artist.map(user => user.id);
+    return userIds.includes(state.user.id);
+  });
   return {
     user: state.user,
-    songs: state.songs.filter(song => song.userId === state.user.id),
+    songs: userSongs,
     comments: state.comments.filter(comment => comment.userId === state.user.id),
   };
 };
@@ -94,6 +91,9 @@ const mapDispatchMyPage = (dispatch) => {
     loadData: (userId) => {
       dispatch(fetchUserSongs(userId));
       dispatch(fetchUserComments(userId));
+    },
+    clearData: () => {
+      dispatch(clearSongs());
     },
   };
 };

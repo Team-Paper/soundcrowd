@@ -2,10 +2,10 @@ const db = require('./server/db/db');
 const { User, Song, Comment } = require('./server/db/models');
 
 const users = [
-  { email: 'admin@admin.admin', password: 'admin', bio: 'I am probably an admin account on this website so don\'t piss me off.', userImage: 'https://pbs.twimg.com/profile_images/596511405999661056/f04wv26A.jpg' },
-  { email: 'user@user.user', password: 'user', bio: 'I am a regular user account on this website and I\'m really nice.', userImage: 'https://i.pinimg.com/736x/11/8a/c3/118ac35750a187594912120b941f83a4--vice-versa-smiley-faces.jpg' },
-  { email: 'user2@user.user', password: 'user', bio: 'I am a regular user account on this website and I\'m somewhat nice.', userImage: 'https://i.pinimg.com/736x/11/8a/c3/118ac35750a187594912120b941f83a4--vice-versa-smiley-faces.jpg' },
-  { email: 'user3@user.user', password: 'user', bio: 'I am a regular user account on this website and I love music and dancing.', userImage: 'https://target.scene7.com/is/image/Target/18822717_Alt01?wid=520&hei=520&fmt=pjpeg' },
+  { username: 'admin', email: 'admin@admin.admin', password: 'admin', bio: 'I am probably an admin account on this website so don\'t piss me off.', userImage: 'https://pbs.twimg.com/profile_images/596511405999661056/f04wv26A.jpg' },
+  { username: 'poppy', email: 'user@user.user', password: 'user', bio: 'I am a regular user account on this website and I\'m really nice.', userImage: 'https://i.pinimg.com/736x/11/8a/c3/118ac35750a187594912120b941f83a4--vice-versa-smiley-faces.jpg' },
+  { username: 'nice-ish person', email: 'user2@user.user', password: 'user', bio: 'I am a regular user account on this website and I\'m somewhat nice.', userImage: 'https://i.pinimg.com/736x/11/8a/c3/118ac35750a187594912120b941f83a4--vice-versa-smiley-faces.jpg' },
+  { username: 'balletFan29', email: 'user3@user.user', password: 'user', bio: 'I am a regular user account on this website and I love music and dancing.', userImage: 'https://target.scene7.com/is/image/Target/18822717_Alt01?wid=520&hei=520&fmt=pjpeg' },
 ];
 
 const songs = [
