@@ -42,15 +42,15 @@ class LandingPage extends React.Component {
                       </Header>
                     </Item.Header>
                     <Item.Meta>
-                      By: {song.artist.map((artist, index) => {
-                        if (index === 0) return artist.email;
-                        return `, ${artist.email}`;
-                      })
+                      By: {
+                        song.artist.map((artist, inx) => {
+                          if (inx === 0) return artist.email;
+                          return `, ${artist.email}`;
+                        })
                         // username would be better than email
                       }
                     </Item.Meta>
                     <Item.Description>
-                      <br /><br />
                       <audio controls>
                         <source src={song.url} type="audio/mp3" />
                       </audio>
