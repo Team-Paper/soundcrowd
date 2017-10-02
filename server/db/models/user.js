@@ -21,7 +21,7 @@ const User = db.define('user', {
     type: Sequelize.STRING
   },
   bio: {
-    type: Sequelize.STRING
+    type: Sequelize.TEXT
   },
   userImage: {
     type: Sequelize.STRING

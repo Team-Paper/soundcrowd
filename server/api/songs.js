@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { Song } = require('../db/models')
+const { Song, Comment, User } = require('../db/models')
 module.exports = router
 
 //get all songs
@@ -8,6 +8,13 @@ router.get('/', (req, res, next) => {
     .then(songs => res.json(songs))
     .catch(next)
 })
+
+// get all comments for a particular song
+router.get('/:id/comments', (req, res, next) => {
+  Song.findOne({ where: { id: Number(req.params.id) }, include: [{ model: Comment, include: [User] }] })
+    .then(song => res.json(song.comments))
+    .catch(next);
+});
 
 //get a number of top-liked songs
 router.get('/top/:number', (req, res, next) => {

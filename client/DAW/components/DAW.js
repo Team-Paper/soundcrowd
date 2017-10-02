@@ -11,7 +11,7 @@ import context from '../context';
 export const DAW = (props) => {
   const { name, library, settings } = props;
   return (
-    <Grid divided>
+    <Grid divided padded>
       <Grid.Column width={3}>
         <Header as="h3">{name}</Header>
         <p>Tempo: {settings.tempo}</p>
