@@ -8,6 +8,11 @@
   })
 */
 
+/*
+ * This was written by Finn during Grace Shopper and
+ * borrowed with minor alterations by Tess during capstone project
+*/
+
 const isLoggedIn = (req, res, next) => {
   if (!req.user) res.sendStatus(401); // not logged in
   else next();
