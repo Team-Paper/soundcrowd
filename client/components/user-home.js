@@ -76,9 +76,12 @@ class UserHome extends React.Component {
 }
 
 /**
- * CONTAINER
+ * CONTAINER FOR USER'S OWN PAGE
+ * Named for convenience later
+ * We can make another mapState and mapDispatch for
+ *  the public userpage
  */
-const mapState = (state) => {
+const mapStateMyPage = (state) => {
   return {
     user: state.user,
     songs: state.songs.filter(song => song.userId === state.user.id),
@@ -86,7 +89,7 @@ const mapState = (state) => {
   };
 };
 
-const mapDispatch = (dispatch) => {
+const mapDispatchMyPage = (dispatch) => {
   return {
     loadData: (userId) => {
       dispatch(fetchUserSongs(userId));
@@ -95,4 +98,5 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-export default connect(mapState, mapDispatch)(UserHome);
+
+export default connect(mapStateMyPage, mapDispatchMyPage)(UserHome);
