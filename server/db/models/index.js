@@ -1,6 +1,7 @@
 const User = require('./user')
 const Song = require('./song')
 const Comment = require('./comment')
+const Soundfile = require('./soundfile')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -35,5 +36,6 @@ const Comment = require('./comment')
 module.exports = {
   User,
   Comment,
-  Song
+  Song,
+  Soundfile,
 }

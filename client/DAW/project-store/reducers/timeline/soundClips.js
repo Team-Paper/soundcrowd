@@ -26,7 +26,7 @@ export default function reducer(soundClips = {}, action) {
 
 // THUNK CREATORS
 export const createSoundClips = (files, soundClips) => dispatch => {
-  return Promise.all(files.map(file => {
+  return Promise.all(Object.entries(files).map(([key, file]) => {
     if (soundClips.hasOwnProperty(file.id)) {
       return;
     } else {

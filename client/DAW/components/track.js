@@ -32,7 +32,6 @@ const styles = {
   },
 };
 
-
 const Track = (props) => {
   const { index, clips, zoom } = props;
   return (
@@ -48,8 +47,9 @@ const Track = (props) => {
         </Card.Content>
       </Card>
       <div style={styles.trackTimeline}>
-        { clips.map(clip => (
-          <div key={clip.url} style={styles.clip(clip, zoom)}>
+        {
+          clips.map(clip => (
+          <div key={clip.key} style={styles.clip(clip, zoom)}>
             {clip.url} starting at {clip.startTime}
           </div>
         )) }
