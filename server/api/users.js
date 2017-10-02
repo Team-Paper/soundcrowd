@@ -15,17 +15,10 @@ router.get('/', (req, res, next) => {
 
 router.get('/:id/songs', (req, res, next) => {
   const userId = Number(req.params.id);
-  User.findOne({ where: { id: userId }, include: [{ model: Song, as: 'compositions' }] })
-    .then(user => user.compositions)
-    .then(songs => songs.map((song) => {
-      const { url, id, imageUrl, title, notes, length, playcount } = song;
-      const songToReturn = { url, id, imageUrl, title, notes, length, playcount };
-      songToReturn.userId = userId;
-      return songToReturn;
-    }))
+  Song.findAll({ where: { '$artist.id$': userId }, include: [{model: User, as: 'artist', though: 'collaborators'}] })
     .then(songs => res.json(songs))
-    .catch(next)
-})
+    .catch(next);
+});
 
 router.get('/:id/comments', (req, res, next) => {
   const id = Number(req.params.id);
