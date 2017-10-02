@@ -24,5 +24,5 @@ router.get('/:id/comments', (req, res, next) => {
   const id = Number(req.params.id);
   User.findOne({ where: { id: id }, include: [{ model: Comment }] })
     .then(user => res.json(user.comments))
-    .catch(next)
+    .catch(next);
 })
