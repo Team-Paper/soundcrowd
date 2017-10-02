@@ -1,5 +1,5 @@
 import React from 'react';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { Track } from '../components';
 
 const styles = {
@@ -39,4 +39,15 @@ const TrackList = (props) => {
   );
 };
 
-export default TrackList;
+const mapState = (state) => {
+  const clips = state.clips.map(clip => ({
+    url: state.files.find(f => f.id === clip.fileId).url,
+    track: clip.track,
+    startTime: clip.startTime,
+    duration: state.timeline.soundClips[clip.fileId] ?
+      state.timeline.soundClips[clip.fileId].duration : 0,
+  }));
+  return { clips };
+};
+
+export default connect(mapState)(TrackList);
