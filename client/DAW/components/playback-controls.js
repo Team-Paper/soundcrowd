@@ -7,6 +7,7 @@ import { setStart } from '../project-store/reducers/timeline/playedAt';
 
 const PlaybackControls = (props) => {
   const { isPlaying, togglePlay } = props;
+  console.log('props are', props);
   return (
     <Menu compact icon style={{ position: 'fixed' }}>
       {
@@ -22,7 +23,7 @@ const PlaybackControls = (props) => {
   );
 };
 
-const mapState = state => ({
+const mapState = (state, ownProps) => ({
   isPlaying: state.timeline.isPlaying,
 });
 

@@ -134,7 +134,7 @@ class Timeline extends React.Component {
     const { clips, tracks, time } = this.props;
     return (
       <div style={{ position: 'relative', overflowX: 'scroll' }}>
-        <PlaybackControls />
+        <PlaybackControls togglePlay={this.togglePlay} />
         <TrackList tracks={tracks} clips={clips} />
       </div>
     );
