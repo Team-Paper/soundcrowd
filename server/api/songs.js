@@ -29,7 +29,7 @@ router.get('/top/:number', (req, res, next) => {
     limit,
     include: [
       {
-        model: User, through: 'collaborators', as: 'artist', attributes: ['id', 'email']
+        model: User, through: 'collaborators', as: 'artist', attributes: ['id', 'username']
       },
     ],
   })
