@@ -62,6 +62,7 @@ class Timeline extends React.Component {
     ]);
     setTracksThunk(projectId, [
       { id: 1, volume: 100, isMuted: false },
+      { id: 2, volume: 100, isMuted: false },
     ]);
     setTempo(60);
     // end firebase seeding
@@ -131,11 +132,11 @@ class Timeline extends React.Component {
   }
 
   render() {
-    const { clips, tracks, time } = this.props;
+    const { tracks, time } = this.props;
     return (
       <div style={{ position: 'relative', overflowX: 'scroll' }}>
         <PlaybackControls togglePlay={this.togglePlay} />
-        <TrackList tracks={tracks} clips={clips} />
+        <TrackList tracks={tracks} />
       </div>
     );
   }
