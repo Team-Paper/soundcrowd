@@ -1,6 +1,7 @@
 import React from 'react';
 // import { connect } from 'react-redux';
 import { Card } from 'semantic-ui-react';
+import { Clip } from '../components';
 
 const styles = {
   track: {
@@ -21,15 +22,6 @@ const styles = {
     height: '100%',
     marginLeft: '180px',
   },
-  clip(clip, zoom) {
-    return {
-      position: 'absolute',
-      left: `${clip.startTime * zoom}px`,
-      width: `${clip.duration * zoom}px`,
-      height: '100%',
-      background: '#22a3ef',
-    };
-  },
 };
 
 
@@ -48,11 +40,7 @@ const Track = (props) => {
         </Card.Content>
       </Card>
       <div style={styles.trackTimeline}>
-        { clips.map(clip => (
-          <div key={clip.url} style={styles.clip(clip, zoom)}>
-            {clip.url} starting at {clip.startTime}
-          </div>
-        )) }
+        { clips.map(clip => (<Clip key={clip.url} clip={clip} zoom={zoom} />)) }
       </div>
     </div>
   );
