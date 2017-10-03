@@ -1,7 +1,7 @@
 import React from 'react';
 // import { connect } from 'react-redux';
 import { Card } from 'semantic-ui-react';
-import { Clip } from '../components';
+import { Clip, TrackControls } from '../components';
 
 const styles = {
   track: {
@@ -22,16 +22,16 @@ const styles = {
 };
 
 const Track = (props) => {
-  const { index, clips, project, zoom } = props;
+  const { clips, project, track, zoom } = props;
   return (
     <div className="track" style={styles.track}>
       <Card style={styles.trackControls}>
         <Card.Content>
           <Card.Header>
-            Track #{index + 1}
+            Track #{track.id}
           </Card.Header>
           <Card.Description>
-            Track specific controls go here
+            <TrackControls track={track} />
           </Card.Description>
         </Card.Content>
       </Card>

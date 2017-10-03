@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Track } from '../components';
+import { PlaybackMarker, Track } from '../components';
 
 const styles = {
   trackList(width) {
@@ -27,15 +27,16 @@ const TrackList = (props) => {
   return (
     <div className="track-list" style={styles.trackList(getWidth(clips, zoom))}>
       {
-        Object.entries(tracks).map(([key, track], index) => (
+        Object.entries(tracks).map(([key, track]) => (
           <Track
             key={`track-${key}`}
-            index={index}
+            track={track}
             project={project}
             zoom={zoom}
             clips={clips.filter(clip => clip.track === track.id)}
           />
         )) }
+      <PlaybackMarker zoom={zoom} />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const { Comment } = require('../db/models')
-const { isLoggedIn } = require('./gatekeepers')
+const { isSelf } = require('./gatekeepers')
 
 module.exports = router
 
@@ -19,14 +19,14 @@ router.get('/:id', (req, res, next) => {
 })
 
 //post a new comment
-router.post('/', isLoggedIn, (req, res, next) => {
+router.post('/', isSelf, (req, res, next) => {
   Comment.create(req.body)
     .then(comment => res.json(comment))
     .catch(next)
 });
 
 //update a comment
-router.put('/:id', (req, res, next) => {
+router.put('/:id', isSelf, (req, res, next) => {
   Comment.findById(Number(req.params.id))
     .then(comment => comment.update(req.body))
     .then(comment => res.json(comment))

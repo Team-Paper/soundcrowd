@@ -1,14 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Icon, Menu } from 'semantic-ui-react';
-import context from '../context';
-import { setIsPlaying } from '../project-store/reducers/timeline/isPlaying';
-import { setStart } from '../project-store/reducers/timeline/playedAt';
+import { setTime } from '../project-store/reducers/timeline/time';
 
 const PlaybackControls = (props) => {
-  const { isPlaying, togglePlay } = props;
+  const { isPlaying, resetTime, togglePlay } = props;
   return (
     <Menu compact icon style={{ position: 'fixed' }}>
+      <Menu.Item
+        name="reset"
+        onClick={() => {
+          if (isPlaying) togglePlay();
+          setTimeout(resetTime, 10);
+        }}
+      >
+        <Icon name="step backward" />
+      </Menu.Item>
       {
         isPlaying ?
           <Menu.Item name="pause" onClick={() => togglePlay()}>
@@ -22,10 +29,12 @@ const PlaybackControls = (props) => {
   );
 };
 
-const mapState = (state, ownProps) => ({
+const mapState = state => ({
   isPlaying: state.timeline.isPlaying,
 });
 
-const mapDispatch = dispatch => ({});
+const mapDispatch = dispatch => ({
+  resetTime: () => dispatch(setTime(0)),
+});
 
 export default connect(mapState, mapDispatch)(PlaybackControls);

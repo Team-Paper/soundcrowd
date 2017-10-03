@@ -121,11 +121,14 @@ class Timeline extends React.Component {
               data: formData,
             })
               .then(res => res.data)
-              .then(file => {
+              .then((file) => {
                 addFileThunk(projectId, file);
-                console.log('selectedTracks are', this.props.selectedTracks);
-                console.log('startRecordTime before firing addCLipThunk', this.props.startRecordTime);
-                addClipThunk(projectId, file.id, [1], this.props.startRecordTime);
+                addClipThunk(
+                  projectId,
+                  file.id,
+                  this.props.selectedTracks,
+                  this.props.startRecordTime,
+                );
               })
               .catch(console.error);
             // const audioURL = window.URL.createObjectURL(blob);
@@ -206,10 +209,10 @@ class Timeline extends React.Component {
   }
 
   startRecord() {
-    const { time, setStartRecordTime, setSelectedTracks } = this.props;
+    const { time, selectedTracks, setStartRecordTime } = this.props;
+    if (!selectedTracks.length) return;
     console.log('startRecordTime should be', time);
     setStartRecordTime(time);
-    setSelectedTracks([1]); // this is hardcoded for now!
     this.mediaRecorder.start();
     this.togglePlay();
     console.log('mediaRecorder state is', this.mediaRecorder.state);
