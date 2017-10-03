@@ -1,20 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Icon } from 'semantic-ui-react';
+import { addSelectedTrack } from '../project-store/reducers/timeline/selectedTracks';
 
 const TrackControls = (props) => {
   const { selectTrack } = props;
   return (
-    <Button circular icon onClick={() => selectTrack(track)}>
+    <Button circular icon onClick={() => selectTrack()}>
       <Icon color="red" name="circle" />
     </Button>
   );
 };
 
-const mapState = state => ({});
+const mapState = () => ({});
 
-const mapDispatch = dispatch => ({
-  selectTrack: track => null,
+const mapDispatch = (dispatch, ownProps) => ({
+  selectTrack: () => dispatch(addSelectedTrack(ownProps.track.id)),
 });
 
 export default connect(mapState, mapDispatch)(TrackControls);
