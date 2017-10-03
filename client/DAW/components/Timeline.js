@@ -30,6 +30,7 @@ class Timeline extends React.Component {
     this.togglePlay = this.togglePlay.bind(this);
     this.startRecord = this.startRecord.bind(this);
     this.stopRecord = this.stopRecord.bind(this);
+    this.mixdown = this.mixdown.bind(this);
     this.clipsRef = firebase.database().ref(`${this.props.projectId}/clips`);
     this.filesRef = firebase.database().ref(`${this.props.projectId}/files`);
     this.tracksRef = firebase.database().ref(`${this.props.projectId}/tracks`);
@@ -207,13 +208,66 @@ class Timeline extends React.Component {
     console.log('recorder stopped');
   }
 
+  mixdown() {
+    const { clips, soundClips } = this.props;
+    let offlineContext = new OfflineAudioContext(2, 10 * 44100, 44100); // hardcoded to stereo, length 300 seconds?
+    let chunks = [];
+
+    offlineContext.oncomplete = e => {
+      console.log('buffer is', e.renderedBuffer);
+      console.log('e is', e);
+      // const blob = new Blob(e.renderedBuffer, { type: 'audio/ogg; codecs=opus'})
+      // chunks = [];
+
+      // this code just plays the sound
+      const source = offlineContext.createBufferSource();
+      source.buffer = e.renderedBuffer;
+
+      const dest = offlineContext.createMediaStreamDestination();
+
+      const mediaRecorder = new MediaRecorder(dest.stream);
+      source.connect(dest);
+      mediaRecorder.ondataavailable = e => {
+        console.log('data available');
+        chunks.push(e.data);
+      }
+
+      mediaRecorder.onstop = e => {
+        console.log('stopped');
+        const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus'});
+        document.querySelector('.audio').src = URL.createObjectURL(blob);
+      }
+
+      mediaRecorder.start();
+      source.start(0);
+      setTimeout(() => mediaRecorder.stop(), 10000);
+      // source.connect(context.destination);
+      console.log('source is', source);
+    }
+    Promise.all(Object.entries(clips).map(([key, clip]) => {
+      console.log('clip is', clip);
+      const newBufferSource = offlineContext.createBufferSource();
+      const soundClip = soundClips[clip.fileId];
+      console.log('soundClip is', soundClip);
+      newBufferSource.buffer = soundClip.sound.buffer;
+      newBufferSource.connect(offlineContext.destination);
+      newBufferSource.start(clip.startTime);
+    }))
+      .then(() => offlineContext.startRendering())
+
+
+    const splitter = context.createChannelMerger(clips.length);
+  }
+
   render() {
     const { projectId, tracks, time } = this.props;
     return (
       <div style={{ position: 'relative', overflowX: 'scroll' }}>
         <div>{time}</div>
+        <audio controls className="audio"></audio>
         <button onClick={this.startRecord}>record</button>
         <button onClick={this.stopRecord}>stop</button>
+        <button onClick={this.mixdown}>mixdown</button>
         <PlaybackControls togglePlay={this.togglePlay} />
         <TrackList project={Number(projectId)} tracks={tracks} />
       </div>
