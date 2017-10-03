@@ -3,6 +3,8 @@ const User = require('../db/models');
 
 module.exports = router;
 
+// REVIEW: CSRF protection ??
+
 router.use('/projects', require('./projects'));
 router.use('/songs', require('./songs'));
 router.use('/comments', require('./comments'));

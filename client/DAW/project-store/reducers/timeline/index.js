@@ -7,4 +7,5 @@ import playedAt from './playedAt';
 import selectedTracks from './selectedTracks';
 import startRecordTime from './startRecordTime';
 
+// REVIEW such a long line
 export default combineReducers({ isPlaying, soundClips, time, start, playedAt, selectedTracks, startRecordTime });

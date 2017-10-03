@@ -9,6 +9,7 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
+        // REVIEW: YUS, excluding is important here
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader'
       },

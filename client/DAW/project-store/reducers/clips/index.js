@@ -9,6 +9,7 @@ export const setClips = clips => ({
   clips,
 });
 
+
 // REDUCER
 export default function reducer(clips = [], action) {
   switch (action.type) {
@@ -25,6 +26,10 @@ export const setClipsThunk = (projectId, clips) => () => {
     firebase.database().ref(`${projectId}/clips`).push(clip);
   });
 };
+
+export const removeClipThunk (projectId, clipId) => () => {
+  firebase.database().ref(`${projectId}/clips/${clip.id}`).remove();
+}
 
 export const addClipThunk = (projectId, fileId, selectedTracks, time) => () => {
   console.log('time is', time);

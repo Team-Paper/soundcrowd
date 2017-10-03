@@ -1,6 +1,7 @@
 const db = require('./server/db/db');
 const { User, Song, Comment } = require('./server/db/models');
 
+// REVIEW: PLZ INDENT IZ GUD FOR MY HEART
 const users = [
   { username: 'admin', email: 'admin@admin.admin', password: 'admin', bio: 'I am probably an admin account on this website so don\'t piss me off.', userImage: 'https://pbs.twimg.com/profile_images/596511405999661056/f04wv26A.jpg' },
   { username: 'poppy', email: 'user@user.user', password: 'user', bio: 'I am a regular user account on this website and I\'m really nice.', userImage: 'https://i.pinimg.com/736x/11/8a/c3/118ac35750a187594912120b941f83a4--vice-versa-smiley-faces.jpg' },
@@ -26,6 +27,7 @@ const comments = [
   { text: 'This song is the bomb' },
 ];
 
+// REVIEW: don't change now, but become comfortable with async/await
 db.sync({ force: true })
   .then(() => Promise.all(users.map(user => User.create(user))))
   .then((createdUsers) => {

@@ -44,6 +44,8 @@ class LandingPage extends React.Component {
   }
 }
 
+// REVIEW: 50 could be a configuration, or at least...
+//         const SONG_COUNT = 50;
 const mapState = (state) => {
   return {
     // sort the songs and take the top 50 for this component

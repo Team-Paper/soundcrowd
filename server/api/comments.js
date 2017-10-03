@@ -20,6 +20,7 @@ router.get('/:id', (req, res, next) => {
 
 //post a new comment
 router.post('/', isSelf, (req, res, next) => {
+  // REVIEW: whitelist
   Comment.create(req.body)
     .then(comment => res.json(comment))
     .catch(next)
