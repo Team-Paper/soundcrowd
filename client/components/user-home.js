@@ -98,8 +98,6 @@ const mapStateMyPage = (state) => {
     return userIds.includes(state.user.id);
   });
 
-  console.log(userProjects);
-
   return {
     user: state.user,
     songs: userSongs,

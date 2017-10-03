@@ -7,6 +7,7 @@ const GET_PROJECTS = 'GET_PROJECTS';
 const GET_PROJECT = 'GET_PROJECT';
 const REMOVE_PROJECT = 'REMOVE_PROJECT';
 const CLEAR_PROJECTS = 'CLEAR_PROJECTS';
+const UPDATE_PROJECT = 'UPDATE_PROJECT';
 
 /**
  * INITIAL STATE
@@ -20,6 +21,7 @@ export const getProject = project => ({ type: GET_PROJECT, project });
 export const removeProject = project => ({ type: REMOVE_PROJECT, project });
 export const getProjects = projects => ({ type: GET_PROJECTS, projects });
 export const clearProjects = () => ({ type: CLEAR_PROJECTS });
+export const updateProject = project => ({ type: UPDATE_PROJECT, project });
 
 /**
  * THUNK CREATORS
@@ -42,6 +44,14 @@ export const fetchUserProjects = (projectId) => {
   };
 };
 
+export const addCollaborator = (collabId, projectId) => {
+  return (dispatch) => {
+    return axios.put(`/${projectId}/addCollab`, { id: collabId })
+      .then(project => dispatch(updateProject(project)))
+      .catch(console.error.bind(console));
+  }
+}
+
 /**
  * REDUCER
  */
@@ -55,6 +65,8 @@ export default function (state = defaultProjects, action) {
       return state.filter(project => project.id !== action.project.id);
     case CLEAR_PROJECTS:
       return defaultProjects;
+    case UPDATE_PROJECT:
+      return [...state.filter(project => project.id !== action.project.id), state.project];
     default:
       return state;
   }
