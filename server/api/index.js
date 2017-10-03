@@ -5,7 +5,7 @@ module.exports = router;
 
 // Grabs the user requested in the param and adds the user object
 // to req. This is needed for the gatekeeper middleware to function.
-router.param('userId', (req, res, next, id) => {
+router.param('id', (req, res, next, id) => {
   User.findById(id)
     .then((user) => {
       if (!user) res.sendStatus(404)
