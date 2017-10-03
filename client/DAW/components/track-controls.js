@@ -4,17 +4,21 @@ import { Button, Icon } from 'semantic-ui-react';
 import { addSelectedTrack } from '../project-store/reducers/timeline/selectedTracks';
 
 const TrackControls = (props) => {
-  const { selectTrack } = props;
+  const { isSelected, selectTrack } = props;
   return (
     <Button circular icon onClick={() => selectTrack()}>
-      <Icon color="red" name="circle" />
+      <Icon color={isSelected ? 'green' : 'red'} name="circle" />
     </Button>
   );
 };
 
-const mapState = () => ({});
+const mapState = (state, ownProps) => ({
+  isSelected: state.timeline.selectedTracks.indexOf(ownProps.track.id) !== -1,
+});
 
 const mapDispatch = (dispatch, ownProps) => ({
+  deselectTrack: () => null,
+  // deselectTrack: () => dispatch(removeSelectedTrack(ownProps.track.id)),
   selectTrack: () => dispatch(addSelectedTrack(ownProps.track.id)),
 });
 
