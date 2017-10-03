@@ -1,6 +1,7 @@
 const User = require('./user')
 const Song = require('./song')
 const Comment = require('./comment')
+const Project = require('./project')
 const Soundfile = require('./soundfile')
 
 /**
@@ -26,6 +27,15 @@ const Soundfile = require('./soundfile')
  Song.hasMany(Comment);
  User.hasMany(Comment);
 
+ // Project is basically a join table between users and our firebase setup
+ // The id on the project table is our source of truth for firebase project ids
+ Project.belongsToMany(User);
+ User.belongsToMany(Project);
+
+ // Each song can come from a project so let's link these together
+ // That way there's a sort of paper trail between the original project
+ // and the song that is mixed down from it
+ Song.belongsTo(Project);
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
@@ -38,4 +48,5 @@ module.exports = {
   Comment,
   Song,
   Soundfile,
+  Project,
 }
