@@ -29,7 +29,7 @@ const AuthForm = (props) => {
         {error && error.response && <div> {error.response.data} </div>}
       </Form>
       <Container textAlign='center'>
-        <a href='/auth/google'>{displayName} with Google</a>
+        <a href='/auth/facebook'>{displayName} with Facebook</a>
       </Container>
     </Container>
   );
