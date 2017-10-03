@@ -6,6 +6,10 @@ const Project = db.define('project', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  projectId: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
 });
 
 

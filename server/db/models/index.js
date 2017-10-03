@@ -28,9 +28,8 @@ const Soundfile = require('./soundfile')
  User.hasMany(Comment);
 
  // Project is basically a join table between users and our firebase setup
- // The id on the project table is our source of truth for firebase project ids
- Project.belongsToMany(User);
- User.belongsToMany(Project);
+ // The projectId on the project table is our source of truth for firebase project ids
+ User.hasMany(Project);
 
  // Each song can come from a project so let's link these together
  // That way there's a sort of paper trail between the original project
