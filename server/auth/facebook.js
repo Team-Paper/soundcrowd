@@ -21,9 +21,9 @@ module.exports = router
 
 
 const strategy = new FacebookStrategy({
-  clientID: FACEBOOK_APP_ID,
-  clientSecret: FACEBOOK_APP_SECRET,
-  callbackURL: "http://localhost:8080/auth/facebook/callback",
+  clientID: process.env.FACEBOOK_APP_ID || '',
+  clientSecret: process.env.FACEBOOK_APP_SECRET || '',
+  callbackURL: process.env.FACEBOOK_CALLBACK || '',
   profileFields:['id','displayName','emails']
 },
 function(accessToken, refreshToken, profile, done) {
