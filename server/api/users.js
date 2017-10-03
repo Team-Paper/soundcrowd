@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { User, Song, Comment } = require('../db/models')
+const { User, Song, Comment, Project } = require('../db/models')
 module.exports = router
 
 router.get('/', (req, res, next) => {
@@ -15,7 +15,7 @@ router.get('/', (req, res, next) => {
 
 router.get('/:id/songs', (req, res, next) => {
   const userId = Number(req.params.id);
-  Song.findAll({ where: { '$artist.id$': userId }, include: [{model: User, as: 'artist', though: 'collaborators'}] })
+  Song.findAll({ where: { '$artist.id$': userId }, include: [{ model: User, as: 'artist', though: 'collaborators' }] })
     .then(songs => res.json(songs))
     .catch(next);
 });
@@ -26,3 +26,11 @@ router.get('/:id/comments', (req, res, next) => {
     .then(user => res.json(user.comments))
     .catch(next);
 })
+
+
+router.get('/:id/projects', (req, res, next) => {
+  const userId = Number(req.params.id);
+  Project.findAll({ where: { '$users.id$': userId }, include: [{ model: User, though: 'usersProjects' }] })
+    .then(projects => res.json(projects))
+    .catch(next);
+});
