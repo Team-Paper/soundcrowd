@@ -7,8 +7,7 @@ const styles = {
     return {
       position: 'relative',
       width: `${width}px`,
-      marginTop: '4em',
-      paddingTop: '1em',
+      margin: '4em 0 0 180px',
       boxShadow: '0 -1px 0 0 rgba(34,36,38,.15)',
     };
   },
@@ -19,14 +18,14 @@ const getWidth = (clips, zoom) => {
   clips.forEach((clip) => {
     end = Math.max(end, clip.startTime + clip.duration);
   });
-  return (zoom * end) + 180; // 180 = control card width
+  return (zoom * end);
 };
 
 const TrackList = (props) => {
   const { tracks, clips } = props;
   const zoom = 200; // pixels per second
   return (
-    <div style={styles.trackList(getWidth(clips, zoom))}>
+    <div className="track-list" style={styles.trackList(getWidth(clips, zoom))}>
       { tracks.map((track, index) => (
         <Track
           key={track.id}

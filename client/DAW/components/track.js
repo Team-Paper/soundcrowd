@@ -5,7 +5,6 @@ import { Clip } from '../components';
 
 const styles = {
   track: {
-    position: 'relative',
     height: '10em',
     marginBottom: '1em',
     boxShadow: '0 1px 0 0 rgba(34,36,38,.15)',
@@ -14,13 +13,11 @@ const styles = {
     position: 'fixed',
     width: '180px',
     height: '10em',
-    margin: '0',
+    margin: '0 0 0 -180px',
     zIndex: '10',
   },
   trackTimeline: {
-    position: 'relative',
     height: '100%',
-    marginLeft: '180px',
   },
 };
 

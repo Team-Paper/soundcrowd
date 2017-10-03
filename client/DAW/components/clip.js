@@ -7,7 +7,7 @@ const styles = {
       position: 'absolute',
       left: `${clip.startTime * zoom}px`,
       width: `${clip.duration * zoom}px`,
-      height: '100%',
+      height: '140px',
       background: '#22a3ef',
       opacity: isDragging ? 0.5 : 1,
       cursor: 'move',
@@ -24,8 +24,8 @@ const Clip = (props) => {
   const { isDragging, clip, zoom } = props;
   return (
     <Draggable
-      axis="x"
-      bounds="parent"
+      bounds=".track-list"
+      grid={[1, 154]}
       onStop={calculateDiff(zoom)}
     >
       <div style={styles.clip(clip, zoom, isDragging)}>
