@@ -22,16 +22,16 @@ const styles = {
 };
 
 const Track = (props) => {
-  const { index, clips, project, zoom } = props;
+  const { clips, project, track, zoom } = props;
   return (
     <div className="track" style={styles.track}>
       <Card style={styles.trackControls}>
         <Card.Content>
           <Card.Header>
-            Track #{index + 1}
+            Track #{track.id}
           </Card.Header>
           <Card.Description>
-            <TrackControls />
+            <TrackControls track={track} />
           </Card.Description>
         </Card.Content>
       </Card>

@@ -27,10 +27,10 @@ const TrackList = (props) => {
   return (
     <div className="track-list" style={styles.trackList(getWidth(clips, zoom))}>
       {
-        Object.entries(tracks).map(([key, track], index) => (
+        Object.entries(tracks).map(([key, track]) => (
           <Track
             key={`track-${key}`}
-            index={index}
+            track={track}
             project={project}
             zoom={zoom}
             clips={clips.filter(clip => clip.track === track.id)}
