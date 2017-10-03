@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { Project } = require('../db/models');
-const { isSelfOrAdmin, isSelf } = require('./gatekeepers');
+const { isSelf } = require('./gatekeepers');
 
 module.exports = router;
 
