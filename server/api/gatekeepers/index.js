@@ -20,6 +20,12 @@ const isLoggedIn = (req, res, next) => {
   else next();
 };
 
+const isSelf = (req, res, next) => {
+  // not logged in or possibly impersonating someone else
+  if (!req.user || req.body.userId !== req.user.id) res.sendStatus(401);
+  else next();
+};
+
 // Only allows admins
 const isAdmin = (req, res, next) => {
   if (!req.user) res.sendStatus(401); // not logged in
@@ -38,4 +44,5 @@ module.exports = {
   isAdmin,
   isSelfOrAdmin,
   isLoggedIn,
+  isSelf,
 };
