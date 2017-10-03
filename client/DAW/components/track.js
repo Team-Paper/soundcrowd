@@ -1,10 +1,10 @@
 import React from 'react';
 // import { connect } from 'react-redux';
 import { Card } from 'semantic-ui-react';
+import { Clip } from '../components';
 
 const styles = {
   track: {
-    position: 'relative',
     height: '10em',
     marginBottom: '1em',
     boxShadow: '0 1px 0 0 rgba(34,36,38,.15)',
@@ -13,27 +13,16 @@ const styles = {
     position: 'fixed',
     width: '180px',
     height: '10em',
-    margin: '0',
+    margin: '0 0 0 -180px',
     zIndex: '10',
   },
   trackTimeline: {
-    position: 'relative',
     height: '100%',
-    marginLeft: '180px',
-  },
-  clip(clip, zoom) {
-    return {
-      position: 'absolute',
-      left: `${clip.startTime * zoom}px`,
-      width: `${clip.duration * zoom}px`,
-      height: '100%',
-      background: '#22a3ef',
-    };
   },
 };
 
 const Track = (props) => {
-  const { index, clips, zoom } = props;
+  const { index, clips, project, zoom } = props;
   return (
     <div className="track" style={styles.track}>
       <Card style={styles.trackControls}>
@@ -47,12 +36,13 @@ const Track = (props) => {
         </Card.Content>
       </Card>
       <div style={styles.trackTimeline}>
-        {
-          clips.map(clip => (
-          <div key={clip.key} style={styles.clip(clip, zoom)}>
-            {clip.url} starting at {clip.startTime}
-          </div>
-        )) }
+        { clips.map(clip => (
+          <Clip
+            key={clip.key}
+            clip={clip}
+            project={project}
+            zoom={zoom}
+          />)) }
       </div>
     </div>
   );

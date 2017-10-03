@@ -208,14 +208,14 @@ class Timeline extends React.Component {
   }
 
   render() {
-    const { tracks, time } = this.props;
+    const { projectId, tracks, time } = this.props;
     return (
       <div style={{ position: 'relative', overflowX: 'scroll' }}>
         <div>{time}</div>
         <button onClick={this.startRecord}>record</button>
         <button onClick={this.stopRecord}>stop</button>
         <PlaybackControls togglePlay={this.togglePlay} />
-        <TrackList tracks={tracks} />
+        <TrackList project={Number(projectId)} tracks={tracks} />
       </div>
     );
   }
