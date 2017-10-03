@@ -194,8 +194,8 @@ class Timeline extends React.Component {
   }
 
   startRecord() {
-    const { time, setStartRecordTime, setSelectedTracks } = this.props;
-    // TODO: short circuit recording of no tracks are selected
+    const { time, selectedTracks, setStartRecordTime } = this.props;
+    if (!selectedTracks.length) return;
     console.log('startRecordTime should be', time);
     setStartRecordTime(time);
     this.mediaRecorder.start();
