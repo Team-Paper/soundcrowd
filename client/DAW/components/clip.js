@@ -1,5 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
+import { updateClipThunk } from '../project-store/reducers/clips';
 
 const styles = {
   clip(clip, zoom, isDragging) {
@@ -15,18 +17,14 @@ const styles = {
   },
 };
 
-const calculateDiff = zoom => (e, data) => {
-  console.log('coords', data.x, data.y);
-  console.log('diff-x', data.x / zoom);
-};
 
 const Clip = (props) => {
-  const { isDragging, clip, zoom } = props;
+  const { isDragging, baseClip, clip, zoom, updatePosition } = props;
   return (
     <Draggable
       bounds=".track-list"
       grid={[1, 154]}
-      onStop={calculateDiff(zoom)}
+      onStop={updatePosition(baseClip, zoom)}
     >
       <div style={styles.clip(clip, zoom, isDragging)}>
         {clip.url} starting at {clip.startTime}
@@ -35,4 +33,17 @@ const Clip = (props) => {
   );
 };
 
-export default Clip;
+const mapState = (state, ownProps) => ({
+  baseClip: state.clips[ownProps.clip.key],
+});
+
+const mapDispatch = (dispatch, ownProps) => ({
+  updatePosition: (clip, zoom) => (e, data) => {
+    // should also change track number >>> data.lastY / 154
+    const newPosition = { startTime: clip.startTime + (data.lastX / zoom) };
+    const updatedClip = Object.assign({}, clip, newPosition);
+    dispatch(updateClipThunk(ownProps.project, ownProps.clip.key, updatedClip));
+  },
+});
+
+export default connect(mapState, mapDispatch)(Clip);

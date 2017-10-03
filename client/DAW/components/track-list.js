@@ -22,7 +22,7 @@ const getWidth = (clips, zoom) => {
 };
 
 const TrackList = (props) => {
-  const { tracks, clips } = props;
+  const { project, tracks, clips } = props;
   const zoom = 200; // pixels per second
   return (
     <div className="track-list" style={styles.trackList(getWidth(clips, zoom))}>
@@ -31,6 +31,7 @@ const TrackList = (props) => {
           <Track
             key={`track-${key}`}
             index={index}
+            project={project}
             zoom={zoom}
             clips={clips.filter(clip => clip.track === track.id)}
           />
