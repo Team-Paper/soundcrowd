@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
+import { setTime } from '../project-store/reducers/timeline/time';
 
 const styles = {
   marker: {
@@ -34,8 +35,8 @@ class PlaybackMarker extends React.Component {
   }
 
   handleEnd(e, data) {
-    // this.setState({ x: 0 });
-    console.log(data.lastX);
+    const { updateTime, zoom } = this.props;
+    updateTime(data.lastX / zoom);
   }
 
   render() {
@@ -57,4 +58,8 @@ const mapState = state => ({
   time: state.timeline.time,
 });
 
-export default connect(mapState)(PlaybackMarker);
+const mapDispatch = dispatch => ({
+  updateTime: time => dispatch(setTime(time)),
+});
+
+export default connect(mapState, mapDispatch)(PlaybackMarker);
