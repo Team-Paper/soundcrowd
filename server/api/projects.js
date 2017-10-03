@@ -26,3 +26,10 @@ router.put('/:id', isSelf, (req, res, next) => {
     .then(project => res.json(project.update(req.body)))
     .catch(next);
 });
+
+router.put('/:id/addCollab', (req, res, next) => {
+  Project.findById(Number(req.params.id))
+    .then(project => project.addUser(req.body.id))
+    .then(project => res.json(project))
+    .catch(next);
+});
