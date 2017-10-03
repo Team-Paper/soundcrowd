@@ -5,9 +5,9 @@ const { isSelf } = require('./gatekeepers');
 module.exports = router;
 
 // get a specific project
-router.get('/:projectId', (req, res, next) => {
+router.get('/:id', (req, res, next) => {
   Project.findById(Number(req.params.id))
-    .then(comment => res.json(comment))
+    .then(project => res.json(project))
     .catch(next);
 });
 
