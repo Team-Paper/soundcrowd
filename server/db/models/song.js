@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('../db');
 
 const Song = db.define('song', {
-  url: {
+  filename: {
     type: Sequelize.STRING,
     unique: true,
     allowNull: false,
@@ -21,7 +21,14 @@ const Song = db.define('song', {
   title: {
     type: Sequelize.STRING,
     allowNull: false,
+    defaultValue: 'untitled',
   },
+  url: {
+    type: Sequelize.VIRTUAL,
+    get(){
+      return '/songs/' + this.getDataValue('filename');
+    }
+  }
 });
 
 Song.prototype.incrementPlaycount = function () {
