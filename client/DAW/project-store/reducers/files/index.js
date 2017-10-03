@@ -9,7 +9,7 @@ export const setFiles = files => ({
 });
 
 // REDUCER
-export default function reducer(files = [], action) {
+export default function reducer(files = {}, action) {
   switch(action.type) {
     case SET_FILES:
       return action.files;
@@ -22,3 +22,7 @@ export default function reducer(files = [], action) {
 export const setFilesThunk = (projectId, files) => dispatch => {
   firebase.database().ref(`${projectId}/files`).set(files);
 };
+
+export const addFileThunk = (projectId, file) => dispatch => {
+  firebase.database().ref(`${projectId}/files/${file.id}`).set(file);
+}

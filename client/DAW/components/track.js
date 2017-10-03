@@ -21,7 +21,6 @@ const styles = {
   },
 };
 
-
 const Track = (props) => {
   const { index, clips, zoom } = props;
   return (
@@ -37,7 +36,7 @@ const Track = (props) => {
         </Card.Content>
       </Card>
       <div style={styles.trackTimeline}>
-        { clips.map(clip => (<Clip key={clip.url} clip={clip} zoom={zoom} />)) }
+        { clips.map(clip => (<Clip key={clip.key} clip={clip} zoom={zoom} />)) }
       </div>
     </div>
   );

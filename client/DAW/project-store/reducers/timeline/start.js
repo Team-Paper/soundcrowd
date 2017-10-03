@@ -17,6 +17,7 @@ export default function reducer(start = 0, action) {
   }
 }
 
+// THUNK CREATORS
 export const setStartThunk = start => dispatch => {
   return Promise.resolve(dispatch(setStart(start)));
 };
