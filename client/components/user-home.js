@@ -2,14 +2,25 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Container, Item, Grid, Image, Header, Button } from 'semantic-ui-react';
-import { fetchUserComments, fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator } from '../store';
+import { Container, Item, Grid, Image, Header, Button, Select } from 'semantic-ui-react';
+import { fetchUserComments, fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchAllUsers } from '../store';
 import SongView from './song-view';
 
 /**
  * COMPONENT
  */
 class UserHome extends React.Component {
+  constructor() {
+    super()
+
+    this.state = {
+      userToAdd: -1,
+    };
+    this.addCollaborator = this.addCollaborator.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+  }
+
+
   componentDidMount() {
     if (this.props.user) {
       this.props.loadData(this.props.user.id);
@@ -24,6 +35,18 @@ class UserHome extends React.Component {
 
   componentWillUnmount() {
     this.props.clearData();
+  }
+
+  handleSelect(event, { value }) {
+    const userToAdd = Number(value);
+    this.setState({ userToAdd });
+  }
+
+  addCollaborator(projectId) {
+    // get the userId you want to add from the state
+    const userId = this.state.userToAdd;
+    if (!!userId ) this.props.addCollaborator(userId, projectId);
+    else console.log('you cannot');
   }
 
   render() {
@@ -66,7 +89,8 @@ class UserHome extends React.Component {
                   return (
                     <div key={project.id}>
                       <Header><Link to={`/projects/${project.id}`}>{project.title}</Link></Header>
-                      <Button onClick={()=>{this.props.addCollaborator(3,project.id)}} positive>Add Collaborator</Button>
+                      <Select onChange={this.handleSelect} placeholder='username' options={this.props.usersOptions} />
+                      <Button onClick={() => this.addCollaborator(project.id)} positive>Add Collaborator</Button>
                     </div>
                   );
                 })
@@ -77,6 +101,9 @@ class UserHome extends React.Component {
       </Grid>
     );
   }
+
+
+
 }
 
 /**
@@ -101,6 +128,7 @@ const mapStateMyPage = (state) => {
 
   return {
     user: state.user,
+    usersOptions: state.users.map(user => ({ key: user.id, value: user.id, text: user.email })),
     songs: userSongs,
     comments: state.comments.filter(comment => comment.userId === state.user.id),
     projects: userProjects,
@@ -113,6 +141,7 @@ const mapDispatchMyPage = (dispatch) => {
       dispatch(fetchUserSongs(userId));
       dispatch(fetchUserComments(userId));
       dispatch(fetchUserProjects(userId));
+      dispatch(fetchAllUsers());
     },
     clearData: () => {
       dispatch(clearSongs());
