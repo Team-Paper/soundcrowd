@@ -64,7 +64,7 @@ class UserHome extends React.Component {
           </Grid.Column>
 
           <Grid.Column width={8}>
-            <Header dividing as='h3'>Welcome, {user.email}</Header>
+            <Header dividing as='h3'>Welcome, {user.username}</Header>
             <Header dividing as='h4'>Bio:</Header><Button icon='write' />
             <Container text>{user.bio}</Container>
           </Grid.Column>
@@ -128,7 +128,7 @@ const mapStateMyPage = (state) => {
 
   return {
     user: state.user,
-    usersOptions: state.users.map(user => ({ key: user.id, value: user.id, text: user.email })),
+    usersOptions: state.users.map(user => ({ key: user.id, value: user.id, text: user.username || user.email})),
     songs: userSongs,
     comments: state.comments.filter(comment => comment.userId === state.user.id),
     projects: userProjects,
