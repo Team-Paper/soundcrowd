@@ -36,7 +36,7 @@ const TrackList = (props) => {
             clips={clips.filter(clip => clip.track === track.id)}
           />
         )) }
-      <PlaybackMarker />
+      <PlaybackMarker zoom={zoom} />
     </div>
   );
 };
