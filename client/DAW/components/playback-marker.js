@@ -3,12 +3,34 @@ import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
 import { setTime } from '../project-store/reducers/timeline/time';
 
+const attrs = {
+  width: 20,
+  color: '#e22',
+};
+
 const styles = {
   marker: {
     position: 'absolute',
     top: '0',
-    left: '1px',
-    width: '20px',
+    left: `${attrs.width / 2}px`,
+    width: `${attrs.width}px`,
+    height: '100%',
+    cursor: 'col-resize',
+    boxShadow: `0 1px 0 ${attrs.color}`,
+  },
+  point: {
+    position: 'absolute',
+    top: `-${attrs.width / 4}px`,
+    width: '0',
+    height: '0',
+    borderTop: `${attrs.width / 2}px solid ${attrs.color}`,
+    borderLeft: `${attrs.width / 2}px solid transparent`,
+    borderRight: `${attrs.width / 2}px solid transparent`,
+  },
+  line: {
+    position: 'absolute',
+    left: `${attrs.width / 2}px`,
+    width: '1px',
     height: '100%',
     background: '#e22',
   },
@@ -48,7 +70,10 @@ class PlaybackMarker extends React.Component {
         onStop={this.handleEnd}
         position={this.state}
       >
-        <div style={styles.marker} />
+        <div style={styles.marker}>
+          <span style={styles.point} />
+          <span style={styles.line} />
+        </div>
       </Draggable>
     );
   }
