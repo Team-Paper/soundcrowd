@@ -12,9 +12,10 @@ const styles = {
   marker: {
     position: 'absolute',
     top: '0',
-    left: `${attrs.width / 2}px`,
+    left: '0',
     width: `${attrs.width}px`,
     height: '100%',
+    marginLeft: `-${(attrs.width - 1) / 2}px`,
     cursor: 'col-resize',
     boxShadow: `0 1px 0 ${attrs.color}`,
   },
