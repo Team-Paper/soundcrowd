@@ -9,10 +9,10 @@ const users = [
 ];
 
 const songs = [
-  { url: 'https://storage.googleapis.com/juke-1379.appspot.com/juke-music/Dexter%20Britain/Creative%20Commons%20Volume%202/01%20The%20Tea%20Party.mp3', notes: 'this is a song i wrote about tea parties', length: 364, playcount: 5, title: 'The Tea Party' },
-  { url: 'https://storage.googleapis.com/juke-1379.appspot.com/juke-music/Dexter%20Britain/Creative%20Commons%20Volume%202/03%20My%20Song%20For%20January.mp3', notes: 'this is a song i wrote about january and the feelings it gives me', length: 452, playcount: 15, title: 'My Song for January' },
-  { url: 'https://storage.googleapis.com/juke-1379.appspot.com/juke-music/Nine%20Inch%20Nails/Ghosts%20I-IV/09%209%20Ghosts%20I.mp3', notes: 'this is actually a NIN song.', length: 520, playcount: 2, title: 'Ghosts' },
-  { url: 'https://storage.googleapis.com/juke-1379.appspot.com/juke-music/Nine%20Inch%20Nails/The%20Slip/05%20Echoplex.mp3', notes: 'a NIN song that I like', length: 452, playcount: 15, title: 'Echoplex' },
+  { filename: '01_The_Tea_Party.mp3', notes: 'this is a song i wrote about tea parties', length: 364, playcount: 5, title: 'The Tea Party' },
+  { filename: '03_My_Song_For_January.mp3', notes: 'this is a song i wrote about january and the feelings it gives me', length: 452, playcount: 15, title: 'My Song for January' },
+  { filename: '09_9_Ghosts_I.mp3', notes: 'this is actually a NIN song.', length: 520, playcount: 2, title: 'Ghosts' },
+  { filename: '05_Echoplex.mp3', notes: 'a NIN song that I like', length: 452, playcount: 15, title: 'Echoplex' },
 ];
 
 const comments = [
