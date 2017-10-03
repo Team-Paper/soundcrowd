@@ -38,10 +38,12 @@ class Clip extends React.Component {
     const { clip, zoom, updatePosition, baseClip } = this.props;
     const newPosition = {
       startTime: clip.startTime + (data.lastX / zoom),
-      // track: clip.track + +(data.lastY / 154),
+      // WARNING: Super not forward compatable. Literally iterates track number.
+      track: clip.track + (data.lastY / 154),
     };
     this.setState({ x: 0, y: 0 });
     updatePosition(baseClip, newPosition);
+    // NOTE: component tries to call setState after switching tracks
   }
 
   render() {
