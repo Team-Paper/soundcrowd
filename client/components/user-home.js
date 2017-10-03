@@ -1,14 +1,26 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Container, Item, Grid, Image, Header, Button } from 'semantic-ui-react';
-import { fetchUserComments, fetchUserSongs, clearSongs } from '../store';
+import { Link } from 'react-router-dom';
+import { Container, Item, Grid, Image, Header, Button, Select } from 'semantic-ui-react';
+import { fetchUserComments, fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchAllUsers } from '../store';
 import SongView from './song-view';
 
 /**
  * COMPONENT
  */
 class UserHome extends React.Component {
+  constructor() {
+    super()
+
+    this.state = {
+      userToAdd: -1,
+    };
+    this.addCollaborator = this.addCollaborator.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+  }
+
+
   componentDidMount() {
     if (this.props.user) {
       this.props.loadData(this.props.user.id);
@@ -25,10 +37,22 @@ class UserHome extends React.Component {
     this.props.clearData();
   }
 
-  render() {
-    const { user, songs, comments } = this.props;
+  handleSelect(event, { value }) {
+    const userToAdd = Number(value);
+    this.setState({ userToAdd });
+  }
 
-    if (!user || !songs) return <div />;
+  addCollaborator(projectId) {
+    // get the userId you want to add from the state
+    const userId = this.state.userToAdd;
+    if (!!userId ) this.props.addCollaborator(userId, projectId);
+    else console.log('you cannot');
+  }
+
+  render() {
+    const { user, songs, comments, projects } = this.props;
+
+    if (!user || !songs || !projects) return <div />;
 
     return (
       <Grid>
@@ -40,7 +64,7 @@ class UserHome extends React.Component {
           </Grid.Column>
 
           <Grid.Column width={8}>
-            <Header dividing as='h3'>Welcome, {user.email}</Header>
+            <Header dividing as='h3'>Welcome, {user.username}</Header>
             <Header dividing as='h4'>Bio:</Header><Button icon='write' />
             <Container text>{user.bio}</Container>
           </Grid.Column>
@@ -59,11 +83,27 @@ class UserHome extends React.Component {
                 })
               }
             </Item.Group>
+            <Item.Group>
+              {
+                projects.map((project) => {
+                  return (
+                    <div key={project.id}>
+                      <Header><Link to={`/projects/${project.id}`}>{project.title}</Link></Header>
+                      <Select onChange={this.handleSelect} placeholder='username' options={this.props.usersOptions} />
+                      <Button onClick={() => this.addCollaborator(project.id)} positive>Add Collaborator</Button>
+                    </div>
+                  );
+                })
+              }
+            </Item.Group>
           </Grid.Column>
         </Grid.Row>
       </Grid>
     );
   }
+
+
+
 }
 
 /**
@@ -79,10 +119,19 @@ const mapStateMyPage = (state) => {
     const userIds = song.artist.map(user => user.id);
     return userIds.includes(state.user.id);
   });
+
+  let userProjects = state.projects.slice();
+  userProjects = userProjects.filter((project) => {
+    const userIds = project.users.map(user => user.id);
+    return userIds.includes(state.user.id);
+  });
+
   return {
     user: state.user,
+    usersOptions: state.users.map(user => ({ key: user.id, value: user.id, text: user.username || user.email})),
     songs: userSongs,
     comments: state.comments.filter(comment => comment.userId === state.user.id),
+    projects: userProjects,
   };
 };
 
@@ -91,10 +140,13 @@ const mapDispatchMyPage = (dispatch) => {
     loadData: (userId) => {
       dispatch(fetchUserSongs(userId));
       dispatch(fetchUserComments(userId));
+      dispatch(fetchUserProjects(userId));
+      dispatch(fetchAllUsers());
     },
     clearData: () => {
       dispatch(clearSongs());
     },
+    addCollaborator: (userId, projectId) => dispatch(addCollaborator(userId, projectId)),
   };
 };
 
