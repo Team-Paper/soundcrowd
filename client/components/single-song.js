@@ -1,20 +1,47 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Grid, Image, Header, Label, Icon, Comment } from 'semantic-ui-react';
-import { fetchSong } from '../store';
+import { Container, Grid, Image, Header, Label, Icon, Comment, Form, Button } from 'semantic-ui-react';
+import { fetchSong, fetchSongComments, postComment } from '../store';
 
 class SingleSong extends React.Component {
-
-  componentDidMount() {
-    this.props.loadSong();
+  constructor() {
+    super();
+    this.state = {
+      text: '',
+    };
+    this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {
-    if (!newProps.song) this.props.loadSong();
+  componentDidMount() {
+    this.props.loadData();
+  }
+
+  // componentWillReceiveProps(newProps) {
+  //   if (!newProps.song) this.props.loadData();
+  // }
+
+  handleChange(event) {
+    this.setState({ text: event.target.value });
+  }
+
+  handleCommentSubmit(event) {
+    event.preventDefault();
+
+    const comment = {};
+    comment.text = this.state.text;
+    comment.user = this.props.user;
+    comment.userId = this.props.user.id;
+    comment.songId = this.props.song.id;
+
+    console.log(comment);
+
+    this.props.postComment(comment)
+    this.setState({ text: '' });
   }
 
   render() {
-    const { song } = this.props;
+    const { song, user } = this.props;
     if (!song) return <div />;
     return (
       <Container>
@@ -36,7 +63,7 @@ class SingleSong extends React.Component {
             </Grid.Column>
 
             <Grid.Column>
-              <Header>Notes:</Header>
+              <Header dividing>Notes:</Header>
               <Container text textAlign='justified'>
                 {song.notes}
               </Container>
@@ -49,6 +76,35 @@ class SingleSong extends React.Component {
                 <Icon name='play' /> {song.playcount}
               </Label>
 
+              <Comment.Group size='large'>
+                <Header as='h3' dividing>Comments</Header>
+                { user.id ?
+                <Form reply onSubmit={this.handleCommentSubmit}>
+                  <Form.TextArea onChange={this.handleChange} />
+                  <Button content='Add Comment' icon='edit' primary />
+                </Form>
+                :
+                <p>Log in or sign up to leave comments</p>
+                }
+
+                {
+                  this.props.comments.map((comment) => {
+                    return (
+                      <Comment key={comment.id}>
+                        <Comment.Avatar src={comment.user.userImage} />
+                        <Comment.Author>
+                          {comment.user.email // this is terrible, they need usernames
+                          }
+                        </Comment.Author>
+                        <Comment.Content>
+                          {comment.text}
+                        </Comment.Content>
+                      </Comment>
+                    );
+                  })
+                }
+              </Comment.Group>
+
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -58,20 +114,25 @@ class SingleSong extends React.Component {
 }
 
 const mapState = (state, ownProps) => {
+  const id = Number(ownProps.match.params.id);
   return {
-    song: state.songs.find(song => Number(ownProps.match.params.id) === song.id),
+    song: state.songs.find(song => id === song.id),
+    comments: state.comments.filter(comment => id === comment.songId),
+    user: state.user,
   };
 };
 
 const mapDispatch = (dispatch, ownProps) => {
   const id = Number(ownProps.match.params.id);
   return {
-    loadSong: () => {
+    loadData: () => {
       dispatch(fetchSong(id));
+      dispatch(fetchSongComments(id));
     },
     play: () => {
       // TODO: add thunks to the store to dispatch a play event to the api
-    }
+    },
+    postComment: comment => dispatch(postComment(comment)),
   };
 };
 

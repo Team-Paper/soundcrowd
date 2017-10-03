@@ -1,5 +1,7 @@
 const router = require('express').Router()
-const { Comment} = require('../db/models')
+const { Comment } = require('../db/models')
+const { isLoggedIn } = require('./gatekeepers')
+
 module.exports = router
 
 // attach the user's id to the body so that
@@ -17,12 +19,11 @@ router.get('/:id', (req, res, next) => {
 })
 
 //post a new comment
-router.post('/', (req, res, next) => {
-  console.log("req.body", req.body)
+router.post('/', isLoggedIn, (req, res, next) => {
   Comment.create(req.body)
     .then(comment => res.json(comment))
     .catch(next)
-})
+});
 
 //update a comment
 router.put('/:id', (req, res, next) => {

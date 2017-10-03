@@ -11,10 +11,10 @@ const PlaybackControls = (props) => {
     <Menu compact icon style={{ position: 'fixed' }}>
       {
         isPlaying ?
-          <Menu.Item name="pause" onClick={() => togglePlay(isPlaying)}>
+          <Menu.Item name="pause" onClick={() => togglePlay()}>
             <Icon name="pause" />
           </Menu.Item> :
-          <Menu.Item name="play" onClick={() => togglePlay(isPlaying)}>
+          <Menu.Item name="play" onClick={() => togglePlay()}>
             <Icon name="play" />
           </Menu.Item>
       }
@@ -22,22 +22,10 @@ const PlaybackControls = (props) => {
   );
 };
 
-const mapState = state => ({
+const mapState = (state, ownProps) => ({
   isPlaying: state.timeline.isPlaying,
 });
 
-const mapDispatch = dispatch => ({
-  togglePlay(isPlaying) {
-    if (!isPlaying) {
-      dispatch(setIsPlaying(true));
-      dispatch(setStart(context.currentTime));
-      // _tick();
-    } else {
-      dispatch(setIsPlaying(false));
-      dispatch(setStart(null));
-      // must cancel this_tick();
-    }
-  },
-});
+const mapDispatch = dispatch => ({});
 
 export default connect(mapState, mapDispatch)(PlaybackControls);

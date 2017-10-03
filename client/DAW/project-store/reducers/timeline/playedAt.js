@@ -2,7 +2,7 @@
 const SET_PLAYED_AT = 'SET_PLAYED_AT';
 
 // ACTION CREATORS
-export const setStart = playedAt => ({
+export const setPlayedAt = playedAt => ({
   type: SET_PLAYED_AT,
   playedAt
 });
@@ -16,3 +16,7 @@ export default function reducer(playedAt = 0, action) {
       return playedAt;
   }
 }
+
+export const setPlayedAtThunk = playedAt => dispatch => {
+  return Promise.resolve(dispatch(setPlayedAt(playedAt)));
+};

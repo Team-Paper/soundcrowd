@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Item, Header } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { fetchTopSongs } from '../store';
+import { fetchTopSongs, clearSongs } from '../store';
+import SongView from './song-view'
 
 /**
  * COMPONENT
@@ -12,10 +14,14 @@ class LandingPage extends React.Component {
     if (this.props.fetchData) this.props.fetchData();
   }
 
-  componentWillReceiveProps(newProps) {
-    if (!this.props.fetchData && newProps.fetchData) {
-      newProps.fetchData();
-    }
+  // componentWillReceiveProps(newProps) {
+  //   if (!this.props.fetchData && newProps.fetchData) {
+  //     newProps.fetchData();
+  //   }
+  // }
+
+  componentWillUnmount() {
+    this.props.clearData();
   }
 
   render() {
@@ -28,20 +34,7 @@ class LandingPage extends React.Component {
           {
             this.props.songs.map((song, index) => {
               return (
-                <Item key={song.id}>
-                  <Item.Image src={song.imageUrl || 'http://via.placeholder.com/150x150'} />
-                  <Item.Content>
-                    <Item.Header>
-                      <Header>#{index + 1}: {song.title}</Header>
-                    </Item.Header>
-                    <Item.Description>
-                      <br /><br />
-                      <audio controls>
-                        <source src={song.url} type="audio/mp3" />
-                      </audio>
-                    </Item.Description>
-                  </Item.Content>
-                </Item>
+                <SongView key={song.id} index={index} song={song} size='large' />
               );
             })
           }
@@ -65,6 +58,7 @@ const mapDispatch = (dispatch) => {
       // fetches the top 50 songs
       dispatch(fetchTopSongs(50));
     },
+    clearData: () => dispatch(clearSongs()),
   };
 };
 
