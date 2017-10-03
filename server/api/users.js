@@ -15,6 +15,7 @@ router.get('/', (req, res, next) => {
 
 router.get('/:id/songs', (req, res, next) => {
   const userId = Number(req.params.id);
+  // REVIEW: indentation plz
   Song.findAll({ where: { '$artist.id$': userId }, include: [{model: User, as: 'artist', though: 'collaborators'}] })
     .then(songs => res.json(songs))
     .catch(next);

@@ -126,6 +126,8 @@ Timeline.prototype.checkAndPlay = function(now) {
   })
 }
 
+// REVIEW: is it possible to switch between projects ?
+//         this might need to happen at `componentDidMount`
 timeline = new Timeline(project.settings);
 
 Promise.all(project.clips.map(clip => {

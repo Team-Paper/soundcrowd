@@ -59,6 +59,13 @@ class Clip extends React.Component {
         <div style={styles.clip(clip, zoom, isDragging)}>
           {clip.url} starting at {clip.startTime}
         </div>
+        <button
+          onClick={(event) => {
+            this.props.removeClip(clip);
+          })
+        >
+          X
+        </button>
       </Draggable>
     );
   }
@@ -73,6 +80,9 @@ const mapDispatch = (dispatch, ownProps) => ({
     const updatedClip = Object.assign({}, clip, newPosition);
     dispatch(updateClipThunk(ownProps.project, ownProps.clip.key, updatedClip));
   },
+  removeClip: (clip) => {
+    dispatch(removeClipThunk(ownProps.project.id, clip.key)),
+  }
 });
 
 export default connect(mapState, mapDispatch)(Clip);

@@ -1,6 +1,9 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
 
+// REVIEW: how do you deal  with multiple exports of the same project?
+//         will those be new songs? Or will they replace the existing song?
+//         How would that mess with inline comments?
 const Song = db.define('song', {
   url: {
     type: Sequelize.STRING,

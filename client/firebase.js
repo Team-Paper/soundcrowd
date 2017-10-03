@@ -1,5 +1,6 @@
 import * as firebase from "firebase";
 
+// REVIEW: consider `process.env.FIREBASE_APP_ID` => `soundcrowd-cd132`
 const config = {
   apiKey: process.env.FIREBASE_API_KEY || '',
   authDomain: "soundcrowd-cd132.firebaseapp.com",
