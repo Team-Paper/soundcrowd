@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Project } = require('../db/models');
+const { Project, User } = require('../db/models');
 const { isSelf } = require('./gatekeepers');
 
 module.exports = router;
@@ -28,12 +28,11 @@ router.put('/:id', isSelf, (req, res, next) => {
 });
 
 router.put('/:id/addCollab', (req, res, next) => {
-  Project.findById(Number(req.params.id))
-    .then((project) => {
-      project.addUser(req.body.id);
-      console.log('PROJECT', project)
-      return project.save();
-    })
-    .then(project => res.json(project))
-    .catch(next);
+  Project.findOne({ where: { id: Number(req.params.id) }, include: [{ model: User, through: 'usersProjects' }] })
+  .then((project) => {
+    project.addUser(req.body.id);
+    return project.save();
+  })
+  .then(project => res.json(project))
+  .catch(next);
 });

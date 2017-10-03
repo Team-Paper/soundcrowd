@@ -46,8 +46,11 @@ export const fetchUserProjects = (projectId) => {
 
 export const addCollaborator = (collabId, projectId) => {
   return (dispatch) => {
-    return axios.put(`/${projectId}/addCollab`, { id: collabId })
-      .then(project => dispatch(updateProject(project)))
+    return axios.put(`/api/projects/${projectId}/addCollab`, { id: collabId })
+      .then(res => res.data)
+      .then((project) => {
+        dispatch(updateProject(project));
+      })
       .catch(console.error.bind(console));
   }
 }
@@ -66,7 +69,10 @@ export default function (state = defaultProjects, action) {
     case CLEAR_PROJECTS:
       return defaultProjects;
     case UPDATE_PROJECT:
-      return [...state.filter(project => project.id !== action.project.id), state.project];
+      return state.map((project) => {
+        if (project.id !== action.project.id) return project;
+        return action.project;
+      });
     default:
       return state;
   }

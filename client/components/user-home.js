@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Container, Item, Grid, Image, Header, Button } from 'semantic-ui-react';
-import { fetchUserComments, fetchUserSongs, clearSongs, fetchUserProjects } from '../store';
+import { fetchUserComments, fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator } from '../store';
 import SongView from './song-view';
 
 /**
@@ -66,6 +66,7 @@ class UserHome extends React.Component {
                   return (
                     <div key={project.id}>
                       <Header><Link to={`/projects/${project.id}`}>{project.title}</Link></Header>
+                      <Button onClick={()=>{this.props.addCollaborator(3,project.id)}} positive>Add Collaborator</Button>
                     </div>
                   );
                 })
@@ -116,6 +117,7 @@ const mapDispatchMyPage = (dispatch) => {
     clearData: () => {
       dispatch(clearSongs());
     },
+    addCollaborator: (userId, projectId) => dispatch(addCollaborator(userId, projectId)),
   };
 };
 
