@@ -30,6 +30,6 @@ router.put('/:id', isSelf, (req, res, next) => {
 router.put('/:id/addCollab', (req, res, next) => {
   Project.findById(Number(req.params.id))
     .then(project => project.addUser(req.body.id))
-    .then(project => res.json(project))
+    .then(() => res.sendStatus(201))
     .catch(next);
 });
