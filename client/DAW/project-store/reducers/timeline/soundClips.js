@@ -43,6 +43,7 @@ export const createSoundClips = (files, soundClips) => dispatch => {
             played: false,
             duration: audio.duration,
           }));
+          return audio;
         });
     }
   }))

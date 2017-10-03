@@ -5,6 +5,7 @@ import axios from 'axios';
 import { PlaybackControls, TrackList } from '../components';
 import context from '../context';
 import getUserMedia from '../getUserMedia';
+import { createWaveform } from '../waveformBuilder';
 import { setTime } from '../project-store/reducers/timeline/time';
 import { setFiles, setFilesThunk, addFileThunk } from '../project-store/reducers/files';
 import { setClips, setClipsThunk, addClipThunk } from '../project-store/reducers/clips';
@@ -48,7 +49,8 @@ class Timeline extends React.Component {
       setFiles(Object.assign({}, received));
       // createSoundClips checks for new files, gets them, and puts the audio buffer in the soundClips object
       console.log('received files are', snapshot.val());
-      createSoundClips(received, soundClips);
+      createSoundClips(received, soundClips)
+        .then(buffers => buffers.forEach(createWaveform));
     });
     this.clipsRef.on('value', snapshot => {
       const received = snapshot.val();
