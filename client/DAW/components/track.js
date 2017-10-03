@@ -1,7 +1,7 @@
 import React from 'react';
 // import { connect } from 'react-redux';
 import { Card } from 'semantic-ui-react';
-import { Clip } from '../components';
+import { Clip, TrackControls } from '../components';
 
 const styles = {
   track: {
@@ -31,7 +31,7 @@ const Track = (props) => {
             Track #{index + 1}
           </Card.Header>
           <Card.Description>
-            Track specific controls go here
+            <TrackControls />
           </Card.Description>
         </Card.Content>
       </Card>
