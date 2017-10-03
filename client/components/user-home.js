@@ -1,8 +1,9 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Container, Item, Grid, Image, Header, Button } from 'semantic-ui-react';
-import { fetchUserComments, fetchUserSongs, clearSongs } from '../store';
+import { fetchUserComments, fetchUserSongs, clearSongs, fetchUserProjects } from '../store';
 import SongView from './song-view';
 
 /**
@@ -26,9 +27,9 @@ class UserHome extends React.Component {
   }
 
   render() {
-    const { user, songs, comments } = this.props;
+    const { user, songs, comments, projects } = this.props;
 
-    if (!user || !songs) return <div />;
+    if (!user || !songs || !projects) return <div />;
 
     return (
       <Grid>
@@ -59,6 +60,17 @@ class UserHome extends React.Component {
                 })
               }
             </Item.Group>
+            <Item.Group>
+              {
+                projects.map((project) => {
+                  return (
+                    <div key={project.id}>
+                      <Header><Link to={`/projects/${project.id}`}>{project.title}</Link></Header>
+                    </div>
+                  );
+                })
+              }
+            </Item.Group>
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -79,10 +91,20 @@ const mapStateMyPage = (state) => {
     const userIds = song.artist.map(user => user.id);
     return userIds.includes(state.user.id);
   });
+
+  let userProjects = state.projects.slice();
+  userProjects = userProjects.filter((project) => {
+    const userIds = project.users.map(user => user.id);
+    return userIds.includes(state.user.id);
+  });
+
+  console.log(userProjects);
+
   return {
     user: state.user,
     songs: userSongs,
     comments: state.comments.filter(comment => comment.userId === state.user.id),
+    projects: userProjects,
   };
 };
 
@@ -91,6 +113,7 @@ const mapDispatchMyPage = (dispatch) => {
     loadData: (userId) => {
       dispatch(fetchUserSongs(userId));
       dispatch(fetchUserComments(userId));
+      dispatch(fetchUserProjects(userId));
     },
     clearData: () => {
       dispatch(clearSongs());
