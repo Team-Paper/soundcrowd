@@ -28,11 +28,19 @@ export const setTracksThunk = (projectId, tracks) => dispatch => {
 };
 
 export const toggleMuteTrackThunk = (projectId, track) => dispatch => {
-  console.log('muteTrackThunk triggered');
   const val = !track.isMuted;
   firebase.database().ref(`${projectId}/tracks/${track.id}/isMuted`).set(val);
 };
 
 export const setTrackVolume = (projectId, track, newVolume) => dispatch => {
   firebase.database().ref(`${projectId}/tracks/${track.id}/volume`).set(+newVolume);
-}
+};
+
+export const setTrackReverbGain = (projectId, track, newGain) => dispatch => {
+  firebase.database().ref(`${projectId}/tracks/${track.id}/reverb/gain`).set(+newGain);
+};
+
+export const toggleTrackReverb = (projectId, track) => dispatch => {
+  const val = !track.reverb.on;
+  firebase.database().ref(`${projectId}/tracks/${track.id}/reverb/on`).set(val);
+};

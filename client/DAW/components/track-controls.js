@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button, Icon } from 'semantic-ui-react';
 import { addSelectedTrack, removeSelectedTrack } from '../project-store/reducers/timeline/selectedTracks';
 import { toggleMuteTrackThunk, setTrackVolume } from '../project-store/reducers/tracks';
+import ReverbModal from './Reverb';
 
 const TrackControls = (props) => {
   const { isSelected, deselectTrack, selectTrack, track, toggleMuteTrackThunk, projectId, setTrackVolume } = props;
@@ -16,6 +17,7 @@ const TrackControls = (props) => {
         <Icon color={track.isMuted ? 'red' : 'grey'} name="mute" />
       </Button>
       <input type="range" value={track.volume} onChange={e => setTrackVolume(projectId, track, e.target.value)} min="0" max="100" step="1" />
+      <ReverbModal track={track} projectId={projectId} />
     </div>
   );
 };
