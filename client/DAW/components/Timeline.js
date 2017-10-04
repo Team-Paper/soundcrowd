@@ -71,14 +71,6 @@ class Timeline extends React.Component {
       setLength(received);
     });
 
-    // if it's a new project and tempo/length is 0, set a default length/tempo
-    if (length === 0) {
-      setLengthThunk(projectId, 10);
-    }
-    if (tempo === 0) {
-      setTempoThunk(projectId, 60);
-    }
-
     // start firebase seeding
     // setFilesThunk(projectId, [
     //   { id: 1, url: '/NotATumah.mp3' },
@@ -302,7 +294,7 @@ class Timeline extends React.Component {
   }
 
   render() {
-    const { projectId, tracks, time, setLength, length } = this.props;
+    const { projectId, tracks, time, setLengthThunk, length } = this.props;
     return (
       <div style={{ position: 'relative', overflowX: 'scroll' }}>
         <div>{time}</div>
@@ -310,7 +302,7 @@ class Timeline extends React.Component {
         <button onClick={this.stopRecord}>stop</button>
         <button onClick={this.mixdown}>mixdown</button>
         <span>length (seconds):</span>
-        <input type="text" value={length} onChange={e => setLength(e.target.value)} />
+        <input type="text" value={length} onChange={e => setLengthThunk(projectId, e.target.value)} />
         <PlaybackControls togglePlay={this.togglePlay} />
         <TrackList project={Number(projectId)} tracks={tracks} />
       </div>
