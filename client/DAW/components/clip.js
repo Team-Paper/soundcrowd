@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
-import { updateClipThunk } from '../project-store/reducers/clips';
+import { updateClipThunk, deleteClip } from '../project-store/reducers/clips';
+import { Button } from 'semantic-ui-react';
+
 
 const styles = {
   clip(clip, zoom, isDragging) {
@@ -47,7 +49,7 @@ class Clip extends React.Component {
   }
 
   render() {
-    const { isDragging, clip, zoom } = this.props;
+    const { isDragging, clip, zoom, project, deleteClip } = this.props;
     return (
       <Draggable
         bounds=".track-list"
@@ -58,7 +60,9 @@ class Clip extends React.Component {
       >
         <div style={styles.clip(clip, zoom, isDragging)}>
           {clip.url} starting at {clip.startTime}
+          <Button color='red' onClick={() => deleteClip(project, clip.key)}>X</Button>
         </div>
+
       </Draggable>
     );
   }
@@ -73,6 +77,7 @@ const mapDispatch = (dispatch, ownProps) => ({
     const updatedClip = Object.assign({}, clip, newPosition);
     dispatch(updateClipThunk(ownProps.project, ownProps.clip.key, updatedClip));
   },
+  deleteClip: (project, clipKey) => dispatch(deleteClip(project, clipKey))
 });
 
 export default connect(mapState, mapDispatch)(Clip);
