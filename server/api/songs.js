@@ -1,9 +1,34 @@
 const router = require('express').Router();
 const { Song, Comment, User } = require('../db/models');
 const multer = require('multer');
-const upload = multer({ dest: 'songs/' });
+const AWS = require('aws-sdk');
 
-module.exports = router
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+const uuidv4 = require('uuid/v4');
+
+
+const s3 = new AWS.S3();
+const myBucket = 'soundcrowd-files-fullstack';
+
+const upload2 = (req, res, next) => {
+  console.log('\n\nFILE:\n', req.file);
+
+  req.file.filename = uuidv4()+'.webm';
+
+  s3.createBucket({ Bucket: myBucket }, (err, data) => {
+    if (err) next(err);
+    else {
+      const params = { Bucket: myBucket, Key: req.file.filename, Body: req.file.buffer };
+      s3.putObject(params, (err, data) => {
+        if (err) next(err);
+        else next();
+      });
+    }
+  });
+
+}
+
 
 // get all songs
 router.get('/', (req, res, next) => {
@@ -13,11 +38,11 @@ router.get('/', (req, res, next) => {
 });
 
 // upload a mix
-router.post('/', upload.single('blob'), (req, res, next) => {
+router.post('/', upload.single('blob'), upload2, (req, res, next) => {
   Song.create({
     filename: req.file.filename,
   })
-    .then(song => {
+    .then((song) => {
       song.addArtist(req.session.passport.user);
       return song;
     })
@@ -85,3 +110,5 @@ router.put('/unlike/:id', (req, res, next) => {
     .then(song => res.sendStatus(200))
     .catch(next)
 })
+
+module.exports = router;

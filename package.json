@@ -46,7 +46,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "semantic-ui-react": "^0.74.2",
-    "sequelize": "^4.3.1"
+    "sequelize": "^4.3.1",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.9.0",
