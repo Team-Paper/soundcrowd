@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.126.0",
     "axios": "^0.15.3",
     "body-parser": "^1.16.1",
     "connect-session-sequelize": "^4.1.0",
@@ -45,7 +46,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "semantic-ui-react": "^0.74.2",
-    "sequelize": "^4.3.1"
+    "sequelize": "^4.3.1",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.9.0",
