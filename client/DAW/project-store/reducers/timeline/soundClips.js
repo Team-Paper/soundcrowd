@@ -34,6 +34,7 @@ export const createSoundClips = (files, soundClips) => dispatch => {
         .then(res => res.data)
         .then(responseAudio => context.decodeAudioData(responseAudio))
         .then(audio => {
+          console.log('audio', audio)
           let buffer = context.createBufferSource();
           console.log('decoding audio data');
           buffer.connect(context.destination);

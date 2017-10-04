@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
 import tempo from './tempo';
-import isMetronomeOn from './isMetronomeOn';
+import length from './length';
 
-export default combineReducers({ tempo, isMetronomeOn });
+export default combineReducers({ tempo, length });

@@ -14,9 +14,10 @@ import { createSoundClips } from '../project-store/reducers/timeline/soundClips'
 import { play, pause, playThunk } from '../project-store/reducers/timeline/isPlaying';
 import { setPlayedAt, setPlayedAtThunk } from '../project-store/reducers/timeline/playedAt';
 import { setStartThunk } from '../project-store/reducers/timeline/start';
-import { setTempo } from '../project-store/reducers/settings/tempo';
 import { setStartRecordTime } from '../project-store/reducers/timeline/startRecordTime';
 import { setSelectedTracks } from '../project-store/reducers/timeline/selectedTracks';
+import { setLength, setLengthThunk } from '../project-store/reducers/settings/length';
+import { setTempo, setTempoThunk } from '../project-store/reducers/settings/tempo';
 import firebase from '../../firebase';
 
 class Timeline extends React.Component {
@@ -31,17 +32,19 @@ class Timeline extends React.Component {
     this.togglePlay = this.togglePlay.bind(this);
     this.startRecord = this.startRecord.bind(this);
     this.stopRecord = this.stopRecord.bind(this);
+    this.mixdown = this.mixdown.bind(this);
     this.clipsRef = firebase.database().ref(`${this.props.projectId}/clips`);
     this.filesRef = firebase.database().ref(`${this.props.projectId}/files`);
     this.tracksRef = firebase.database().ref(`${this.props.projectId}/tracks`);
-    this.settingsRef = firebase.database().ref(`${this.props.projectId}/settings`);
+    this.tempoRef = firebase.database().ref(`${this.props.projectId}/settings/tempo`);
+    this.lengthRef = firebase.database().ref(`${this.props.projectId}/settings/length`);
     this.mediaRecorder = null;
     this.audioChunks = [];
   }
 
   componentDidMount() {
     // calling createSoundClips here for testing purposes, but will need to be done after project files array is retrieved
-    const { setFiles, setFilesThunk, addFileThunk, setClips, setClipsThunk, setTracks, setTracksThunk, setTempo, createSoundClips, clips, projectId, files, soundClips, addClipThunk, selectedTracks } = this.props;
+    const { setFiles, setFilesThunk, addFileThunk, setClips, setClipsThunk, setTracks, setTracksThunk, setTempo, setTempoThunk, createSoundClips, clips, projectId, files, soundClips, addClipThunk, selectedTracks, length, setLengthThunk, setLength, tempo } = this.props;
 
     // subscribe redux to firebase
     this.filesRef.on('value', snapshot => {
@@ -60,10 +63,22 @@ class Timeline extends React.Component {
       const received = snapshot.val();
       setTracks(Object.assign({}, received));
     });
-    this.settingsRef.on('value', snapshot => {
+    this.tempoRef.on('value', snapshot => {
       const received = snapshot.val();
-      setTempo(Object.assign({}, received));
+      setTempo(received);
     });
+    this.lengthRef.on('value', snapshot => {
+      const received = snapshot.val();
+      setLength(received);
+    });
+
+    // if it's a new project and tempo/length is 0, set a default length/tempo
+    if (length === 0) {
+      setLengthThunk(projectId, 10);
+    }
+    if (tempo === 0) {
+      setTempoThunk(projectId, 60);
+    }
 
     // start firebase seeding
     // setFilesThunk(projectId, [
@@ -212,13 +227,72 @@ class Timeline extends React.Component {
     console.log('recorder stopped');
   }
 
+  mixdown() {
+    const { clips, soundClips, length } = this.props;
+    const offlineContext = new OfflineAudioContext(2, length * 44100, 44100); // hardcoded to stereo, length 300 seconds?
+    const chunks = [];
+
+    offlineContext.oncomplete = e => {
+      const source = context.createBufferSource();
+      const dest = context.createMediaStreamDestination();
+      const mediaRecorder = new MediaRecorder(dest.stream);
+
+      source.buffer = e.renderedBuffer;
+      source.connect(dest);
+
+      mediaRecorder.ondataavailable = e => {
+        console.log('data available');
+        chunks.push(e.data);
+      }
+
+      mediaRecorder.onstop = e => {
+        const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus'});
+        const formData = new FormData();
+
+        formData.set('blob', blob);
+        axios({
+          method: 'post',
+          url: '/api/songs',
+          headers: { 'Content-Type': 'multipart/form-data' },
+          data: formData,
+        })
+          .then(res => res.data)
+          .then(file => {
+            console.log('mixdown upload received!');
+          })
+          .catch(console.error);
+      }
+
+      mediaRecorder.start();
+      source.start(0);
+      setTimeout(() => mediaRecorder.stop(), (length * 1000));
+    }
+
+    Promise.all(Object.entries(clips).map(([key, clip]) => {
+      console.log('clip is', clip);
+      const newBufferSource = offlineContext.createBufferSource();
+      const soundClip = soundClips[clip.fileId];
+      console.log('soundClip is', soundClip);
+      newBufferSource.buffer = soundClip.sound.buffer;
+      newBufferSource.connect(offlineContext.destination);
+      newBufferSource.start(clip.startTime);
+    }))
+      .then(() => offlineContext.startRendering())
+
+
+    const splitter = context.createChannelMerger(clips.length);
+  }
+
   render() {
-    const { projectId, tracks, time } = this.props;
+    const { projectId, tracks, time, setLength, length } = this.props;
     return (
       <div style={{ position: 'relative', overflowX: 'scroll' }}>
         <div>{time}</div>
         <button onClick={this.startRecord}>record</button>
         <button onClick={this.stopRecord}>stop</button>
+        <button onClick={this.mixdown}>mixdown</button>
+        <span>length (seconds):</span>
+        <input type="text" value={length} onChange={e => setLength(e.target.value)} />
         <PlaybackControls togglePlay={this.togglePlay} />
         <TrackList project={Number(projectId)} tracks={tracks} />
       </div>
@@ -240,6 +314,7 @@ const mapState = (state, ownProps) => {
   tracks: state.tracks,
   selectedTracks: state.timeline.selectedTracks,
   startRecordTime: state.timeline.startRecordTime,
+  length: state.settings.length,
 }};
 
 const mapDispatch = dispatch => ({
@@ -253,6 +328,7 @@ const mapDispatch = dispatch => ({
   setTracks: (tracks) => dispatch(setTracks(tracks)),
   setTracksThunk: (projectId, tracks) => dispatch(setTracksThunk(projectId, tracks)),
   setTempo: (tempo) => dispatch(setTempo(tempo)),
+  setTempoThunk: (projectId, tempo) => dispatch(setTempoThunk(projectId, tempo)),
   createSoundClips: (files, soundClips) => dispatch(createSoundClips(files, soundClips)),
   play: () => dispatch(play()),
   playThunk: () => dispatch(playThunk()),
@@ -262,6 +338,8 @@ const mapDispatch = dispatch => ({
   setStartThunk: start => dispatch(setStartThunk(start)),
   setSelectedTracks: selectedTracks => dispatch(setSelectedTracks(selectedTracks)),
   setStartRecordTime: time => dispatch(setStartRecordTime(time)),
+  setLength: length => dispatch(setLength(length)),
+  setLengthThunk: (projectId, length) => dispatch(setLengthThunk(projectId, length)),
 });
 
 export default connect(mapState, mapDispatch)(Timeline);

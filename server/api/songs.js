@@ -1,13 +1,29 @@
-const router = require('express').Router()
-const { Song, Comment, User } = require('../db/models')
+const router = require('express').Router();
+const { Song, Comment, User } = require('../db/models');
+const multer = require('multer');
+const upload = multer({ dest: 'songs/' });
+
 module.exports = router
 
-//get all songs
+// get all songs
 router.get('/', (req, res, next) => {
   Song.findAll()
     .then(songs => res.json(songs))
     .catch(next)
-})
+});
+
+// upload a mix
+router.post('/', upload.single('blob'), (req, res, next) => {
+  Song.create({
+    filename: req.file.filename,
+  })
+    .then(song => {
+      song.addArtist(req.session.passport.user);
+      return song;
+    })
+    .then(song => res.json(song))
+    .catch(next);
+});
 
 // get all comments for a particular song
 router.get('/:id/comments', (req, res, next) => {
