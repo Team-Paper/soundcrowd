@@ -48,7 +48,7 @@ class Clip extends React.Component {
   }
 
   render() {
-    const { baseClip, isDragging, clip, zoom } = this.props;
+    const { isDragging, clip, waveform, zoom } = this.props;
     return (
       <Draggable
         bounds=".track-list"
@@ -58,7 +58,7 @@ class Clip extends React.Component {
         position={this.state}
       >
         <div style={styles.clip(clip, zoom, isDragging)}>
-          <Waveform clip={baseClip} />
+          <Waveform waveform={waveform} />
           {clip.url} starting at {clip.startTime}
         </div>
       </Draggable>
@@ -66,9 +66,14 @@ class Clip extends React.Component {
   }
 }
 
-const mapState = (state, ownProps) => ({
-  baseClip: state.clips[ownProps.clip.key],
-});
+const mapState = (state, ownProps) => {
+  const baseClip = state.clips[ownProps.clip.key];
+  const soundClip = state.timeline.soundClips[baseClip.fileId];
+  return {
+    baseClip,
+    waveform: soundClip ? soundClip.waveform : [],
+  };
+};
 
 const mapDispatch = (dispatch, ownProps) => ({
   updatePosition: (clip, newPosition) => {
