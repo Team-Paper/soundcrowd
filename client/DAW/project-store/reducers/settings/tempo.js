@@ -10,7 +10,7 @@ export const setTempo = tempo => ({
 });
 
 // REDUCER
-export default function reducer(tempo = 0, action) {
+export default function reducer(tempo = 80, action) {
   switch(action.type) {
     case SET_TEMPO:
       return action.tempo;
