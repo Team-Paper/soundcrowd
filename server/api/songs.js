@@ -12,7 +12,6 @@ const s3 = new AWS.S3();
 const myBucket = 'soundcrowd-files-fullstack';
 
 const upload2 = (req, res, next) => {
-  console.log('\n\nFILE:\n', req.file);
 
   req.file.filename = uuidv4()+'.webm';
 
