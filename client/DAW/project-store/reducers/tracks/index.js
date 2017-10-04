@@ -32,3 +32,7 @@ export const toggleMuteTrackThunk = (projectId, track) => dispatch => {
   const val = !track.isMuted;
   firebase.database().ref(`${projectId}/tracks/${track.id}/isMuted`).set(val);
 };
+
+export const setTrackVolume = (projectId, track, newVolume) => dispatch => {
+  firebase.database().ref(`${projectId}/tracks/${track.id}/volume`).set(+newVolume);
+}

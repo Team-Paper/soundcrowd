@@ -2,10 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Icon } from 'semantic-ui-react';
 import { addSelectedTrack, removeSelectedTrack } from '../project-store/reducers/timeline/selectedTracks';
-import { toggleMuteTrackThunk } from '../project-store/reducers/tracks';
+import { toggleMuteTrackThunk, setTrackVolume } from '../project-store/reducers/tracks';
 
 const TrackControls = (props) => {
-  const { isSelected, deselectTrack, selectTrack, track, toggleMuteTrackThunk, projectId } = props;
+  const { isSelected, deselectTrack, selectTrack, track, toggleMuteTrackThunk, projectId, setTrackVolume } = props;
+
   return (
     <div>
       <Button circular icon onClick={isSelected ? deselectTrack : selectTrack}>
@@ -14,6 +15,7 @@ const TrackControls = (props) => {
       <Button circular icon onClick={() => toggleMuteTrackThunk(projectId, track)} >
         <Icon color={track.isMuted ? 'red' : 'grey'} name="mute" />
       </Button>
+      <input type="range" value={track.volume} onChange={e => setTrackVolume(projectId, track, e.target.value)} min="0" max="100" step="1" />
     </div>
   );
 };
@@ -27,6 +29,7 @@ const mapDispatch = (dispatch, ownProps) => ({
   deselectTrack: () => dispatch(removeSelectedTrack(ownProps.track.id)),
   selectTrack: () => dispatch(addSelectedTrack(ownProps.track.id)),
   toggleMuteTrackThunk: (projectId, track) => dispatch(toggleMuteTrackThunk(projectId, track)),
+  setTrackVolume: (projectId, track, newVolume) => dispatch(setTrackVolume(projectId, track, newVolume)),
 });
 
 export default connect(mapState, mapDispatch)(TrackControls);
