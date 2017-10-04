@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
+import { Waveform } from '../components';
 import { updateClipThunk } from '../project-store/reducers/clips';
 
 const styles = {
@@ -47,7 +48,7 @@ class Clip extends React.Component {
   }
 
   render() {
-    const { isDragging, clip, zoom } = this.props;
+    const { baseClip, isDragging, clip, zoom } = this.props;
     return (
       <Draggable
         bounds=".track-list"
@@ -57,6 +58,7 @@ class Clip extends React.Component {
         position={this.state}
       >
         <div style={styles.clip(clip, zoom, isDragging)}>
+          <Waveform clip={baseClip} />
           {clip.url} starting at {clip.startTime}
         </div>
       </Draggable>
