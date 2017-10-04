@@ -1,16 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Header, List } from 'semantic-ui-react';
-import { Timeline } from '../components';
-
-const styles = {
-  listItem: {
-    background: '#22a3ef',
-    cursor: 'move',
-    marginBottom: '1em',
-    overflow: 'hidden',
-  },
-};
+import { Timeline, FileItem } from '../components';
 
 
 /**
@@ -25,12 +16,7 @@ export const DAW = (props) => {
         <p>Tempo: {settings.tempo}</p>
         <List>
           {files.map(item => (
-            <List.Item
-              style={styles.listItem}
-              key={item.id}
-            >
-              {item.filename}
-            </List.Item>
+            <FileItem key={item.id} item={item} />
           ))}
         </List>
       </Grid.Column>
