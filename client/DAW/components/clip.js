@@ -51,7 +51,6 @@ class Clip extends React.Component {
   render() {
     const { isDragging, clip, zoom, project, deleteClip } = this.props;
     return (
-      <div>
       <Draggable
         bounds=".track-list"
         grid={[1, 154]}
@@ -65,7 +64,6 @@ class Clip extends React.Component {
         </div>
 
       </Draggable>
-      </div>
     );
   }
 }
