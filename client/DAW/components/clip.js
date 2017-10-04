@@ -5,16 +5,20 @@ import { Waveform } from '../components';
 import { updateClipThunk } from '../project-store/reducers/clips';
 
 const styles = {
-  clip(clip, zoom, isDragging) {
+  clip(clip, zoom) {
     return {
       position: 'absolute',
       left: `${clip.startTime * zoom}px`,
       width: `${clip.duration * zoom}px`,
       height: '140px',
       background: '#22a3ef',
-      opacity: isDragging ? 0.5 : 1,
+      opacity: '0.8',
       cursor: 'move',
     };
+  },
+  clipInfo: {
+    position: 'absolute',
+    top: '0',
   },
 };
 
@@ -48,7 +52,7 @@ class Clip extends React.Component {
   }
 
   render() {
-    const { isDragging, clip, waveform, zoom } = this.props;
+    const { clip, waveform, zoom } = this.props;
     return (
       <Draggable
         bounds=".track-list"
@@ -57,9 +61,9 @@ class Clip extends React.Component {
         onStop={this.handleEnd}
         position={this.state}
       >
-        <div style={styles.clip(clip, zoom, isDragging)}>
+        <div style={styles.clip(clip, zoom)}>
           <Waveform waveform={waveform} />
-          {clip.url} starting at {clip.startTime}
+          <div style={styles.clipInfo}>{clip.url} starting at {clip.startTime}</div>
         </div>
       </Draggable>
     );

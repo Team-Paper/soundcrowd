@@ -1,4 +1,4 @@
-export const createWaveform = buffer => {
+export const createWaveform = (buffer) => {
   const sampleSize = 200;
   const sampleStep = 20;
   const length = Math.floor(buffer.length / sampleSize);
