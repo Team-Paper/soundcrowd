@@ -2,7 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Header, List } from 'semantic-ui-react';
 import { Timeline } from '../components';
-import context from '../context';
+
+const styles = {
+  listItem: {
+    background: '#22a3ef',
+    cursor: 'move',
+    marginBottom: '1em',
+    overflow: 'hidden',
+  },
+};
+
 
 /**
  * COMPONENT
@@ -15,7 +24,14 @@ export const DAW = (props) => {
         <Header as="h3">{name}</Header>
         <p>Tempo: {settings.tempo}</p>
         <List>
-          { files.map(item => <List.Item key={item.id}>{item.url}</List.Item>) }
+          {files.map(item => (
+            <List.Item
+              style={styles.listItem}
+              key={item.id}
+            >
+              {item.filename}
+            </List.Item>
+          ))}
         </List>
       </Grid.Column>
       <Grid.Column width={13}>
@@ -28,13 +44,11 @@ export const DAW = (props) => {
 /**
  * CONTAINER
  */
-const mapState = (state, ownProps) =>
-  // return state.project
-  ({
-    name: 'Current Project',
-    files: Object.entries(state.files).map(entry => entry[1]),
-    settings: { tempo: 60, isMetronomeOn: false },
-  });
+const mapState = state => ({
+  name: 'Current Project',
+  files: Object.entries(state.files).map(entry => entry[1]),
+  settings: { tempo: 60, isMetronomeOn: false },
+});
 
 
 export default connect(mapState)(DAW);
