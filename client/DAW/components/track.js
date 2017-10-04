@@ -31,7 +31,7 @@ const Track = (props) => {
             Track #{track.id}
           </Card.Header>
           <Card.Description>
-            <TrackControls track={track} />
+            <TrackControls track={track} projectId={project} />
           </Card.Description>
         </Card.Content>
       </Card>
