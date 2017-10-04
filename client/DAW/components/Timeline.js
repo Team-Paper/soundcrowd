@@ -33,6 +33,7 @@ class Timeline extends React.Component {
     this.startRecord = this.startRecord.bind(this);
     this.stopRecord = this.stopRecord.bind(this);
     this.mixdown = this.mixdown.bind(this);
+    this.trackEffectsLoop = this.trackEffectsLoop.bind(this);
     this.clipsRef = firebase.database().ref(`${this.props.projectId}/clips`);
     this.filesRef = firebase.database().ref(`${this.props.projectId}/files`);
     this.tracksRef = firebase.database().ref(`${this.props.projectId}/tracks`);
@@ -71,14 +72,6 @@ class Timeline extends React.Component {
       const received = snapshot.val();
       setLength(received);
     });
-
-    // if it's a new project and tempo/length is 0, set a default length/tempo
-    if (length === 0) {
-      setLengthThunk(projectId, 10);
-    }
-    if (tempo === 0) {
-      setTempoThunk(projectId, 60);
-    }
 
     // start firebase seeding
     // setFilesThunk(projectId, [
@@ -151,15 +144,29 @@ class Timeline extends React.Component {
     this.settingsRef.off();
   }
 
-  playSound(buffer, startTime, playAt) {
+  playSound(buffer, startTime, playAt, track) {
+    console.log('played sound track is', track);
     const source = context.createBufferSource();
     if (!startTime) {
       startTime = 0;
     }
     source.buffer = buffer;
-    source.connect(context.destination);
+    this.trackEffectsLoop(source, track, context).connect(context.destination);
     source.start(playAt, startTime);
     this.setState({ playing: this.state.playing.concat(source) });
+  }
+
+  trackEffectsLoop(source, track, loopContext) {
+    // effects loop settings
+    const gainNode = loopContext.createGain();
+    gainNode.gain.value = track.volume / 100;
+    if (track.isMuted) {
+      gainNode.gain.value = 0;
+    }
+
+    // effects chain
+    source.connect(gainNode);
+    return gainNode;
   }
 
   togglePlay() {
@@ -194,16 +201,17 @@ class Timeline extends React.Component {
   }
 
   checkAndPlay(time) {
-    const { soundClips, isPlaying, clips } = this.props;
+    const { soundClips, isPlaying, clips, tracks } = this.props;
     for (let key in clips) {
       if (clips.hasOwnProperty(key)) {
         const clip = clips[key];
-        if (isPlaying === true && time > clip.startTime) {
+        if (isPlaying === true && time > clip.startTime && clip.track !== null) {
+          const track = tracks[clip.track];
           const soundClip = soundClips[clip.fileId];
           if (soundClip.played === false) {
             soundClip.played = true;
             const playAt = context.currentTime + (clip.startTime - time);
-            this.playSound(soundClip.sound.buffer, time - clip.startTime, playAt);
+            this.playSound(soundClip.sound.buffer, time - clip.startTime, playAt, track);
           }
         }
       }
@@ -228,7 +236,7 @@ class Timeline extends React.Component {
   }
 
   mixdown() {
-    const { clips, soundClips, length } = this.props;
+    const { clips, soundClips, length, tracks } = this.props;
     const offlineContext = new OfflineAudioContext(2, length * 44100, 44100); // hardcoded to stereo, length 300 seconds?
     const chunks = [];
 
@@ -237,8 +245,8 @@ class Timeline extends React.Component {
       const dest = context.createMediaStreamDestination();
       const mediaRecorder = new MediaRecorder(dest.stream);
 
-      source.buffer = e.renderedBuffer;
-      source.connect(dest);
+      source.buffer = e.renderedBuffer; // this is the mixed-down audio buffer
+      source.connect(dest); // this connects the mixed-down buffer to the mediaRecorder
 
       mediaRecorder.ondataavailable = e => {
         console.log('data available');
@@ -270,11 +278,15 @@ class Timeline extends React.Component {
 
     Promise.all(Object.entries(clips).map(([key, clip]) => {
       console.log('clip is', clip);
+      if (clip.track === null) {
+        return;
+      }
+      const track = tracks[clip.track];
       const newBufferSource = offlineContext.createBufferSource();
       const soundClip = soundClips[clip.fileId];
       console.log('soundClip is', soundClip);
       newBufferSource.buffer = soundClip.sound.buffer;
-      newBufferSource.connect(offlineContext.destination);
+      this.trackEffectsLoop(newBufferSource, track, offlineContext).connect(offlineContext.destination);
       newBufferSource.start(clip.startTime);
     }))
       .then(() => offlineContext.startRendering())
@@ -284,7 +296,7 @@ class Timeline extends React.Component {
   }
 
   render() {
-    const { projectId, tracks, time, setLength, length } = this.props;
+    const { projectId, tracks, time, setLengthThunk, length } = this.props;
     return (
       <div style={{ position: 'relative', overflowX: 'scroll' }}>
         <div>{time}</div>
@@ -292,7 +304,7 @@ class Timeline extends React.Component {
         <button onClick={this.stopRecord}>stop</button>
         <button onClick={this.mixdown}>mixdown</button>
         <span>length (seconds):</span>
-        <input type="text" value={length} onChange={e => setLength(e.target.value)} />
+        <input type="text" value={length} onChange={e => setLengthThunk(projectId, e.target.value)} />
         <PlaybackControls togglePlay={this.togglePlay} />
         <TrackList project={Number(projectId)} tracks={tracks} />
       </div>

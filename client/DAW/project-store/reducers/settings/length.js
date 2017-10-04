@@ -10,7 +10,7 @@ export const setLength = length => ({
 });
 
 // REDUCER
-export default function reducer(length = 0, action) {
+export default function reducer(length = 10, action) {
   switch(action.type) {
     case SET_LENGTH:
       return action.length;
@@ -21,5 +21,5 @@ export default function reducer(length = 0, action) {
 
 // THUNK CREATORS
 export const setLengthThunk = (projectId, length) => dispatch => {
-  firebase.database().ref(`${projectId}/settings/length`).set(length);
+  firebase.database().ref(`${projectId}/settings/length`).set(+length);
 }
