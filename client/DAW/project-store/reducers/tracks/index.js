@@ -34,5 +34,10 @@ export const toggleMuteTrackThunk = (projectId, track) => dispatch => {
 };
 
 export const setTrackVolume = (projectId, track, newVolume) => dispatch => {
+
   firebase.database().ref(`${projectId}/tracks/${track.id}/volume`).set(+newVolume);
+}
+
+export const deleteTrack = (projectId, track) => dispatch => {
+  firebase.database().ref(`${projectId}/tracks/${track}`).remove();
 }

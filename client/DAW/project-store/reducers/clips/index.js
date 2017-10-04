@@ -37,3 +37,10 @@ export const addClipThunk = (projectId, fileId, selectedTracks, time) => () => {
 export const updateClipThunk = (projectId, key, newClip) => () => {
   firebase.database().ref(`${projectId}/clips/${key}`).set(newClip);
 };
+
+export const deleteClip = (projectId, clipKey) => dispatch => {
+  console.log('firing delete thunk')
+  firebase.database().ref(`${projectId}/clips/${clipKey}`).remove();
+}
+
+
