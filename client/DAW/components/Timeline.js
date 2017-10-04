@@ -82,10 +82,10 @@ class Timeline extends React.Component {
     //   { fileId: 2, startTime: 2, track: 2 },
     //   { fileId: 1, startTime: 0, track: 1 },
     // ]);
-    // setTracksThunk(projectId, [
-    //   { id: 1, volume: 100, isMuted: false, reverb: { id: 1, on: false, gain: 1 } },
-    //   { id: 2, volume: 100, isMuted: false, reverb: { id: 1, on: false, gain: 1 } },
-    // ]);
+    setTracksThunk(projectId, [
+      { id: 1, volume: 100, isMuted: false, reverb: { id: 1, on: false, gain: 1 } },
+      { id: 2, volume: 100, isMuted: false, reverb: { id: 1, on: false, gain: 1 } },
+    ]);
     // end firebase seeding
 
     // start listening for recording events
