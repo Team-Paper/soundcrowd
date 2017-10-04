@@ -1,25 +1,33 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
-import { List } from 'semantic-ui-react';
+import { List, Icon } from 'semantic-ui-react';
 import { updateClipThunk } from '../project-store/reducers/clips';
 
 const styles = {
-  listItem: {
+  listItem(isDragging) {
+    return {
+      background: isDragging ? '#59eabf' : '#22a3ef',
+      cursor: 'move',
+      marginBottom: '1em',
+      overflow: 'hidden',
+    };
+  },
+  draggingItem: {
+    position: 'absolute',
+    height: '140px',
     background: '#22a3ef',
-    cursor: 'move',
-    marginBottom: '1em',
-    overflow: 'hidden',
+    opacity: '0.5',
     zIndex: '20',
   },
 };
 
 
 class FileItem extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
+      isDragging: false,
       x: 0,
       y: 0,
     };
@@ -29,7 +37,7 @@ class FileItem extends React.Component {
   }
 
   handleDrag(e, data) {
-    this.setState({ x: data.x, y: data.y });
+    this.setState({ isDragging: true, x: data.x, y: data.y });
   }
 
   handleEnd(e, data) {
@@ -38,27 +46,28 @@ class FileItem extends React.Component {
 
 
 
-    this.setState({ x: 0, y: 0 });
+    this.setState({ isDragging: false, x: 0, y: 0 });
   }
 
 
   render() {
     const { item } = this.props;
+    const { isDragging, x, y } = this.state;
 
     return (
-      <Draggable
-        onDrag={this.handleDrag}
-        onStop={this.handleEnd}
-        position={this.state}
+      <List.Item
+        style={styles.listItem(isDragging)}
+        key={item.id}
       >
-        <List.Item
-          style={styles.listItem}
-          key={item.id}
+        <Draggable
+          onDrag={this.handleDrag}
+          onStop={this.handleEnd}
+          position={{ x, y }}
         >
-          {item.filename}
-        </List.Item>
-      </Draggable>
-
+          {isDragging ? <div style={styles.draggingItem}>{item.filename}</div> : <Icon name="move" />}
+        </Draggable>
+        {item.filename}
+      </List.Item>
     )
   }
 }
