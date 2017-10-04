@@ -232,8 +232,8 @@ class Timeline extends React.Component {
 
     offlineContext.oncomplete = e => {
       const source = context.createBufferSource();
-      const mediaRecorder = new MediaRecorder(dest.stream);
       const dest = context.createMediaStreamDestination();
+      const mediaRecorder = new MediaRecorder(dest.stream);
 
       source.buffer = e.renderedBuffer;
       source.connect(dest);
