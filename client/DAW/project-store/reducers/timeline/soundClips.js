@@ -3,6 +3,7 @@ import context from '../../../context';
 
 // ACTION TYPES
 const ADD_SOUND_CLIP = 'ADD_SOUND_CLIP';
+const SET_WAVEFORM = 'SET_WAVEFORM';
 
 // ACTION CREATORS
 export const addSoundClip = (fileId, soundClip) => ({
@@ -11,14 +12,28 @@ export const addSoundClip = (fileId, soundClip) => ({
   fileId,
 });
 
+export const setWaveform = (fileId, waveform) => ({
+  type: SET_WAVEFORM,
+  waveform,
+  fileId,
+});
+
 // REDUCER
 export default function reducer(soundClips = {}, action) {
-  switch(action.type) {
-    case ADD_SOUND_CLIP:
+  switch (action.type) {
+    case ADD_SOUND_CLIP: {
       const fileId = action.fileId;
       const newSoundClips = Object.assign({}, soundClips);
       newSoundClips[fileId] = action.soundClip;
       return newSoundClips;
+    }
+    case SET_WAVEFORM: {
+      const { fileId, waveform } = action;
+      if (!soundClips[fileId]) return soundClips;
+      const newSoundClips = Object.assign({}, soundClips);
+      newSoundClips[fileId] = Object.assign({}, soundClips[fileId], { waveform });
+      return newSoundClips;
+    }
     default:
       return soundClips;
   }
@@ -34,7 +49,6 @@ export const createSoundClips = (files, soundClips) => dispatch => {
         .then(res => res.data)
         .then(responseAudio => context.decodeAudioData(responseAudio))
         .then(audio => {
-          console.log('audio', audio)
           let buffer = context.createBufferSource();
           console.log('decoding audio data');
           buffer.connect(context.destination);
@@ -43,7 +57,9 @@ export const createSoundClips = (files, soundClips) => dispatch => {
             sound: buffer,
             played: false,
             duration: audio.duration,
+            waveform: [],
           }));
+          return [key, audio];
         });
     }
   }))
