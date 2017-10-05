@@ -265,8 +265,8 @@ class Timeline extends React.Component {
     eqBand12.gain.value = -100;
 
     // reverb settings
-    const convolverNode = context.createConvolver();
-    const convolverGain = context.createGain();
+    const convolverNode = loopContext.createConvolver();
+    const convolverGain = loopContext.createGain();
     convolverNode.buffer = reverbs['1'].audio.buffer;
     convolverGain.gain.value = track.reverb.gain;
     if (!track.reverb.on) {
