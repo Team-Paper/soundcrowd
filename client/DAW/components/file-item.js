@@ -9,9 +9,10 @@ import { startDragging, stopDragging } from '../project-store/reducers/dragging'
 const styles = {
   listItem(isDragging) {
     return {
-      background: isDragging ? '#59eabf' : '#22a3ef',
+      background: '#22a3ef',
       cursor: 'move',
       marginBottom: '1em',
+      opacity: isDragging ? '0.8' : '1',
       overflow: 'hidden',
     };
   },
@@ -39,12 +40,12 @@ class FileItem extends React.Component {
     this.handleEnd = this.handleEnd.bind(this);
   }
 
-  handleStart(e, data) {
+  handleStart() {
     this.props.startDrag();
     window.addEventListener('mouseup', this.handleEnd);
   }
 
-  handleEnd(e, data) {
+  handleEnd() {
     window.removeEventListener('mouseup', this.handleEnd);
     this.props.stopDrag();
     this.setState({ x: 0, y: 0 });
@@ -74,8 +75,8 @@ class FileItem extends React.Component {
   }
 }
 
-const mapState = state => ({
-  isDragging: state.dragging.isDragging,
+const mapState = (state, ownProps) => ({
+  isDragging: state.dragging.file === ownProps.item.id,
 });
 
 const mapDispatch = (dispatch, ownProps) => ({
