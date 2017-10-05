@@ -33,7 +33,7 @@ const Waveform = (props) => {
 };
 
 export const WaveformGradient = () => (
-  <svg width="0" height="0">
+  <svg display="block" width="0" height="0">
     <defs>
       <linearGradient id="waveformGradient" gradientTransform="rotate(90)">
         <stop offset="5%" stopColor="#74befc" />

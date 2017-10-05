@@ -1,13 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { PlaybackMarker, Track, WaveformGradient } from '../components';
+import { Container } from 'semantic-ui-react';
+import { PlaybackMarker, Track, TrackControls, WaveformGradient } from '../components';
 
 const styles = {
+  trackListWrapper: {
+    display: 'flex',
+    overflowY: 'scroll',
+  },
+  trackControlList: {
+  },
   trackList(width) {
     return {
       position: 'relative',
       width: `${width}px`,
-      margin: '4em 0 0 180px',
       boxShadow: '0 -1px 0 0 rgba(34,36,38,.15)',
     };
   },
@@ -25,26 +31,35 @@ const TrackList = (props) => {
   const { project, tracks, clips } = props;
   const zoom = 200; // pixels per second
   return (
-    <div className="track-list" style={styles.trackList(getWidth(clips, zoom))}>
-      <WaveformGradient />
-      {
-        Object.entries(tracks).map(([key, track]) => (
-          <Track
-            key={`track-${key}`}
-            track={track}
-            project={project}
-            zoom={zoom}
-            clips={clips.filter(clip => clip.track === track.id)}
-          />
-        )) }
-      <PlaybackMarker zoom={zoom} />
-    </div>
+    <Container style={styles.trackListWrapper}>
+      <div style={styles.trackControlList}>
+        {
+          Object.entries(tracks).map(([key, track]) => (
+            <TrackControls key={key} track={track} projectId={project} />
+          ))
+        }
+      </div>
+      <div className="track-list" style={styles.trackList(getWidth(clips, zoom))}>
+        <WaveformGradient />
+        {
+          Object.entries(tracks).map(([key, track]) => (
+            <Track
+              key={`track-${key}`}
+              track={track}
+              project={project}
+              zoom={zoom}
+              clips={clips.filter(clip => clip.track === track.id)}
+            />
+          )) }
+        <PlaybackMarker zoom={zoom} />
+      </div>
+    </Container>
   );
 };
 
 const mapState = (state) => {
   const clips = Object.entries(state.clips).map(([key, clip]) => {
-    const file = Object.entries(state.files).find(([fk, f]) => f.id === clip.fileId)[1] || {};
+    const file = Object.entries(state.files).find(entry => entry[1].id === clip.fileId)[1] || {};
     return {
       url: file.url,
       key,

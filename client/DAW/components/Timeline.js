@@ -498,7 +498,7 @@ class Timeline extends React.Component {
   render() {
     const { projectId, tracks, time, setLengthThunk, length } = this.props;
     return (
-      <div style={{ position: 'relative', overflowX: 'scroll' }}>
+      <div style={{ position: 'relative' }}>
         <div>{time}</div>
         <button onClick={this.startRecord}>Record</button>
         <button onClick={this.stopRecord}>Stop</button>
