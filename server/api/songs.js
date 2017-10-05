@@ -1,33 +1,13 @@
 const router = require('express').Router();
 const { Song, Comment, User } = require('../db/models');
 const multer = require('multer');
-const AWS = require('aws-sdk');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-const uuidv4 = require('uuid/v4');
 
-
-const s3 = new AWS.S3();
-const myBucket = 'soundcrowd-files-fullstack';
-
-const upload2 = (req, res, next) => {
-
-  req.file.filename = uuidv4()+'.webm';
-
-  s3.createBucket({ Bucket: myBucket }, (err, data) => {
-    if (err) next(err);
-    else {
-      const params = { Bucket: myBucket, Key: req.file.filename, Body: req.file.buffer };
-      s3.putObject(params, (err, data) => {
-        if (err) next(err);
-        else next();
-      });
-    }
-  });
-
-}
-
+//configuration for AWS
+const myBucket = 'soundcrowd-songs-fullstack';
+const upload2AWS = require('./aws-helper')(myBucket);
 
 // get all songs
 router.get('/', (req, res, next) => {
@@ -37,7 +17,7 @@ router.get('/', (req, res, next) => {
 });
 
 // upload a mix
-router.post('/', upload.single('blob'), upload2, (req, res, next) => {
+router.post('/', upload.single('blob'), upload2AWS, (req, res, next) => {
   Song.create({
     filename: req.file.filename,
   })
