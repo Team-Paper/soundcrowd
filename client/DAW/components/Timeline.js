@@ -11,7 +11,7 @@ import { setFiles, setFilesThunk, addFileThunk } from '../project-store/reducers
 import { setClips, setClipsThunk, addClipThunk } from '../project-store/reducers/clips';
 import { setTracks, setTracksThunk } from '../project-store/reducers/tracks';
 import { fetchReverbsThunk } from '../project-store/reducers/reverbs';
-import { createSoundClips } from '../project-store/reducers/timeline/soundClips';
+import { createSoundClips, setWaveform } from '../project-store/reducers/timeline/soundClips';
 import { play, pause, playThunk } from '../project-store/reducers/timeline/isPlaying';
 import { setPlayedAt, setPlayedAtThunk } from '../project-store/reducers/timeline/playedAt';
 import { setStartThunk } from '../project-store/reducers/timeline/start';
@@ -47,7 +47,7 @@ class Timeline extends React.Component {
 
   componentDidMount() {
     // calling createSoundClips here for testing purposes, but will need to be done after project files array is retrieved
-    const { setFiles, setFilesThunk, addFileThunk, setClips, setClipsThunk, setTracks, setTracksThunk, setTempo, setTempoThunk, createSoundClips, clips, projectId, files, soundClips, addClipThunk, selectedTracks, length, setLengthThunk, setLength, tempo, fetchReverbsThunk } = this.props;
+    const { setFiles, setFilesThunk, addFileThunk, setClips, setClipsThunk, setTracks, setTracksThunk, setTempo, setTempoThunk, createSoundClips, setWaveform, clips, projectId, files, soundClips, addClipThunk, selectedTracks, length, setLengthThunk, setLength, tempo, fetchReverbsThunk } = this.props;
 
     // subscribe redux to firebase
     this.filesRef.on('value', snapshot => {
@@ -56,7 +56,9 @@ class Timeline extends React.Component {
       // createSoundClips checks for new files, gets them, and puts the audio buffer in the soundClips object
       console.log('received files are', snapshot.val());
       createSoundClips(received, soundClips)
-        .then(buffers => buffers.forEach(createWaveform));
+        .then(buffers => buffers.forEach(([id, audio]) => {
+          setWaveform(id, createWaveform(audio));
+        }));
     });
     this.clipsRef.on('value', snapshot => {
       const received = snapshot.val();
@@ -365,6 +367,7 @@ const mapDispatch = dispatch => ({
   setTempo: (tempo) => dispatch(setTempo(tempo)),
   setTempoThunk: (projectId, tempo) => dispatch(setTempoThunk(projectId, tempo)),
   createSoundClips: (files, soundClips) => dispatch(createSoundClips(files, soundClips)),
+  setWaveform: (fileId, waveform) => dispatch(setWaveform(fileId, waveform)),
   play: () => dispatch(play()),
   playThunk: () => dispatch(playThunk()),
   pause: () => dispatch(pause()),

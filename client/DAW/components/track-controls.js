@@ -15,7 +15,7 @@ const TrackControls = (props) => {
       <Button circular icon onClick={() => toggleMuteTrackThunk(projectId, track)} >
         <Icon color={track.isMuted ? 'red' : 'grey'} name="mute" />
       </Button>
-      <Button color='red' onClick={() => deleteTrack(projectId, track.id)}>X</Button>
+      <Button color="red" icon="remove" onClick={() => deleteTrack(projectId, track.id)} />
       <input type="range" value={track.volume} onChange={e => setTrackVolume(projectId, track, e.target.value)} min="0" max="100" step="1" />
       <ReverbModal track={track} projectId={projectId} />
     </div>
