@@ -13,6 +13,7 @@ import { setTracks, setTracksThunk } from '../project-store/reducers/tracks';
 import { fetchReverbsThunk } from '../project-store/reducers/reverbs';
 import { createSoundClips, setWaveform } from '../project-store/reducers/timeline/soundClips';
 import { play, pause, playThunk } from '../project-store/reducers/timeline/isPlaying';
+import { startRecord, stopRecord } from '../project-store/reducers/timeline/isRecording';
 import { setPlayedAt, setPlayedAtThunk } from '../project-store/reducers/timeline/playedAt';
 import { setStartThunk } from '../project-store/reducers/timeline/start';
 import { setStartRecordTime } from '../project-store/reducers/timeline/startRecordTime';
@@ -143,7 +144,6 @@ class Timeline extends React.Component {
 
           this.mediaRecorder.onstop = e => {
             console.log('recorder stopped');
-            const audio = document.querySelector('.audio');
             const blob = new Blob(this.audioChunks, { type: 'audio/ogg; codecs=opus'})
             this.audioChunks = [];
             console.log('blob is', blob);
@@ -332,7 +332,7 @@ class Timeline extends React.Component {
 
   togglePlay() {
     console.log('playing toggled')
-    const { isPlaying, play, pause, setPlayedAt, setPlayedAtThunk, soundClips, playThunk, setStartThunk, time, clips } = this.props;
+    const { isPlaying, play, pause, setPlayedAt, setPlayedAtThunk, soundClips, playThunk, setStartThunk, time, clips, isRecording, stopRecord } = this.props;
     if (!isPlaying) {
       setStartThunk(time)
         .then(() => playThunk())
@@ -341,6 +341,11 @@ class Timeline extends React.Component {
         .catch(console.error);
         // setTimeout(this.tick, 20);
     } else {
+      if (isRecording) {
+        console.log('mediarecorder state is', this.mediaRecorder.state);
+        this.mediaRecorder.stop();
+        stopRecord();
+      }
       pause();
       this.state.playing.forEach(sound => {
         sound.stop();
@@ -379,18 +384,26 @@ class Timeline extends React.Component {
   }
 
   startRecord() {
-    const { time, selectedTracks, setStartRecordTime } = this.props;
-    if (!selectedTracks.length) return;
+    const { time, selectedTracks, setStartRecordTime, isPlaying, isRecording, startRecord } = this.props;
+    if (!selectedTracks.length || isRecording) return;
+    startRecord();
     console.log('startRecordTime should be', time);
     setStartRecordTime(time);
     this.mediaRecorder.start();
-    this.togglePlay();
+    if (!isPlaying) {
+      this.togglePlay();
+    }
     console.log('mediaRecorder state is', this.mediaRecorder.state);
     console.log('recorder started');
   }
 
   stopRecord() {
-    this.mediaRecorder.stop();
+    const { isRecording, stopRecord, isPlaying } = this.props;
+    if (!isRecording) return;
+    stopRecord();
+    if (isPlaying) {
+      this.togglePlay(); //togglePlay will call this.mediaRecorder.stop();
+    }
     console.log('mediaRecorder state is', this.mediaRecorder.state);
     console.log('recorder stopped');
   }
@@ -487,6 +500,7 @@ const mapState = (state, ownProps) => {
   startRecordTime: state.timeline.startRecordTime,
   length: state.settings.length,
   reverbs: state.reverbs,
+  isRecording: state.timeline.isRecording,
 }};
 
 const mapDispatch = dispatch => ({
@@ -514,6 +528,8 @@ const mapDispatch = dispatch => ({
   setLength: length => dispatch(setLength(length)),
   setLengthThunk: (projectId, length) => dispatch(setLengthThunk(projectId, length)),
   fetchReverbsThunk: reverbs => dispatch(fetchReverbsThunk(reverbs)),
+  startRecord: () => dispatch(startRecord()),
+  stopRecord: () => dispatch(stopRecord()),
 });
 
 export default connect(mapState, mapDispatch)(Timeline);
