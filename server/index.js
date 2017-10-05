@@ -53,7 +53,8 @@ const createApp = () => {
   // static file-serving middleware
   app.use(express.static(path.join(__dirname, '..', 'public')));
   app.use(express.static(path.join(__dirname, '..', 'sounds')));
-  app.use('/songs', express.static(path.join(__dirname, '..', 'songs')))
+  app.use('/songs', express.static(path.join(__dirname, '..', 'songs')));
+  app.use('/reverbs', express.static(path.join(__dirname, '..', 'reverbs')));
 
   // sends index.html
   app.use('*', (req, res) => {
