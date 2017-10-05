@@ -1,0 +1,20 @@
+// this is the permissions policy set on our amazon buckets
+// it allows anyone to make a GET request to any file in the bucket
+// for the other bucket (files)
+// replace "arn:aws:s3:::soundcrowd-songs-fullstack/*"
+// with "arn:aws:s3:::soundcrowd-files-fullstack/*"
+// actual policy is stored on AWS
+// modifying THIS file will do nothing but it's here for reference
+{
+  "Version": "2012-10-17",
+  "Id": "Policy1507155021094",
+  "Statement": [
+      {
+          "Sid": "Stmt1507154802429",
+          "Effect": "Allow",
+          "Principal": "*",
+          "Action": "s3:GetObject",
+          "Resource": "arn:aws:s3:::soundcrowd-songs-fullstack/*"
+      }
+  ]
+}
