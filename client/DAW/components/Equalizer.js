@@ -22,7 +22,7 @@ function EqualizerModal({ projectId, track, setTrackEQBandGain, toggleTrackEQ })
           Object.keys(track.eq.bands).map(key =>
           <div style={styles.bandWrapper} key={`band-${key}`}>
             <div style={styles.gainWrapper}>
-              <input type="range" value={track.eq.bands[key].gain} onChange={e => setTrackEQBandGain(projectId, track, key, e.target.value)} style={styles.gain} max={60} min={-100} step={0.5} />
+              <input type="range" value={track.eq.bands[key].gain} onChange={e => setTrackEQBandGain(projectId, track, key, e.target.value)} style={styles.gain} max={20} min={-60} step={0.5} />
             </div>
             <div>{track.eq.bands[key].f}</div>
           </div>

@@ -92,18 +92,18 @@ class Timeline extends React.Component {
         eq: {
           on: false,
           bands: {
-            1: { f: 63, q: 1, gain: 0},
-            2: { f: 125, q: 1, gain: 0},
-            3: { f: 250, q: 1, gain: 0},
-            4: { f: 400, q: 1, gain: 0},
-            5: { f: 630, q: 1, gain: 0},
-            6: { f: 1000, q: 1, gain: 0},
-            7: { f: 1600, q: 1, gain: 0},
-            8: { f: 2500, q: 1, gain: 0},
-            9: { f: 4000, q: 1, gain: 0},
-            10: { f: 6300, q: 1, gain: 0},
-            11: { f: 10000, q: 1, gain: 0},
-            12: { f: 16000, q: 1, gain: 0},
+            1: { f: 63, q: 4.3, gain: 0},
+            2: { f: 125, q: 4.3, gain: 0},
+            3: { f: 250, q: 4.3, gain: 0},
+            4: { f: 400, q: 4.3, gain: 0},
+            5: { f: 630, q: 4.3, gain: 0},
+            6: { f: 1000, q: 4.3, gain: 0},
+            7: { f: 1600, q: 4.3, gain: 0},
+            8: { f: 2500, q: 4.3, gain: 0},
+            9: { f: 4000, q: 4.3, gain: 0},
+            10: { f: 6300, q: 4.3, gain: 0},
+            11: { f: 10000, q: 4.3, gain: 0},
+            12: { f: 16000, q: 4.3, gain: 0},
           }
         }
       },
@@ -112,18 +112,18 @@ class Timeline extends React.Component {
         eq: {
           on: false,
           bands: {
-            1: { f: 63, q: 1, gain: 0},
-            2: { f: 125, q: 1, gain: 0},
-            3: { f: 250, q: 1, gain: 0},
-            4: { f: 400, q: 1, gain: 0},
-            5: { f: 630, q: 1, gain: 0},
-            6: { f: 1000, q: 1, gain: 0},
-            7: { f: 1600, q: 1, gain: 0},
-            8: { f: 2500, q: 1, gain: 0},
-            9: { f: 4000, q: 1, gain: 0},
-            10: { f: 6300, q: 1, gain: 0},
-            11: { f: 10000, q: 1, gain: 0},
-            12: { f: 16000, q: 1, gain: 0},
+            1: { f: 63, q: 4.3, gain: 0},
+            2: { f: 125, q: 4.3, gain: 0},
+            3: { f: 250, q: 4.3, gain: 0},
+            4: { f: 400, q: 4.3, gain: 0},
+            5: { f: 630, q: 4.3, gain: 0},
+            6: { f: 1000, q: 4.3, gain: 0},
+            7: { f: 1600, q: 4.3, gain: 0},
+            8: { f: 2500, q: 4.3, gain: 0},
+            9: { f: 4000, q: 4.3, gain: 0},
+            10: { f: 6300, q: 4.3, gain: 0},
+            11: { f: 10000, q: 4.3, gain: 0},
+            12: { f: 16000, q: 4.3, gain: 0},
           }
         }
       },
@@ -223,67 +223,67 @@ class Timeline extends React.Component {
     const eqBand02 = loopContext.createBiquadFilter();
     eqBand02.type = 'peaking';
     eqBand02.frequency.value = 600;
-    eqBand02.Q.value = 10;
+    eqBand02.Q.value = track.eq.bands[2].q;
     eqBand02.gain.value = track.eq.bands[2].gain;
 
     const eqBand03 = loopContext.createBiquadFilter();
     eqBand03.type = 'peaking';
     eqBand03.frequency.value = 1000;
-    eqBand03.Q.value = 10;
+    eqBand03.Q.value = track.eq.bands[3].q;
     eqBand03.gain.value = track.eq.bands[3].gain;
 
     const eqBand04 = loopContext.createBiquadFilter();
     eqBand04.type = 'peaking';
     eqBand04.frequency.value = 1000;
-    eqBand04.Q.value = 10;
+    eqBand04.Q.value = track.eq.bands[4].q;
     eqBand04.gain.value = track.eq.bands[4].gain;
 
     const eqBand05 = loopContext.createBiquadFilter();
     eqBand05.type = 'peaking';
     eqBand05.frequency.value = 1000;
-    eqBand05.Q.value = 10;
+    eqBand05.Q.value = track.eq.bands[5].q;
     eqBand05.gain.value = track.eq.bands[5].gain;
 
     const eqBand06 = loopContext.createBiquadFilter();
     eqBand06.type = 'peaking';
     eqBand06.frequency.value = 1000;
-    eqBand06.Q.value = 10;
+    eqBand06.Q.value = track.eq.bands[6].q;
     eqBand06.gain.value = track.eq.bands[6].gain;
 
     const eqBand07 = loopContext.createBiquadFilter();
     eqBand07.type = 'peaking';
     eqBand07.frequency.value = 1000;
-    eqBand07.Q.value = 10;
+    eqBand07.Q.value = track.eq.bands[7].q;
     eqBand07.gain.value = track.eq.bands[7].gain;
 
     const eqBand08 = loopContext.createBiquadFilter();
     eqBand08.type = 'peaking';
     eqBand08.frequency.value = 1000;
-    eqBand08.Q.value = 10;
+    eqBand08.Q.value = track.eq.bands[8].q;
     eqBand08.gain.value = track.eq.bands[8].gain;
 
     const eqBand09 = loopContext.createBiquadFilter();
     eqBand09.type = 'peaking';
     eqBand09.frequency.value = 1000;
-    eqBand09.Q.value = 10;
+    eqBand09.Q.value = track.eq.bands[9].q;
     eqBand09.gain.value = track.eq.bands[9].gain;
 
     const eqBand10 = loopContext.createBiquadFilter();
     eqBand10.type = 'peaking';
     eqBand10.frequency.value = 1000;
-    eqBand10.Q.value = 10;
+    eqBand10.Q.value = track.eq.bands[10].q;
     eqBand10.gain.value = track.eq.bands[10].gain;
 
     const eqBand11 = loopContext.createBiquadFilter();
     eqBand11.type = 'peaking';
     eqBand11.frequency.value = 1000;
-    eqBand11.Q.value = 10;
+    eqBand11.Q.value = track.eq.bands[11].q;
     eqBand11.gain.value = track.eq.bands[11].gain;
 
     const eqBand12 = loopContext.createBiquadFilter();
     eqBand12.type = 'highshelf';
     eqBand12.frequency.value = 1000;
-    eqBand12.Q.value = 10;
+    eqBand12.Q.value = track.eq.bands[12].q;
     eqBand12.gain.value = track.eq.bands[12].gain;
 
     if (!track.eq.on) {
