@@ -7,5 +7,6 @@ import playedAt from './playedAt';
 import selectedTracks from './selectedTracks';
 import startRecordTime from './startRecordTime';
 import isMetronomeOn from './isMetronomeOn';
+import isRecording from './isRecording';
 
-export default combineReducers({ isPlaying, soundClips, time, start, playedAt, selectedTracks, startRecordTime, isMetronomeOn });
+export default combineReducers({ isPlaying, soundClips, time, start, playedAt, selectedTracks, startRecordTime, isMetronomeOn, isRecording });

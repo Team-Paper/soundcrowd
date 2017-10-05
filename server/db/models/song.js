@@ -26,7 +26,7 @@ const Song = db.define('song', {
   url: {
     type: Sequelize.VIRTUAL,
     get(){
-      return 'https://s3.amazonaws.com/soundcrowd-files-fullstack/' + this.getDataValue('filename');
+      return 'https://s3.amazonaws.com/soundcrowd-songs-fullstack/' + this.getDataValue('filename');
     }
   }
 });

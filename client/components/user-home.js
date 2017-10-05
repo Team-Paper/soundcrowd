@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Container, Item, Grid, Image, Header, Button, Select } from 'semantic-ui-react';
-import { fetchUserComments, fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchAllUsers } from '../store';
+import { fetchUserComments, fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchFriends } from '../store';
 import SongView from './song-view';
 
 /**
@@ -89,7 +89,7 @@ class UserHome extends React.Component {
                   return (
                     <div key={project.id}>
                       <Header><Link to={`/projects/${project.id}`}>{project.title}</Link></Header>
-                      <Select onChange={this.handleSelect} placeholder='username' options={this.props.usersOptions} />
+                      <Select onChange={this.handleSelect} placeholder='name' options={this.props.usersOptions} />
                       <Button onClick={() => this.addCollaborator(project.id)} positive>Add Collaborator</Button>
                     </div>
                   );
@@ -128,7 +128,7 @@ const mapStateMyPage = (state) => {
 
   return {
     user: state.user,
-    usersOptions: state.users.map(user => ({ key: user.id, value: user.id, text: user.username || user.email})),
+    usersOptions: state.users.map(user => ({ key: user.id, value: user.id, text: user.username || user.name})),
     songs: userSongs,
     comments: state.comments.filter(comment => comment.userId === state.user.id),
     projects: userProjects,
@@ -141,12 +141,12 @@ const mapDispatchMyPage = (dispatch) => {
       dispatch(fetchUserSongs(userId));
       dispatch(fetchUserComments(userId));
       dispatch(fetchUserProjects(userId));
-      dispatch(fetchAllUsers());
+      dispatch(fetchFriends());
     },
     clearData: () => {
       dispatch(clearSongs());
     },
-    addCollaborator: (userId, projectId) => dispatch(addCollaborator(userId, projectId)),
+    addCollaborator: (fbId, projectId) => dispatch(addCollaborator(fbId, projectId)),
   };
 };
 

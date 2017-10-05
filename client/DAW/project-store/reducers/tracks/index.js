@@ -45,6 +45,15 @@ export const toggleTrackReverb = (projectId, track) => dispatch => {
   firebase.database().ref(`${projectId}/tracks/${track.id}/reverb/on`).set(val);
 };
 
+export const setTrackEQBandGain = (projectId, track, band, newGain) => dispatch => {
+  firebase.database().ref(`${projectId}/tracks/${track.id}/eq/bands/${band}/gain/`).set(+newGain);
+};
+
+export const toggleTrackEQ = (projectId, track) => dispatch => {
+  const val = !track.eq.on;
+  firebase.database().ref(`${projectId}/tracks/${track.id}/eq/on/`).set(val);
+}
+
 export const deleteTrack = (projectId, track) => dispatch => {
   firebase.database().ref(`${projectId}/tracks/${track}`).remove();
 }

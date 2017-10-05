@@ -25,7 +25,7 @@ function(req, accessToken, refreshToken, profile, done) {
   return User.find({where: {facebookId: profile.id}})
   .then(user => user
     ? done(null, user)
-    : User.create({name, email, facebookId})
+    : User.create({username: name, email, facebookId})
       .then(user => done(null, user))
   )
   .catch(done)
@@ -45,8 +45,9 @@ router.get('/callback', passport.authenticate('facebook', {
 
 router.get('/friends', (req, res, next) => {
   axios.get(`https://graph.facebook.com/v2.9/${req.session.facebookId}/friends?access_token=${req.session.token}`)
-  .then(response => {
-    res.json(response.data)
+  .then((response) => {
+    // res.data.data === [{name: 'JK Rowling', id: '5000189'}, {}, {} ....]
+    res.json(response.data.data)
     })
   .catch(console.error)})
 

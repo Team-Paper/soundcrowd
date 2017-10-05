@@ -55,7 +55,6 @@ export const createSoundClips = (files, soundClips) => dispatch => {
           buffer.buffer = audio;
           dispatch(addSoundClip(file.id, {
             sound: buffer,
-            played: false,
             duration: audio.duration,
             waveform: [],
           }));
