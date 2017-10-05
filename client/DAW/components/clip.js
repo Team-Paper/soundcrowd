@@ -36,12 +36,23 @@ class Clip extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      hover: false,
       x: 0,
       y: 0,
     };
 
+    this.handleMouseEnter = this.handleMouseEnter.bind(this);
+    this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.handleDrag = this.handleDrag.bind(this);
     this.handleEnd = this.handleEnd.bind(this);
+  }
+
+  handleMouseEnter() {
+    this.setState({ hover: true });
+  }
+
+  handleMouseLeave() {
+    this.setState({ hover: false });
   }
 
   handleDrag(e, data) {
@@ -62,25 +73,30 @@ class Clip extends React.Component {
 
   render() {
     const { clip, waveform, zoom, project, deleteClip } = this.props;
+    const { hover, x, y } = this.state;
     return (
       <Draggable
         bounds=".track-list"
         grid={[1, 154]}
         onDrag={this.handleDrag}
         onStop={this.handleEnd}
-        position={this.state}
+        position={{ x, y }}
       >
-        <div style={styles.clip(clip, zoom)}>
+        <div
+          style={styles.clip(clip, zoom)}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+        >
           <Waveform waveform={waveform} />
           <div style={styles.clipInfo}>
             {clip.url} starting at {clip.startTime}
-            <Button
+            { hover && <Button
               style={styles.clipRemove}
               size="mini"
               color="red"
               icon="remove"
               onClick={() => deleteClip(project, clip.key)}
-            />
+            /> }
           </div>
         </div>
 
