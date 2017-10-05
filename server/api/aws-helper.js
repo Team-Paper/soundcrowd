@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const uuidv4 = require('uuid/v4');
 
 const s3 = new AWS.S3();
 
