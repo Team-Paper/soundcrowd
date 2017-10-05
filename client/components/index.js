@@ -5,7 +5,7 @@
  */
 export {default as Main} from './main'
 export {default as Project} from './project'
-export {default as UserHome} from './user-home'
+export { UserHomeConnected as UserHome, PublicPage } from './user-home'
 export {Login, Signup} from './auth-form'
 export {default as LandingPage} from './landing-page'
 export {default as SingleSong} from './single-song'
