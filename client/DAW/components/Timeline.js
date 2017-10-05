@@ -9,7 +9,7 @@ import { createWaveform } from '../waveformBuilder';
 import { setTime } from '../project-store/reducers/timeline/time';
 import { setFiles, setFilesThunk, addFileThunk } from '../project-store/reducers/files';
 import { setClips, setClipsThunk, addClipThunk } from '../project-store/reducers/clips';
-import { setTracks, setTracksThunk } from '../project-store/reducers/tracks';
+import { setTracks, setTracksThunk, addTrackThunk } from '../project-store/reducers/tracks';
 import { fetchReverbsThunk } from '../project-store/reducers/reverbs';
 import { createSoundClips, setWaveform } from '../project-store/reducers/timeline/soundClips';
 import { play, pause, playThunk } from '../project-store/reducers/timeline/isPlaying';
@@ -36,6 +36,7 @@ class Timeline extends React.Component {
     this.stopRecord = this.stopRecord.bind(this);
     this.mixdown = this.mixdown.bind(this);
     this.trackEffectsLoop = this.trackEffectsLoop.bind(this);
+    this.addTrack = this.addTrack.bind(this);
     this.clipsRef = firebase.database().ref(`${this.props.projectId}/clips`);
     this.filesRef = firebase.database().ref(`${this.props.projectId}/files`);
     this.tracksRef = firebase.database().ref(`${this.props.projectId}/tracks`);
@@ -47,7 +48,7 @@ class Timeline extends React.Component {
 
   componentDidMount() {
     // calling createSoundClips here for testing purposes, but will need to be done after project files array is retrieved
-    const { setFiles, setFilesThunk, addFileThunk, setClips, setClipsThunk, setTracks, setTracksThunk, setTempo, setTempoThunk, createSoundClips, setWaveform, clips, projectId, files, soundClips, addClipThunk, selectedTracks, length, setLengthThunk, setLength, tempo, fetchReverbsThunk } = this.props;
+    const { setFiles, setFilesThunk, addFileThunk, setClips, setClipsThunk, setTracks, setTracksThunk, addTrackThunk, setTempo, setTempoThunk, createSoundClips, setWaveform, clips, projectId, files, soundClips, addClipThunk, selectedTracks, length, setLengthThunk, setLength, tempo, fetchReverbsThunk } = this.props;
 
     // subscribe redux to firebase
     this.filesRef.on('value', snapshot => {
@@ -260,6 +261,15 @@ class Timeline extends React.Component {
     console.log('recorder stopped');
   }
 
+  addTrack() {
+    const { projectId, tracks, addTrackThunk } = this.props;
+    const newTrackId = Object.keys(tracks).length + 1
+    console.log('tracks', Object.keys(tracks).length)
+
+    const newTrack = { id: newTrackId, volume: 100, isMuted: false, reverb: { id: 1, on: false, gain: 1 } }
+    addTrackThunk(projectId, newTrackId, newTrack)
+  }
+
   mixdown() {
     const { clips, soundClips, length, tracks } = this.props;
     const offlineContext = new OfflineAudioContext(2, length * 44100, 44100); // hardcoded to stereo, length 300 seconds?
@@ -324,9 +334,10 @@ class Timeline extends React.Component {
     return (
       <div style={{ position: 'relative', overflowX: 'scroll' }}>
         <div>{time}</div>
-        <button onClick={this.startRecord}>record</button>
-        <button onClick={this.stopRecord}>stop</button>
-        <button onClick={this.mixdown}>mixdown</button>
+        <button onClick={this.startRecord}>Record</button>
+        <button onClick={this.stopRecord}>Stop</button>
+        <button onClick={this.mixdown}>Mixdown</button>
+        <button onClick={this.addTrack}>Add Track</button>
         <span>length (seconds):</span>
         <input type="text" value={length} onChange={e => setLengthThunk(projectId, e.target.value)} />
         <PlaybackControls togglePlay={this.togglePlay} />
@@ -364,6 +375,8 @@ const mapDispatch = dispatch => ({
   addClipThunk: (projectId, fileId, selectedTracks, time) => dispatch(addClipThunk(projectId, fileId, selectedTracks, time)),
   setTracks: (tracks) => dispatch(setTracks(tracks)),
   setTracksThunk: (projectId, tracks) => dispatch(setTracksThunk(projectId, tracks)),
+  addTrackThunk: (projectId, trackId, newTrack) => {console.log('in this mess')
+  dispatch(addTrackThunk(projectId, trackId, newTrack))},
   setTempo: (tempo) => dispatch(setTempo(tempo)),
   setTempoThunk: (projectId, tempo) => dispatch(setTempoThunk(projectId, tempo)),
   createSoundClips: (files, soundClips) => dispatch(createSoundClips(files, soundClips)),

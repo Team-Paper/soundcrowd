@@ -16,6 +16,7 @@ const strategy = new FacebookStrategy({
 
 },
 function(req, accessToken, refreshToken, profile, done) {
+  console.log(profile)
   req.session.token = accessToken
   req.session.facebookId = profile.id
   const facebookId = profile.id
@@ -48,3 +49,4 @@ router.get('/friends', (req, res, next) => {
     res.json(response.data)
     })
   .catch(console.error)})
+
