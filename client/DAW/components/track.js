@@ -23,17 +23,18 @@ const styles = {
 };
 
 const Track = (props) => {
-  const { clips, dragOver, isDragging, project, track, zoom } = props;
+  const { clips, dragOver, isDragging, isOver, project, track, zoom } = props;
   return (
     <div
       className="track"
       style={styles.track}
-      onMouseOver={isDragging ? dragOver : () => false}
+      onMouseOver={() => isDragging && !isOver && dragOver()}
     >
       <Card style={styles.trackControls}>
         <Card.Content>
           <Card.Header>
             Track #{track.id}
+            {isOver && 'TARGET'}
           </Card.Header>
           <Card.Description>
             <TrackControls track={track} projectId={project} />
@@ -53,8 +54,9 @@ const Track = (props) => {
   );
 };
 
-const mapState = state => ({
+const mapState = (state, ownProps) => ({
   isDragging: state.dragging.isDragging,
+  isOver: state.dragging.trackOver === ownProps.track.id,
 });
 
 const mapDispatch = (dispatch, ownProps) => ({

@@ -20,6 +20,7 @@ const styles = {
     marginTop: '-70px',
     background: '#22a3ef',
     opacity: '0.5',
+    pointerEvents: 'none',
     zIndex: '20',
   },
 };
