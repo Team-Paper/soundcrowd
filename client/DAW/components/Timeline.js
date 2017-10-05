@@ -189,7 +189,8 @@ class Timeline extends React.Component {
     this.clipsRef.off();
     this.tracksRef.off();
     this.filesRef.off();
-    this.settingsRef.off();
+    this.tempoRef.off();
+    this.lengthRef.off();
   }
 
   playSound(buffer, startTime, playAt, track) {
