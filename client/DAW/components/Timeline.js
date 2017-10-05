@@ -412,7 +412,6 @@ class Timeline extends React.Component {
   addTrack() {
     const { projectId, tracks, addTrackThunk } = this.props;
     const newTrackId = Object.keys(tracks).length + 1
-    console.log('tracks', Object.keys(tracks).length)
 
     const newTrack =  { id: newTrackId, volume: 100, isMuted: false,
       reverb: { id: 1, on: false, gain: 1 },
