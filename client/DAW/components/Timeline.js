@@ -334,7 +334,7 @@ class Timeline extends React.Component {
     console.log('playing toggled')
     const { isPlaying, play, pause, setPlayedAt, setPlayedAtThunk, soundClips, playThunk, setStartThunk, time, clips, isRecording, stopRecord } = this.props;
     if (!isPlaying) {
-      setStartThunk(time)
+      return setStartThunk(time)
         .then(() => playThunk())
         .then(() => setPlayedAtThunk(context.currentTime))
         .then(() => this.tick())
@@ -389,9 +389,11 @@ class Timeline extends React.Component {
     startRecord();
     console.log('startRecordTime should be', time);
     setStartRecordTime(time);
-    this.mediaRecorder.start();
+
     if (!isPlaying) {
-      this.togglePlay();
+      this.togglePlay()
+        .then(() => this.mediaRecorder.start())
+        .catch(console.error);
     }
     console.log('mediaRecorder state is', this.mediaRecorder.state);
     console.log('recorder started');
