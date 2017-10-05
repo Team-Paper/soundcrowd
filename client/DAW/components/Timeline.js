@@ -195,7 +195,7 @@ class Timeline extends React.Component {
 
   togglePlay() {
     console.log('playing toggled')
-    const { isPlaying, play, pause, setPlayedAt, setPlayedAtThunk, soundClips, playThunk, setStartThunk, time } = this.props;
+    const { isPlaying, play, pause, setPlayedAt, setPlayedAtThunk, soundClips, playThunk, setStartThunk, time, clips } = this.props;
     if (!isPlaying) {
       setStartThunk(time)
         .then(() => playThunk())
@@ -208,9 +208,9 @@ class Timeline extends React.Component {
       this.state.playing.forEach(sound => {
         sound.stop();
       });
-      for (let key in soundClips) {
-        if (soundClips.hasOwnProperty(key)) {
-          soundClips[key].played = false;
+      for (let key in clips) {
+        if (clips.hasOwnProperty(key)) {
+          clips[key].played = false;
         }
       }
       this.setState({ playing: [] });
@@ -230,14 +230,12 @@ class Timeline extends React.Component {
     for (let key in clips) {
       if (clips.hasOwnProperty(key)) {
         const clip = clips[key];
-        if (isPlaying === true && time > clip.startTime && clip.track !== null) {
+        if (isPlaying === true && time > clip.startTime && clip.track !== null && clip.played === false) {
           const track = tracks[clip.track];
           const soundClip = soundClips[clip.fileId];
-          if (soundClip.played === false) {
-            soundClip.played = true;
-            const playAt = context.currentTime + (clip.startTime - time);
-            this.playSound(soundClip.sound.buffer, time - clip.startTime, playAt, track);
-          }
+          const playAt = context.currentTime + (clip.startTime - time);
+          clip.played = true;
+          this.playSound(soundClip.sound.buffer, time - clip.startTime, playAt, track);
         }
       }
     }

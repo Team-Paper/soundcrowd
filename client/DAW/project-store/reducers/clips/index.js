@@ -29,7 +29,7 @@ export const setClipsThunk = (projectId, clips) => () => {
 export const addClipThunk = (projectId, fileId, selectedTracks, time) => () => {
   console.log('time is', time);
   selectedTracks.forEach((selectedTrack) => {
-    const newClip = { fileId, track: selectedTrack, startTime: time };
+    const newClip = { fileId, track: selectedTrack, startTime: time, played: false };
     firebase.database().ref(`${projectId}/clips`).push(newClip);
   });
 };
