@@ -46,3 +46,9 @@ router.get('/fb/:id', (req, res, next) => {
     .then(users => res.json(users))
     .catch(next);
 });
+
+router.get('/:id', (req, res, next) => {
+  User.findById(Number(req.params.id))
+    .then(users => res.json(users))
+    .catch(next);
+});
