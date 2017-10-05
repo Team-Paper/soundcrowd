@@ -1,5 +1,6 @@
 export { default as Clip } from './clip';
 export { default as DAW } from './DAW';
+export { default as FileItem } from './file-item';
 export { default as PlaybackControls } from './playback-controls';
 export { default as PlaybackMarker } from './playback-marker';
 export { default as Timeline } from './Timeline';

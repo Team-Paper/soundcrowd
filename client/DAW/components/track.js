@@ -1,7 +1,8 @@
 import React from 'react';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { Card } from 'semantic-ui-react';
 import { Clip, TrackControls } from '../components';
+import { addClipThunk } from '../project-store/reducers/clips';
 
 const styles = {
   track: {
@@ -22,9 +23,13 @@ const styles = {
 };
 
 const Track = (props) => {
-  const { clips, project, track, zoom } = props;
+  const { clips, draggedFile, dropFile, isDragging, project, track, zoom } = props;
   return (
-    <div className="track" style={styles.track}>
+    <div
+      className="track"
+      style={styles.track}
+      onMouseUp={() => isDragging && dropFile(draggedFile)}
+    >
       <Card style={styles.trackControls}>
         <Card.Content>
           <Card.Header>
@@ -48,4 +53,14 @@ const Track = (props) => {
   );
 };
 
-export default Track;
+const mapState = state => ({
+  isDragging: state.dragging.isDragging,
+  draggedFile: state.dragging.file,
+});
+
+const mapDispatch = (dispatch, ownProps) => ({
+  dropFile: file => dispatch(addClipThunk(ownProps.project, file, [ownProps.track.id], 0)),
+});
+
+
+export default connect(mapState, mapDispatch)(Track);
