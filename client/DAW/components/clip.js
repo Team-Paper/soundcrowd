@@ -20,6 +20,14 @@ const styles = {
   clipInfo: {
     position: 'absolute',
     top: '0',
+    width: '100%',
+  },
+  clipRemove: {
+    position: 'absolute',
+    top: '0',
+    right: '0',
+    margin: '1em',
+    padding: '0.5em',
   },
 };
 
@@ -66,7 +74,13 @@ class Clip extends React.Component {
           <Waveform waveform={waveform} />
           <div style={styles.clipInfo}>
             {clip.url} starting at {clip.startTime}
-            <Button color="red" onClick={() => deleteClip(project, clip.key)}>X</Button>
+            <Button
+              style={styles.clipRemove}
+              size="mini"
+              color="red"
+              icon="remove"
+              onClick={() => deleteClip(project, clip.key)}
+            />
           </div>
         </div>
 
