@@ -24,7 +24,7 @@ function(req, accessToken, refreshToken, profile, done) {
   return User.find({where: {facebookId: profile.id}})
   .then(user => user
     ? done(null, user)
-    : User.create({name, email, facebookId})
+    : User.create({username: name, email, facebookId})
       .then(user => done(null, user))
   )
   .catch(done)
