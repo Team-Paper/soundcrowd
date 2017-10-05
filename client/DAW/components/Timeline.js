@@ -414,7 +414,26 @@ class Timeline extends React.Component {
     const newTrackId = Object.keys(tracks).length + 1
     console.log('tracks', Object.keys(tracks).length)
 
-    const newTrack = { id: newTrackId, volume: 100, isMuted: false, reverb: { id: 1, on: false, gain: 1 } }
+    const newTrack =  { id: newTrackId, volume: 100, isMuted: false,
+      reverb: { id: 1, on: false, gain: 1 },
+      eq: {
+        on: false,
+        bands: {
+          1: { f: 63, q: 4.318, gain: 0},
+          2: { f: 125, q: 4.318, gain: 0},
+          3: { f: 250, q: 4.318, gain: 0},
+          4: { f: 400, q: 4.318, gain: 0},
+          5: { f: 630, q: 4.318, gain: 0},
+          6: { f: 1000, q: 4.318, gain: 0},
+          7: { f: 1600, q: 4.318, gain: 0},
+          8: { f: 2500, q: 4.318, gain: 0},
+          9: { f: 4000, q: 4.318, gain: 0},
+          10: { f: 6300, q: 4.318, gain: 0},
+          11: { f: 10000, q: 4.318, gain: 0},
+          12: { f: 16000, q: 4.318, gain: 0},
+        }
+      }
+    }
     addTrackThunk(projectId, newTrackId, newTrack)
   }
 
