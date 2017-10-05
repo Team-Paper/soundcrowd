@@ -1,3 +1,4 @@
+/* global window */
 import React from 'react';
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
@@ -40,9 +41,11 @@ class FileItem extends React.Component {
 
   handleStart(e, data) {
     this.props.startDrag();
+    window.addEventListener('mouseup', this.handleEnd);
   }
 
   handleEnd(e, data) {
+    window.removeEventListener('mouseup', this.handleEnd);
     this.props.stopDrag();
     this.setState({ x: 0, y: 0 });
   }
@@ -59,7 +62,6 @@ class FileItem extends React.Component {
       >
         <Draggable
           onStart={this.handleStart}
-          onStop={this.handleEnd}
           position={{ x, y }}
         >
           { isDragging ?
@@ -76,8 +78,8 @@ const mapState = state => ({
   isDragging: state.dragging.isDragging,
 });
 
-const mapDispatch = dispatch => ({
-  startDrag: () => dispatch(startDragging()),
+const mapDispatch = (dispatch, ownProps) => ({
+  startDrag: () => dispatch(startDragging(ownProps.item.id)),
   stopDrag: () => dispatch(stopDragging()),
 });
 

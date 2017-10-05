@@ -1,39 +1,30 @@
 // DEFAULT STATE
 const defaultDrag = {
   isDragging: false,
-  trackOver: 0,
+  file: 0,
 };
 
 // ACTION TYPES
 const START_DRAGGING = 'START_DRAGGING';
 const STOP_DRAGGING = 'STOP_DRAGGING';
-const SET_TRACK_OVER = 'SET_TRACK_OVER';
 
 // ACTION CREATORS
-export const startDragging = () => ({
+export const startDragging = file => ({
   type: START_DRAGGING,
+  file,
 });
 
 export const stopDragging = () => ({
   type: STOP_DRAGGING,
 });
 
-export const setTrackOver = trackOver => ({
-  type: SET_TRACK_OVER,
-  trackOver,
-});
-
 // REDUCER
 export default function reducer(dragging = defaultDrag, action) {
   switch (action.type) {
     case START_DRAGGING:
-      return { isDragging: true, trackOver: 0 };
+      return { isDragging: true, file: action.file };
     case STOP_DRAGGING:
       return defaultDrag;
-    case SET_TRACK_OVER:
-      return dragging.isDragging ?
-        Object.assign({}, dragging, { trackOver: action.trackOver }) :
-        dragging;
     default:
       return dragging;
   }

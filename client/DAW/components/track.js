@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Card } from 'semantic-ui-react';
 import { Clip, TrackControls } from '../components';
-import { setTrackOver } from '../project-store/reducers/dragging';
+import { addClipThunk } from '../project-store/reducers/clips';
 
 const styles = {
   track: {
@@ -23,18 +23,17 @@ const styles = {
 };
 
 const Track = (props) => {
-  const { clips, dragOver, isDragging, isOver, project, track, zoom } = props;
+  const { clips, draggedFile, dropFile, isDragging, project, track, zoom } = props;
   return (
     <div
       className="track"
       style={styles.track}
-      onMouseOver={() => isDragging && !isOver && dragOver()}
+      onMouseUp={() => isDragging && dropFile(draggedFile)}
     >
       <Card style={styles.trackControls}>
         <Card.Content>
           <Card.Header>
             Track #{track.id}
-            {isOver && 'TARGET'}
           </Card.Header>
           <Card.Description>
             <TrackControls track={track} projectId={project} />
@@ -54,13 +53,13 @@ const Track = (props) => {
   );
 };
 
-const mapState = (state, ownProps) => ({
+const mapState = state => ({
   isDragging: state.dragging.isDragging,
-  isOver: state.dragging.trackOver === ownProps.track.id,
+  draggedFile: state.dragging.file,
 });
 
 const mapDispatch = (dispatch, ownProps) => ({
-  dragOver: () => dispatch(setTrackOver(ownProps.track.id)),
+  dropFile: file => dispatch(addClipThunk(ownProps.project, file, [ownProps.track.id], 0)),
 });
 
 
