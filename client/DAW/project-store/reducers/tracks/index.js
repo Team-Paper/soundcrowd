@@ -44,3 +44,7 @@ export const toggleTrackReverb = (projectId, track) => dispatch => {
   const val = !track.reverb.on;
   firebase.database().ref(`${projectId}/tracks/${track.id}/reverb/on`).set(val);
 };
+
+export const deleteTrack = (projectId, track) => dispatch => {
+  firebase.database().ref(`${projectId}/tracks/${track}`).remove();
+}
