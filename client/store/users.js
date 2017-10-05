@@ -41,6 +41,15 @@ export const fetchAllUsers = () => {
   };
 };
 
+export const fetchFriends = (userId) => {
+  return (dispatch) => {
+    axios.get('/auth/facebook/friends')
+      .then(res => res.data)
+      .then(users => dispatch(getAllUsers(users)))
+      .catch(console.error.bind(console));
+  };
+};
+
 /**
  * REDUCER
  */
