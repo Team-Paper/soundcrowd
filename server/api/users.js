@@ -7,7 +7,7 @@ router.get('/', (req, res, next) => {
     // explicitly select only the id and email fields - even though
     // users' passwords are encrypted, it won't help if we just
     // send everything to anyone who asks!
-    attributes: ['id', 'username', 'email']
+    attributes: ['id', 'username']
   })
     .then(users => res.json(users))
     .catch(next)
@@ -32,5 +32,17 @@ router.get('/:id/projects', (req, res, next) => {
   const userId = Number(req.params.id);
   Project.findAll({ where: { '$users.id$': userId }, include: [{ model: User, though: 'usersProjects' }] })
     .then(projects => res.json(projects))
+    .catch(next);
+});
+
+router.get('/fb/:id', (req, res, next) => {
+  User.findOne({
+    // explicitly select only the id and email fields - even though
+    // users' passwords are encrypted, it won't help if we just
+    // send everything to anyone who asks!
+    attributes: ['id', 'username'],
+    where: { facebookId: req.params.id },
+  })
+    .then(users => res.json(users))
     .catch(next);
 });
