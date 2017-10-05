@@ -1,7 +1,8 @@
 import React from 'react';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { Card } from 'semantic-ui-react';
 import { Clip, TrackControls } from '../components';
+import { setTrackOver } from '../project-store/reducers/dragging';
 
 const styles = {
   track: {
@@ -22,9 +23,13 @@ const styles = {
 };
 
 const Track = (props) => {
-  const { clips, project, track, zoom } = props;
+  const { clips, dragOver, isDragging, project, track, zoom } = props;
   return (
-    <div className="track" style={styles.track}>
+    <div
+      className="track"
+      style={styles.track}
+      onMouseOver={isDragging ? dragOver : () => false}
+    >
       <Card style={styles.trackControls}>
         <Card.Content>
           <Card.Header>
@@ -48,4 +53,13 @@ const Track = (props) => {
   );
 };
 
-export default Track;
+const mapState = state => ({
+  isDragging: state.dragging.isDragging,
+});
+
+const mapDispatch = (dispatch, ownProps) => ({
+  dragOver: () => dispatch(setTrackOver(ownProps.track.id)),
+});
+
+
+export default connect(mapState, mapDispatch)(Track);
