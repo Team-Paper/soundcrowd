@@ -89,22 +89,44 @@ class Timeline extends React.Component {
     setTracksThunk(projectId, [
       { id: 1, volume: 100, isMuted: false,
         reverb: { id: 1, on: false, gain: 1 },
-        eq: { on: false,
-            band01: { f: 63, q: 1, gain: 0},
-            band02: { f: 125, q: 1, gain: 0},
-            band03: { f: 250, q: 1, gain: 0},
-            band04: { f: 400, q: 1, gain: 0},
-            band05: { f: 630, q: 1, gain: 0},
-            band06: { f: 1000, q: 1, gain: 0},
-            band07: { f: 1600, q: 1, gain: 0},
-            band08: { f: 2500, q: 1, gain: 0},
-            band09: { f: 4000, q: 1, gain: 0},
-            band10: { f: 6300, q: 1, gain: 0},
-            band11: { f: 10000, q: 1, gain: 0},
-            band12: { f: 16000, q: 1, gain: 0},
+        eq: {
+          on: false,
+          bands: {
+            1: { f: 63, q: 1, gain: 0},
+            2: { f: 125, q: 1, gain: 0},
+            3: { f: 250, q: 1, gain: 0},
+            4: { f: 400, q: 1, gain: 0},
+            5: { f: 630, q: 1, gain: 0},
+            6: { f: 1000, q: 1, gain: 0},
+            7: { f: 1600, q: 1, gain: 0},
+            8: { f: 2500, q: 1, gain: 0},
+            9: { f: 4000, q: 1, gain: 0},
+            10: { f: 6300, q: 1, gain: 0},
+            11: { f: 10000, q: 1, gain: 0},
+            12: { f: 16000, q: 1, gain: 0},
+          }
         }
       },
-      { id: 2, volume: 100, isMuted: false, reverb: { id: 1, on: false, gain: 1 } },
+      { id: 2, volume: 100, isMuted: false,
+        reverb: { id: 1, on: false, gain: 1 },
+        eq: {
+          on: false,
+          bands: {
+            1: { f: 63, q: 1, gain: 0},
+            2: { f: 125, q: 1, gain: 0},
+            3: { f: 250, q: 1, gain: 0},
+            4: { f: 400, q: 1, gain: 0},
+            5: { f: 630, q: 1, gain: 0},
+            6: { f: 1000, q: 1, gain: 0},
+            7: { f: 1600, q: 1, gain: 0},
+            8: { f: 2500, q: 1, gain: 0},
+            9: { f: 4000, q: 1, gain: 0},
+            10: { f: 6300, q: 1, gain: 0},
+            11: { f: 10000, q: 1, gain: 0},
+            12: { f: 16000, q: 1, gain: 0},
+          }
+        }
+      },
     ]);
     // end firebase seeding
 
@@ -196,73 +218,88 @@ class Timeline extends React.Component {
     const eqBand01 = loopContext.createBiquadFilter();
     eqBand01.type = 'lowshelf';
     eqBand01.frequency.value = 120;
-    eqBand01.gain.value = 0; // in dBs
+    eqBand01.gain.value = track.eq.bands[1].gain; // in dBs
 
     const eqBand02 = loopContext.createBiquadFilter();
     eqBand02.type = 'peaking';
     eqBand02.frequency.value = 600;
     eqBand02.Q.value = 10;
-    eqBand02.gain.value = -100;
+    eqBand02.gain.value = track.eq.bands[2].gain;
 
     const eqBand03 = loopContext.createBiquadFilter();
     eqBand03.type = 'peaking';
     eqBand03.frequency.value = 1000;
     eqBand03.Q.value = 10;
-    eqBand03.gain.value = -100;
+    eqBand03.gain.value = track.eq.bands[3].gain;
 
     const eqBand04 = loopContext.createBiquadFilter();
     eqBand04.type = 'peaking';
     eqBand04.frequency.value = 1000;
     eqBand04.Q.value = 10;
-    eqBand04.gain.value = -100;
+    eqBand04.gain.value = track.eq.bands[4].gain;
 
     const eqBand05 = loopContext.createBiquadFilter();
     eqBand05.type = 'peaking';
     eqBand05.frequency.value = 1000;
     eqBand05.Q.value = 10;
-    eqBand05.gain.value = -100;
+    eqBand05.gain.value = track.eq.bands[5].gain;
 
     const eqBand06 = loopContext.createBiquadFilter();
     eqBand06.type = 'peaking';
     eqBand06.frequency.value = 1000;
     eqBand06.Q.value = 10;
-    eqBand06.gain.value = -100;
+    eqBand06.gain.value = track.eq.bands[6].gain;
 
     const eqBand07 = loopContext.createBiquadFilter();
     eqBand07.type = 'peaking';
     eqBand07.frequency.value = 1000;
     eqBand07.Q.value = 10;
-    eqBand07.gain.value = -100;
+    eqBand07.gain.value = track.eq.bands[7].gain;
 
     const eqBand08 = loopContext.createBiquadFilter();
     eqBand08.type = 'peaking';
     eqBand08.frequency.value = 1000;
     eqBand08.Q.value = 10;
-    eqBand08.gain.value = -100;
+    eqBand08.gain.value = track.eq.bands[8].gain;
 
     const eqBand09 = loopContext.createBiquadFilter();
     eqBand09.type = 'peaking';
     eqBand09.frequency.value = 1000;
     eqBand09.Q.value = 10;
-    eqBand09.gain.value = -100;
+    eqBand09.gain.value = track.eq.bands[9].gain;
 
     const eqBand10 = loopContext.createBiquadFilter();
     eqBand10.type = 'peaking';
     eqBand10.frequency.value = 1000;
     eqBand10.Q.value = 10;
-    eqBand10.gain.value = -100;
+    eqBand10.gain.value = track.eq.bands[10].gain;
 
     const eqBand11 = loopContext.createBiquadFilter();
     eqBand11.type = 'peaking';
     eqBand11.frequency.value = 1000;
     eqBand11.Q.value = 10;
-    eqBand11.gain.value = -100;
+    eqBand11.gain.value = track.eq.bands[11].gain;
 
     const eqBand12 = loopContext.createBiquadFilter();
     eqBand12.type = 'highshelf';
     eqBand12.frequency.value = 1000;
     eqBand12.Q.value = 10;
-    eqBand12.gain.value = -100;
+    eqBand12.gain.value = track.eq.bands[12].gain;
+
+    if (!track.eq.on) {
+      eqBand01.gain.value = 0;
+      eqBand02.gain.value = 0;
+      eqBand03.gain.value = 0;
+      eqBand04.gain.value = 0;
+      eqBand05.gain.value = 0;
+      eqBand06.gain.value = 0;
+      eqBand07.gain.value = 0;
+      eqBand08.gain.value = 0;
+      eqBand09.gain.value = 0;
+      eqBand10.gain.value = 0;
+      eqBand11.gain.value = 0;
+      eqBand12.gain.value = 0;
+    }
 
     // reverb settings
     const convolverNode = loopContext.createConvolver();
