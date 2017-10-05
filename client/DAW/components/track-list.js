@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { PlaybackMarker, Track } from '../components';
+import { PlaybackMarker, Track, WaveformGradient } from '../components';
 
 const styles = {
   trackList(width) {
@@ -26,6 +26,7 @@ const TrackList = (props) => {
   const zoom = 200; // pixels per second
   return (
     <div className="track-list" style={styles.trackList(getWidth(clips, zoom))}>
+      <WaveformGradient />
       {
         Object.entries(tracks).map(([key, track]) => (
           <Track
