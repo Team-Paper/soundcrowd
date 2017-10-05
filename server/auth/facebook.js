@@ -49,3 +49,4 @@ router.get('/friends', (req, res, next) => {
     res.json(response.data.data)
     })
   .catch(console.error)})
+

@@ -57,3 +57,9 @@ export const toggleTrackEQ = (projectId, track) => dispatch => {
 export const deleteTrack = (projectId, track) => dispatch => {
   firebase.database().ref(`${projectId}/tracks/${track}`).remove();
 }
+
+
+export const addTrackThunk = (projectId, trackId, newTrack) => dispatch => {
+  console.log('in thunk')
+  firebase.database().ref(`${projectId}/tracks/${trackId}`).set(newTrack);
+}
