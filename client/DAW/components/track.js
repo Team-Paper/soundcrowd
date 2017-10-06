@@ -6,10 +6,7 @@ import { addClipThunk } from '../project-store/reducers/clips';
 const styles = {
   track: {
     height: '154px',
-    boxShadow: '0 1px 0 0 rgba(34,36,38,.15)',
-  },
-  trackTimeline: {
-    height: '100%',
+    boxShadow: '0 -1px 0 0 rgba(34,36,38,.15)',
   },
 };
 
@@ -21,15 +18,13 @@ const Track = (props) => {
       style={styles.track}
       onMouseUp={() => isDragging && dropFile(draggedFile)}
     >
-      <div style={styles.trackTimeline}>
-        { clips.map(clip => (
-          <Clip
-            key={clip.key}
-            clip={clip}
-            project={project}
-            zoom={zoom}
-          />)) }
-      </div>
+      { clips.map(clip => (
+        <Clip
+          key={clip.key}
+          clip={clip}
+          project={project}
+          zoom={zoom}
+        />)) }
     </div>
   );
 };
