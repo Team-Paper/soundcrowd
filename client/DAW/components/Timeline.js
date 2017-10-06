@@ -48,7 +48,7 @@ class Timeline extends React.Component {
 
   componentDidMount() {
     // calling createSoundClips here for testing purposes, but will need to be done after project files array is retrieved
-    const { setFiles, setFilesThunk, addFileThunk, setClips, setClipsThunk, setTracks, setTracksThunk, addTrackThunk, setTempo, setTempoThunk, createSoundClips, setWaveform, clips, projectId, files, soundClips, addClipThunk, selectedTracks, length, setLengthThunk, setLength, tempo, fetchReverbsThunk } = this.props;
+    const { setFiles, setFilesThunk, addFileThunk, setClips, setClipsThunk, setTracks, setTracksThunk, addTrackThunk, setTempo, setTempoThunk, createSoundClips, setWaveform, clips, projectId, files, tracks, soundClips, addClipThunk, selectedTracks, length, setLengthThunk, setLength, tempo, fetchReverbsThunk } = this.props;
 
     // subscribe redux to firebase
     this.filesRef.on('value', snapshot => {
