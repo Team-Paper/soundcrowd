@@ -2,16 +2,17 @@ import React from 'react';
 import Draggable from 'react-draggable';
 
 const styles = {
-  clipHandle(side) {
-    return Object.assign({
+  clipHandle(side, offset) {
+    return {
       position: 'absolute',
       top: '0',
+      [side]: offset,
       height: '100%',
       width: '20px',
       background: 'black',
       cursor: 'col-resize',
       opacity: '0.8',
-    }, side === 'left' ? { left: '0' } : { right: '0' });
+    };
   },
 };
 
@@ -31,6 +32,7 @@ class ClipHandle extends React.Component {
   }
 
   render() {
+    const { offset, side } = this.props;
     const { x } = this.state;
     return (
       <Draggable
@@ -40,7 +42,7 @@ class ClipHandle extends React.Component {
         onStop={this.props.handleEnd}
         position={{ x, y: 0 }}
       >
-        <div style={styles.clipHandle(this.props.side)} />
+        <div style={styles.clipHandle(side, offset)} />
       </Draggable>
     );
   }
