@@ -5,6 +5,7 @@ import { addSelectedTrack, removeSelectedTrack } from '../project-store/reducers
 import { toggleMuteTrackThunk, setTrackVolume, deleteTrack } from '../project-store/reducers/tracks';
 import ReverbModal from './Reverb';
 import EqualizerModal from './Equalizer';
+import CompressorModal from './Compressor';
 
 const styles = {
   trackControls: {
@@ -50,6 +51,7 @@ const TrackControls = (props) => {
           />
           <ReverbModal track={track} projectId={projectId} />
           <EqualizerModal track={track} projectId={projectId} />
+          <CompressorModal track={track} projectId={projectId} />
         </Card.Description>
       </Card.Content>
     </Card>

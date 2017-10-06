@@ -58,6 +58,30 @@ export const deleteTrack = (projectId, track) => dispatch => {
   firebase.database().ref(`${projectId}/tracks/${track}`).remove();
 }
 
+export const toggleTrackCompressor = (projectId, track) => dispatch => {
+  const val = !track.compressor.on;
+  firebase.database().ref(`${projectId}/tracks/${track.id}/compressor/on/`).set(val);
+};
+
+export const setTrackCompressorThreshold = (projectId, track, newThreshold) => dispatch => {
+  firebase.database().ref(`${projectId}/tracks/${track.id}/compressor/threshold`).set(+newThreshold);
+};
+
+export const setTrackCompressorKnee = (projectId, track, newKnee) => dispatch => {
+  firebase.database().ref(`${projectId}/tracks/${track.id}/compressor/knee`).set(+newKnee);
+};
+
+export const setTrackCompressorRatio = (projectId, track, newRatio) => dispatch => {
+  firebase.database().ref(`${projectId}/tracks/${track.id}/compressor/ratio`).set(+newRatio);
+};
+
+export const setTrackCompressorAttack = (projectId, track, newAttack) => dispatch => {
+  firebase.database().ref(`${projectId}/tracks/${track.id}/compressor/attack`).set(+newAttack);
+};
+
+export const setTrackCompressorRelease = (projectId, track, newRelease) => dispatch => {
+  firebase.database().ref(`${projectId}/tracks/${track.id}/compressor/release`).set(+newRelease);
+};
 
 export const addTrackThunk = (projectId, trackId, newTrack) => dispatch => {
   console.log('in thunk')
