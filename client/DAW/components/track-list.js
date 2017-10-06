@@ -6,12 +6,13 @@ import { PlaybackMarker, Track, TrackControls, WaveformGradient } from '../compo
 const styles = {
   trackListWrapper: {
     display: 'flex',
+    position: 'relative',
     marginTop: '1em',
     overflowY: 'scroll',
   },
   trackControlList: {
     height: '100%',
-    margin: '1px',
+    margin: '1px 0 1px 1px',
   },
   trackList(width) {
     return {
@@ -23,8 +24,8 @@ const styles = {
     };
   },
   trackListView: {
-    position: 'relative',
     height: '100%',
+    paddingLeft: '1px',
     overflowX: 'scroll',
   },
 };
@@ -62,8 +63,8 @@ const TrackList = (props) => {
                 clips={clips.filter(clip => clip.track === track.id)}
               />
             )) }
+          <PlaybackMarker zoom={zoom} />
         </div>
-        <PlaybackMarker zoom={zoom} />
       </div>
     </Container>
   );
