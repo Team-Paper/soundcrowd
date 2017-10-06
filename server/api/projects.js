@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { Project, User } = require('../db/models');
-const { isSelf } = require('./gatekeepers');
+const { isLoggedIn, isSelf } = require('./gatekeepers');
 
 module.exports = router;
 
@@ -14,8 +14,10 @@ router.get('/:id', (req, res, next) => {
 // create a new project
 // the isSelf gatekeeper makes sure that users cannot
 // make a project for another user
-router.post('/', isSelf, (req, res, next) => {
+router.post('/', isLoggedIn, (req, res, next) => {
   Project.create(req.body)
+    .then(project => Promise.all([project.addUser(req.user.id), project]))
+    .spread((projectJoin, project) => Project.findOne({ where: { id: project.id }, include: [{ model: User, though: 'usersProjects' }] }))
     .then(project => res.json(project))
     .catch(next);
 });

@@ -8,6 +8,7 @@ const GET_PROJECT = 'GET_PROJECT';
 const REMOVE_PROJECT = 'REMOVE_PROJECT';
 const CLEAR_PROJECTS = 'CLEAR_PROJECTS';
 const UPDATE_PROJECT = 'UPDATE_PROJECT';
+const ADD_PROJECT = 'ADD_PROJECT';
 
 /**
  * INITIAL STATE
@@ -22,6 +23,7 @@ export const removeProject = project => ({ type: REMOVE_PROJECT, project });
 export const getProjects = projects => ({ type: GET_PROJECTS, projects });
 export const clearProjects = () => ({ type: CLEAR_PROJECTS });
 export const updateProject = project => ({ type: UPDATE_PROJECT, project });
+export const addProject = project => ({ type: ADD_PROJECT, project });
 
 /**
  * THUNK CREATORS
@@ -81,6 +83,8 @@ export default function (state = defaultProjects, action) {
         if (project.id !== action.project.id) return project;
         return action.project;
       });
+    case ADD_PROJECT:
+      return state.concat(action.project);
     default:
       return state;
   }
