@@ -10,12 +10,14 @@ const styles = {
     overflowY: 'scroll',
   },
   trackControlList: {
+    height: '100%',
     margin: '1px',
   },
   trackList(width) {
     return {
       position: 'relative',
       width: `${width}px`,
+      height: '100%',
       margin: '1px 0',
       boxShadow: '0 1px 0 0 rgba(34,36,38,.15)',
     };
