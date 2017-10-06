@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Container } from 'semantic-ui-react';
-import { PlaybackMarker, Track, TrackControls, WaveformGradient } from '../components';
+import { PlaybackMarker, Track, TrackControls, TickMarks, WaveformGradient } from '../components';
 
 const styles = {
   trackListWrapper: {
@@ -45,6 +45,7 @@ const TrackList = (props) => {
       </div>
       <div style={styles.trackListView}>
         <WaveformGradient />
+        <TickMarks />
         <div className="track-list" style={styles.trackList(length * zoom)}>
           {
             Object.entries(tracks).map(([key, track]) => (
