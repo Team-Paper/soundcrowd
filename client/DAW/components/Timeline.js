@@ -34,6 +34,7 @@ class Timeline extends React.Component {
     this.togglePlay = this.togglePlay.bind(this);
     this.startRecord = this.startRecord.bind(this);
     this.stopRecord = this.stopRecord.bind(this);
+    this.addTrack = this.addTrack.bind(this);
     this.mixdown = this.mixdown.bind(this);
     this.trackEffectsLoop = this.trackEffectsLoop.bind(this);
     this.clipsRef = firebase.database().ref(`${this.props.projectId}/clips`);
