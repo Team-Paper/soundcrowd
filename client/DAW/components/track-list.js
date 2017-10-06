@@ -22,6 +22,11 @@ const styles = {
       boxShadow: '0 1px 0 0 rgba(34,36,38,.15)',
     };
   },
+  trackListView: {
+    position: 'relative',
+    height: '100%',
+    overflowX: 'scroll',
+  },
 };
 
 const getWidth = (clips, zoom) => {
@@ -44,18 +49,20 @@ const TrackList = (props) => {
           ))
         }
       </div>
-      <div className="track-list" style={styles.trackList(getWidth(clips, zoom))}>
+      <div style={styles.trackListView}>
         <WaveformGradient />
-        {
-          Object.entries(tracks).map(([key, track]) => (
-            <Track
-              key={`track-${key}`}
-              track={track}
-              project={project}
-              zoom={zoom}
-              clips={clips.filter(clip => clip.track === track.id)}
-            />
-          )) }
+        <div className="track-list" style={styles.trackList(getWidth(clips, zoom))}>
+          {
+            Object.entries(tracks).map(([key, track]) => (
+              <Track
+                key={`track-${key}`}
+                track={track}
+                project={project}
+                zoom={zoom}
+                clips={clips.filter(clip => clip.track === track.id)}
+              />
+            )) }
+        </div>
         <PlaybackMarker zoom={zoom} />
       </div>
     </Container>
