@@ -107,7 +107,7 @@ class Timeline extends React.Component {
             12: { f: 16000, q: 4.318, gain: 0},
           }
         },
-        compressor:{
+        compressor: {
           on: false,
           threshold: -24,
           knee: 30,
@@ -135,7 +135,7 @@ class Timeline extends React.Component {
             12: { f: 16000, q: 4.318, gain: 0},
           }
         },
-        compressor:{
+        compressor: {
           on: false,
           threshold: -24,
           knee: 30,
@@ -452,8 +452,8 @@ class Timeline extends React.Component {
     const newTrack =  { id: newTrackId, volume: 100, isMuted: false,
       reverb: { id: 1, on: false, gain: 1 },
       eq: {
-      on: false,
-      bands: {
+        on: false,
+        bands: {
           1: { f: 63, q: 4.318, gain: 0},
           2: { f: 125, q: 4.318, gain: 0},
           3: { f: 250, q: 4.318, gain: 0},
@@ -467,6 +467,14 @@ class Timeline extends React.Component {
           11: { f: 10000, q: 4.318, gain: 0},
           12: { f: 16000, q: 4.318, gain: 0},
         }
+      },
+      compressor: {
+        on: false,
+        threshold: -24,
+        knee: 30,
+        ratio: 12,
+        attack: 0.003,
+        release: 0.25,
       }
     }
     addTrackThunk(projectId, newTrackId, newTrack)
