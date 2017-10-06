@@ -26,7 +26,7 @@ class ClipHandle extends React.Component {
   }
 
   handleDrag(e, data) {
-    this.props.handle(data.x);
+    this.props.handleDrag(data.x);
     this.setState({ x: 0 });
   }
 
@@ -37,6 +37,7 @@ class ClipHandle extends React.Component {
         axis="x"
         onStart={e => e.stopPropagation()}
         onDrag={this.handleDrag}
+        onStop={this.props.handleEnd}
         position={{ x, y: 0 }}
       >
         <div style={styles.clipHandle(this.props.side)} />

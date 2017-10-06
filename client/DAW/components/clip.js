@@ -56,6 +56,7 @@ class Clip extends React.Component {
     this.handleDrag = this.handleDrag.bind(this);
     this.handleEnd = this.handleEnd.bind(this);
     this.dragOffsetStart = this.dragOffsetStart.bind(this);
+    this.updateOffsetStart = this.updateOffsetStart.bind(this);
     this.dragOffsetEnd = this.dragOffsetEnd.bind(this);
   }
 
@@ -87,6 +88,20 @@ class Clip extends React.Component {
     this.setState({ offsetStart: pos });
   }
 
+  updateOffsetStart() {
+    const { clip, zoom, updatePosition, baseClip } = this.props;
+    const offset = this.state.offsetStart / zoom;
+    const newOffset = {
+      startTime: clip.startTime + offset,
+      offset: clip.startTime + offset,
+      duration: clip.duration !== undefined ?
+        clip.duration - offset : clip.baseDuration - offset,
+    };
+    console.log('update!', newOffset);
+    updatePosition(baseClip, newOffset);
+    this.setState({ offsetStart: 0 });
+  }
+
   dragOffsetEnd(pos) {
     this.setState({ offsetEnd: pos });
   }
@@ -113,7 +128,11 @@ class Clip extends React.Component {
           >
             <Waveform waveform={waveform} />
             <div style={styles.clipInfo}>
-              <ClipHandle side="left" handle={this.dragOffsetStart} />
+              <ClipHandle
+                side="left"
+                handleDrag={this.dragOffsetStart}
+                handleEnd={this.updateOffsetStart}
+              />
               {clip.url} starting at {clip.startTime}
               { hover && <Button
                 style={styles.clipRemove}
