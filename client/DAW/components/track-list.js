@@ -6,15 +6,17 @@ import { PlaybackMarker, Track, TrackControls, WaveformGradient } from '../compo
 const styles = {
   trackListWrapper: {
     display: 'flex',
+    marginTop: '1em',
     overflowY: 'scroll',
   },
   trackControlList: {
+    margin: '1px',
   },
   trackList(width) {
     return {
       position: 'relative',
       width: `${width}px`,
-      boxShadow: '0 -1px 0 0 rgba(34,36,38,.15)',
+      boxShadow: '0 1px 0 0 rgba(34,36,38,.15) inset',
     };
   },
 };

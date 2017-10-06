@@ -40,7 +40,14 @@ const TrackControls = (props) => {
             <Icon color={track.isMuted ? 'red' : 'grey'} name="mute" />
           </Button>
           <Button color="red" icon="remove" onClick={() => deleteTrack(projectId, track.id)} />
-          <input type="range" value={track.volume} onChange={e => setTrackVolume(projectId, track, e.target.value)} min="0" max="100" step="1" />
+          <input
+            type="range"
+            value={track.volume}
+            onChange={e => setTrackVolume(projectId, track, e.target.value)}
+            min="0"
+            max="100"
+            step="1"
+          />
           <ReverbModal track={track} projectId={projectId} />
           <EqualizerModal track={track} projectId={projectId} />
         </Card.Description>
@@ -50,15 +57,15 @@ const TrackControls = (props) => {
 };
 const mapState = (state, ownProps) => ({
   isSelected: state.timeline.selectedTracks.indexOf(ownProps.track.id) !== -1,
-  ownProps: ownProps,
 });
 
 const mapDispatch = (dispatch, ownProps) => ({
   deselectTrack: () => dispatch(removeSelectedTrack(ownProps.track.id)),
   selectTrack: () => dispatch(addSelectedTrack(ownProps.track.id)),
   toggleMuteTrackThunk: (projectId, track) => dispatch(toggleMuteTrackThunk(projectId, track)),
-  setTrackVolume: (projectId, track, newVolume) => dispatch(setTrackVolume(projectId, track, newVolume)),
-  deleteTrack: (projectId, track) => dispatch(deleteTrack(projectId, track))
+  setTrackVolume: (projectId, track, newVolume) =>
+    dispatch(setTrackVolume(projectId, track, newVolume)),
+  deleteTrack: (projectId, track) => dispatch(deleteTrack(projectId, track)),
 });
 
 export default connect(mapState, mapDispatch)(TrackControls);
