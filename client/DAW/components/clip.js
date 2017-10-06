@@ -45,6 +45,7 @@ const ClipHandle = props => (
   <Draggable
     axis="x"
     onStart={e => e.stopPropagation()}
+    onDrag={props.handle}
   >
     <div style={styles.clipHandle(props.side)} />
   </Draggable>
@@ -55,6 +56,8 @@ class Clip extends React.Component {
     super(props);
     this.state = {
       hover: false,
+      offsetStart: 0,
+      offsetEnd: 0,
       x: 0,
       y: 0,
     };
@@ -63,6 +66,8 @@ class Clip extends React.Component {
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.handleDrag = this.handleDrag.bind(this);
     this.handleEnd = this.handleEnd.bind(this);
+    this.dragOffsetStart = this.dragOffsetStart.bind(this);
+    this.dragOffsetEnd = this.dragOffsetEnd.bind(this);
   }
 
   handleMouseEnter() {
@@ -89,6 +94,14 @@ class Clip extends React.Component {
     // NOTE: component tries to call setState after switching tracks
   }
 
+  dragOffsetStart(e, data) {
+    this.setState({ offsetStart: data.x });
+  }
+
+  dragOffsetEnd(e, data) {
+    this.setState({ offsetEnd: data.x });
+  }
+
   render() {
     const { clip, waveform, zoom, project, deleteClip } = this.props;
     const { hover, x, y } = this.state;
@@ -107,7 +120,7 @@ class Clip extends React.Component {
         >
           <Waveform waveform={waveform} />
           <div style={styles.clipInfo}>
-            <ClipHandle side="left" />
+            <ClipHandle side="left" handle={this.dragOffsetStart} />
             {clip.url} starting at {clip.startTime}
             { hover && <Button
               style={styles.clipRemove}
@@ -116,7 +129,7 @@ class Clip extends React.Component {
               icon="remove"
               onClick={() => deleteClip(project, clip.key)}
             /> }
-            <ClipHandle side="right" />
+            <ClipHandle side="right" handle={this.dragOffsetEnd} />
           </div>
         </div>
 
