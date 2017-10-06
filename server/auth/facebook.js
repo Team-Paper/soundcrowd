@@ -11,11 +11,12 @@ const strategy = new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID || '',
   clientSecret: process.env.FACEBOOK_APP_SECRET || '',
   callbackURL: process.env.FACEBOOK_CALLBACK || '',
-  profileFields:['id','displayName','emails'],
+  profileFields:['id','displayName','emails', 'picture'],
   passReqToCallback: true
 
 },
 function(req, accessToken, refreshToken, profile, done) {
+  console.log(profile)
   req.session.token = accessToken
   req.session.facebookId = profile.id
   const facebookId = profile.id
