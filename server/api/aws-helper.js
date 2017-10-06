@@ -6,7 +6,7 @@ const s3 = new AWS.S3();
 //this must be used after multer or else the req will not have a file attached
 const upload2AWS = (myBucket) => {
   return (req, res, next) => {
-    req.file.filename = uuidv4() + '.webm';
+    req.file.filename = uuidv4();
     s3.createBucket({ Bucket: myBucket }, (err, data) => {
       if (err) next(err);
       else {
