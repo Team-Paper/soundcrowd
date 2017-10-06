@@ -5,6 +5,7 @@ import { addSelectedTrack, removeSelectedTrack } from '../project-store/reducers
 import { toggleMuteTrackThunk, setTrackVolume, deleteTrack } from '../project-store/reducers/tracks';
 import ReverbModal from './Reverb';
 import EqualizerModal from './Equalizer';
+import CompressorModal from './Compressor';
 
 const TrackControls = (props) => {
   const { isSelected, deselectTrack, selectTrack, track, toggleMuteTrackThunk, projectId, setTrackVolume, deleteTrack } = props;
@@ -20,6 +21,7 @@ const TrackControls = (props) => {
       <input type="range" value={track.volume} onChange={e => setTrackVolume(projectId, track, e.target.value)} min="0" max="100" step="1" />
       <ReverbModal track={track} projectId={projectId} />
       <EqualizerModal track={track} projectId={projectId} />
+      <CompressorModal track={track} projectId={projectId} />
     </div>
   );
 };
