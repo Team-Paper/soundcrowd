@@ -21,6 +21,7 @@ const styles = {
       height: '100%',
       margin: '1px 0',
       boxShadow: '0 1px 0 0 rgba(34,36,38,.15)',
+      overflow: 'hidden',
     };
   },
   trackListView: {
@@ -30,16 +31,8 @@ const styles = {
   },
 };
 
-const getWidth = (clips, zoom) => {
-  let end = 10; // seconds (min-duration)
-  clips.forEach((clip) => {
-    end = Math.max(end, clip.startTime + clip.duration);
-  });
-  return (zoom * end);
-};
-
 const TrackList = (props) => {
-  const { project, tracks, clips } = props;
+  const { project, length, tracks, clips } = props;
   const zoom = 200; // pixels per second
   return (
     <Container style={styles.trackListWrapper}>
@@ -52,7 +45,7 @@ const TrackList = (props) => {
       </div>
       <div style={styles.trackListView}>
         <WaveformGradient />
-        <div className="track-list" style={styles.trackList(getWidth(clips, zoom))}>
+        <div className="track-list" style={styles.trackList(length * zoom)}>
           {
             Object.entries(tracks).map(([key, track]) => (
               <Track
@@ -82,7 +75,7 @@ const mapState = (state) => {
         state.timeline.soundClips[clip.fileId].duration : 0,
     };
   });
-  return { clips };
+  return { clips, length: state.settings.length || 10 };
 };
 
 export default connect(mapState)(TrackList);
