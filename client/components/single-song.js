@@ -55,7 +55,7 @@ class SingleSong extends React.Component {
                 {song.title}
               </Header>
               <Header>
-                by {song.artists || 'unknown'}
+                by {song.artist.map(art => art.username).join(', ') || 'unknown'}
               </Header>
               <audio controls>
                 <source src={song.url} type="audio/mp3" />
