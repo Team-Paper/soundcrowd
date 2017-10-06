@@ -36,6 +36,10 @@ export const setTrackVolume = (projectId, track, newVolume) => dispatch => {
   firebase.database().ref(`${projectId}/tracks/${track.id}/volume`).set(+newVolume);
 };
 
+export const setName = (projectId, track, newName) => dispatch => {
+  firebase.database().ref(`${projectId}/tracks/${track.id}/name`).set(newName);
+}
+
 export const setTrackReverbGain = (projectId, track, newGain) => dispatch => {
   firebase.database().ref(`${projectId}/tracks/${track.id}/reverb/gain`).set(+newGain);
 };
