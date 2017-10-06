@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Segment } from 'semantic-ui-react';
 import axios from 'axios';
 import { PlaybackControls, TrackList } from '../components';
 import context from '../context';
@@ -472,14 +471,16 @@ class Timeline extends React.Component {
   render() {
     const { projectId, tracks, time, setLengthThunk, length } = this.props;
     return (
-      <div style={{ position: 'relative', overflowX: 'scroll' }}>
-        <div>{time}</div>
-        <button onClick={this.startRecord}>record</button>
-        <button onClick={this.stopRecord}>stop</button>
-        <button onClick={this.mixdown}>mixdown</button>
-        <span>length (seconds):</span>
-        <input type="text" value={length} onChange={e => setLengthThunk(projectId, e.target.value)} />
-        <PlaybackControls togglePlay={this.togglePlay} />
+      <div style={{ display: 'flex', flexDirection: 'column', position: 'relative', height: '100%' }}>
+        <div className="project-controls">
+          <div>{time}</div>
+          <button onClick={this.startRecord}>Record</button>
+          <button onClick={this.stopRecord}>Stop</button>
+          <button onClick={this.mixdown}>Mixdown</button>
+          <span>length (seconds):</span>
+          <input type="text" value={length} onChange={e => setLengthThunk(projectId, e.target.value)} />
+          <PlaybackControls togglePlay={this.togglePlay} />
+        </div>
         <TrackList project={Number(projectId)} tracks={tracks} />
       </div>
     );

@@ -11,7 +11,7 @@ const styles = {
       position: 'absolute',
       left: `${clip.startTime * zoom}px`,
       width: `${clip.duration * zoom}px`,
-      height: '140px',
+      height: '154px',
       background: '#22a3ef',
       opacity: '0.8',
       cursor: 'move',

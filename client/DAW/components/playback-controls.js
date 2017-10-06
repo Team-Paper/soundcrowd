@@ -6,7 +6,7 @@ import { setTime } from '../project-store/reducers/timeline/time';
 const PlaybackControls = (props) => {
   const { isPlaying, resetTime, togglePlay } = props;
   return (
-    <Menu compact icon style={{ position: 'fixed' }}>
+    <Menu compact icon>
       <Menu.Item
         name="reset"
         onClick={() => {
