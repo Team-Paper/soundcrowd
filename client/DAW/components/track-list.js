@@ -72,8 +72,8 @@ const mapState = (state) => {
       key,
       track: clip.track,
       startTime: clip.startTime,
-      offset: 0, // clip.offset
-      duration: baseClip ? baseClip.duration : 0, // clip.duration
+      offset: clip.offset || 0,
+      duration: clip.duration,
       baseDuration: baseClip ? baseClip.duration : 0,
     };
   });
