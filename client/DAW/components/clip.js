@@ -11,9 +11,9 @@ const styles = {
       position: 'absolute',
       left: `${start}px`,
       width: `${length}px`,
-      border: '2px solid green',
+      border: '2px solid red', // visualizing border
       height: '154px',
-      overflow: 'hidden',
+      // overflow: 'hidden',
     };
   },
   clip(length, offset) {
@@ -29,8 +29,10 @@ const styles = {
   clipInfo: {
     position: 'absolute',
     top: '0',
+    // TODO: fix width resizing issues
     width: '100%',
     height: '100%',
+    border: '2px solid green', // visualizing border
   },
   clipRemove: {
     position: 'absolute',
@@ -98,7 +100,6 @@ class Clip extends React.Component {
       duration: clip.duration !== undefined ?
         clip.duration - diff : clip.baseDuration - diff,
     };
-    console.log('update!', newOffset);
     updatePosition(baseClip, newOffset);
     this.setState({ offsetStart: 0 });
   }
