@@ -60,7 +60,7 @@ export default function (state = defaultSongs, action) {
     case GET_SONG:
       return [...state, action.song];
     case GET_SOME_SONGS:
-      return [].concat(action.songs, state);
+      return action.songs;
     case REMOVE_SONG:
       return state.filter(song => song.id !== action.song.id);
     case CLEAR_SONGS:
