@@ -11,6 +11,7 @@ const styles = {
       position: 'absolute',
       left: `${start}px`,
       width: `${length}px`,
+      border: '2px solid green',
       height: '154px',
       overflow: 'hidden',
     };
@@ -119,7 +120,7 @@ class Clip extends React.Component {
       >
         <div style={styles.clipWrapper(
           (clip.startTime * zoom) + offsetStart,
-          (clip.duration * zoom) + offsetEnd)}
+          (clip.duration * zoom) + (offsetEnd - offsetStart))}
         >
           <div
             style={styles.clip(clip.baseDuration * zoom, (clip.offset * zoom) + offsetStart)}
