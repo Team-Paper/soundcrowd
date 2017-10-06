@@ -34,8 +34,6 @@ function EqualizerModal({ projectId, track, setTrackEQBandGain, toggleTrackEQ })
   );
 }
 
-
-
 const mapState = (state, ownProps) => ({});
 
 const mapDispatch = dispatch => ({
