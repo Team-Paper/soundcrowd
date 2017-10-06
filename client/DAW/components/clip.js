@@ -93,7 +93,7 @@ class Clip extends React.Component {
     const offset = this.state.offsetStart / zoom;
     const newOffset = {
       startTime: clip.startTime + offset,
-      offset: clip.startTime + offset,
+      offset: clip.offset + offset,
       duration: clip.duration !== undefined ?
         clip.duration - offset : clip.baseDuration - offset,
     };
@@ -118,11 +118,11 @@ class Clip extends React.Component {
         position={{ x, y }}
       >
         <div style={styles.clipWrapper(
-          offsetStart + (clip.startTime * zoom),
-          ((clip.duration * zoom) - offsetStart) + offsetEnd)}
+          (clip.startTime * zoom) + offsetStart,
+          (clip.duration * zoom) + offsetEnd)}
         >
           <div
-            style={styles.clip(clip.baseDuration * zoom, offsetStart)}
+            style={styles.clip(clip.baseDuration * zoom, (clip.offset * zoom) + offsetStart)}
             onMouseEnter={this.handleMouseEnter}
             onMouseLeave={this.handleMouseLeave}
           >
