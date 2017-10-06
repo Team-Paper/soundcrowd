@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Button } from 'semantic-ui-react';
 import Draggable from 'react-draggable';
 import { Waveform } from '../components';
 import { updateClipThunk, deleteClip } from '../project-store/reducers/clips';
-import { Button } from 'semantic-ui-react';
 
 const styles = {
   clip(clip, zoom) {
@@ -21,6 +21,7 @@ const styles = {
     position: 'absolute',
     top: '0',
     width: '100%',
+    height: '100%',
   },
   clipRemove: {
     position: 'absolute',
@@ -29,8 +30,25 @@ const styles = {
     margin: '1em',
     padding: '0.5em',
   },
+  clipHandle(side) {
+    return Object.assign({
+      position: 'absolute',
+      top: '0',
+      height: '100%',
+      width: '20px',
+      background: 'black',
+    }, side === 'left' ? { left: '0' } : { right: '0' });
+  },
 };
 
+const ClipHandle = props => (
+  <Draggable
+    axis="x"
+    onStart={e => e.stopPropagation()}
+  >
+    <div style={styles.clipHandle(props.side)} />
+  </Draggable>
+);
 
 class Clip extends React.Component {
   constructor(props) {
@@ -89,6 +107,7 @@ class Clip extends React.Component {
         >
           <Waveform waveform={waveform} />
           <div style={styles.clipInfo}>
+            <ClipHandle side="left" />
             {clip.url} starting at {clip.startTime}
             { hover && <Button
               style={styles.clipRemove}
@@ -97,6 +116,7 @@ class Clip extends React.Component {
               icon="remove"
               onClick={() => deleteClip(project, clip.key)}
             /> }
+            <ClipHandle side="right" />
           </div>
         </div>
 
@@ -119,7 +139,7 @@ const mapDispatch = (dispatch, ownProps) => ({
     const updatedClip = Object.assign({}, clip, newPosition);
     dispatch(updateClipThunk(ownProps.project, ownProps.clip.key, updatedClip));
   },
-  deleteClip: (project, clipKey) => dispatch(deleteClip(project, clipKey))
+  deleteClip: (project, clipKey) => dispatch(deleteClip(project, clipKey)),
 });
 
 export default connect(mapState, mapDispatch)(Clip);
