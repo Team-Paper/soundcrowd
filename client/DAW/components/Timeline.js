@@ -87,48 +87,64 @@ class Timeline extends React.Component {
     //   { fileId: 2, startTime: 2, track: 2 },
     //   { fileId: 1, startTime: 0, track: 1 },
     // ]);
-    // setTracksThunk(projectId, [
-    //   { id: 1, name: "My Track 1", volume: 100, isMuted: false,
-    //     reverb: { id: 1, on: false, gain: 1 },
-    //     eq: {
-    //       on: false,
-    //       bands: {
-    //         1: { f: 63, q: 4.318, gain: 0},
-    //         2: { f: 125, q: 4.318, gain: 0},
-    //         3: { f: 250, q: 4.318, gain: 0},
-    //         4: { f: 400, q: 4.318, gain: 0},
-    //         5: { f: 630, q: 4.318, gain: 0},
-    //         6: { f: 1000, q: 4.318, gain: 0},
-    //         7: { f: 1600, q: 4.318, gain: 0},
-    //         8: { f: 2500, q: 4.318, gain: 0},
-    //         9: { f: 4000, q: 4.318, gain: 0},
-    //         10: { f: 6300, q: 4.318, gain: 0},
-    //         11: { f: 10000, q: 4.318, gain: 0},
-    //         12: { f: 16000, q: 4.318, gain: 0},
-    //       }
-    //     }
-    //   },
-    //   { id: 2, name: "My Track 2", volume: 100, isMuted: false,
-    //     reverb: { id: 1, on: false, gain: 1 },
-    //     eq: {
-    //       on: false,
-    //       bands: {
-    //         1: { f: 63, q: 4.318, gain: 0},
-    //         2: { f: 125, q: 4.318, gain: 0},
-    //         3: { f: 250, q: 4.318, gain: 0},
-    //         4: { f: 400, q: 4.318, gain: 0},
-    //         5: { f: 630, q: 4.318, gain: 0},
-    //         6: { f: 1000, q: 4.318, gain: 0},
-    //         7: { f: 1600, q: 4.318, gain: 0},
-    //         8: { f: 2500, q: 4.318, gain: 0},
-    //         9: { f: 4000, q: 4.318, gain: 0},
-    //         10: { f: 6300, q: 4.318, gain: 0},
-    //         11: { f: 10000, q: 4.318, gain: 0},
-    //         12: { f: 16000, q: 4.318, gain: 0},
-    //       }
-    //     }
-    //   },
-    // ]);
+    setTracksThunk(projectId, [
+      { id: 1, volume: 100, isMuted: false,
+        reverb: { id: 1, on: false, gain: 1 },
+        eq: {
+          on: false,
+          bands: {
+            1: { f: 63, q: 4.318, gain: 0},
+            2: { f: 125, q: 4.318, gain: 0},
+            3: { f: 250, q: 4.318, gain: 0},
+            4: { f: 400, q: 4.318, gain: 0},
+            5: { f: 630, q: 4.318, gain: 0},
+            6: { f: 1000, q: 4.318, gain: 0},
+            7: { f: 1600, q: 4.318, gain: 0},
+            8: { f: 2500, q: 4.318, gain: 0},
+            9: { f: 4000, q: 4.318, gain: 0},
+            10: { f: 6300, q: 4.318, gain: 0},
+            11: { f: 10000, q: 4.318, gain: 0},
+            12: { f: 16000, q: 4.318, gain: 0},
+          }
+        },
+        compressor: {
+          on: false,
+          threshold: -24,
+          knee: 30,
+          ratio: 12,
+          attack: 0.003,
+          release: 0.25,
+        }
+      },
+      { id: 2, volume: 100, isMuted: false,
+        reverb: { id: 1, on: false, gain: 1 },
+        eq: {
+          on: false,
+          bands: {
+            1: { f: 63, q: 4.318, gain: 0},
+            2: { f: 125, q: 4.318, gain: 0},
+            3: { f: 250, q: 4.318, gain: 0},
+            4: { f: 400, q: 4.318, gain: 0},
+            5: { f: 630, q: 4.318, gain: 0},
+            6: { f: 1000, q: 4.318, gain: 0},
+            7: { f: 1600, q: 4.318, gain: 0},
+            8: { f: 2500, q: 4.318, gain: 0},
+            9: { f: 4000, q: 4.318, gain: 0},
+            10: { f: 6300, q: 4.318, gain: 0},
+            11: { f: 10000, q: 4.318, gain: 0},
+            12: { f: 16000, q: 4.318, gain: 0},
+          }
+        },
+        compressor: {
+          on: false,
+          threshold: -24,
+          knee: 30,
+          ratio: 12,
+          attack: 0.003,
+          release: 0.25,
+        }
+      },
+    ]);
     // end firebase seeding
 
     // start listening for recording events
@@ -301,6 +317,14 @@ class Timeline extends React.Component {
       eqBand12.gain.value = 0;
     }
 
+    // compression settings
+    const compressionNode = loopContext.createDynamicsCompressor();
+    compressionNode.threshold.value = track.compressor.threshold;
+    compressionNode.knee.value = track.compressor.knee;
+    compressionNode.ratio.value = track.compressor.ratio;
+    compressionNode.attack.value = track.compressor.attack;
+    compressionNode.release.value = track.compressor.release;
+
     // reverb settings
     const convolverNode = loopContext.createConvolver();
     const convolverGain = loopContext.createGain();
@@ -323,10 +347,21 @@ class Timeline extends React.Component {
     eqBand09.connect(eqBand10);
     eqBand10.connect(eqBand11);
     eqBand11.connect(eqBand12);
-    eqBand12.connect(convolverGain);
+    if (track.compressor.on) {
+      eqBand12.connect(compressionNode);
+      compressionNode.connect(convolverGain);
+    } else {
+      eqBand12.connect(convolverGain);
+    }
     convolverGain.connect(convolverNode);
     convolverNode.connect(gainNode);
-    eqBand12.connect(gainNode);
+    if (track.compressor.on) {
+      eqBand12.connect(compressionNode);
+      compressionNode.connect(gainNode);
+    } else {
+      eqBand12.connect(gainNode);
+    }
+
     return gainNode;
   }
 
@@ -417,8 +452,8 @@ class Timeline extends React.Component {
     const newTrack =  { id: newTrackId, volume: 100, isMuted: false,
       reverb: { id: 1, on: false, gain: 1 },
       eq: {
-      on: false,
-      bands: {
+        on: false,
+        bands: {
           1: { f: 63, q: 4.318, gain: 0},
           2: { f: 125, q: 4.318, gain: 0},
           3: { f: 250, q: 4.318, gain: 0},
@@ -432,6 +467,14 @@ class Timeline extends React.Component {
           11: { f: 10000, q: 4.318, gain: 0},
           12: { f: 16000, q: 4.318, gain: 0},
         }
+      },
+      compressor: {
+        on: false,
+        threshold: -24,
+        knee: 30,
+        ratio: 12,
+        attack: 0.003,
+        release: 0.25,
       }
     }
     addTrackThunk(projectId, newTrackId, newTrack)
