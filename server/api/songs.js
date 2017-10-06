@@ -59,9 +59,9 @@ router.get('/top/:number', (req, res, next) => {
 
 //get a specific song
 router.get('/:id', (req, res, next) => {
-  Song.findById(Number(req.params.id))
+  Song.findOne({ where: { id: Number(req.params.id) }, include: [{ model: User, as: 'artist' }] })
     .then(song => res.json(song))
-    .catch(next)
+    .catch(next);
 })
 
 //to increment play count
