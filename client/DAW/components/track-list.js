@@ -66,13 +66,15 @@ const TrackList = (props) => {
 const mapState = (state) => {
   const clips = Object.entries(state.clips).map(([key, clip]) => {
     const file = Object.entries(state.files).find(entry => entry[1].id === clip.fileId)[1] || {};
+    const baseClip = state.timeline.soundClips[clip.fileId];
     return {
       url: file.url,
       key,
       track: clip.track,
       startTime: clip.startTime,
-      duration: state.timeline.soundClips[clip.fileId] ?
-        state.timeline.soundClips[clip.fileId].duration : 0,
+      offset: 0, // clip.offset
+      duration: baseClip ? baseClip.duration : 0, // clip.duration
+      baseDuration: baseClip ? baseClip.duration : 0,
     };
   });
   return { clips, length: state.settings.length || 10 };

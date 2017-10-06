@@ -6,12 +6,19 @@ import { Waveform } from '../components';
 import { updateClipThunk, deleteClip } from '../project-store/reducers/clips';
 
 const styles = {
-  clip(clip, zoom) {
+  clipWrapper(start, length) {
     return {
       position: 'absolute',
-      left: `${clip.startTime * zoom}px`,
-      width: `${clip.duration * zoom}px`,
+      left: `${start}px`,
+      width: `${length}px`,
       height: '154px',
+    };
+  },
+  clip(length, offset) {
+    return {
+      width: `${length}px`,
+      height: '100%',
+      marginLeft: `${-(offset)}px`,
       background: '#22a3ef',
       opacity: '0.8',
       cursor: 'move',
@@ -37,23 +44,46 @@ const styles = {
       height: '100%',
       width: '20px',
       background: 'black',
+      cursor: 'col-resize',
+      opacity: '0.8',
     }, side === 'left' ? { left: '0' } : { right: '0' });
   },
 };
 
-const ClipHandle = props => (
-  <Draggable
-    axis="x"
-    onStart={e => e.stopPropagation()}
-    onDrag={props.handle}
-  >
-    <div style={styles.clipHandle(props.side)} />
-  </Draggable>
-);
+class ClipHandle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      x: 0,
+    };
+
+    this.handleDrag = this.handleDrag.bind(this);
+  }
+
+  handleDrag(e, data) {
+    this.props.handle(data.x);
+    this.setState({ x: 0 });
+  }
+
+  render() {
+    const { x } = this.state;
+    return (
+      <Draggable
+        axis="x"
+        onStart={e => e.stopPropagation()}
+        onDrag={this.handleDrag}
+        position={{ x, y: 0 }}
+      >
+        <div style={styles.clipHandle(this.props.side)} />
+      </Draggable>
+    );
+  }
+}
 
 class Clip extends React.Component {
   constructor(props) {
     super(props);
+    // const { clip, zoom } = props;
     this.state = {
       hover: false,
       offsetStart: 0,
@@ -94,17 +124,18 @@ class Clip extends React.Component {
     // NOTE: component tries to call setState after switching tracks
   }
 
-  dragOffsetStart(e, data) {
-    this.setState({ offsetStart: data.x });
+  dragOffsetStart(pos) {
+    this.setState({ offsetStart: pos });
   }
 
-  dragOffsetEnd(e, data) {
-    this.setState({ offsetEnd: data.x });
+  dragOffsetEnd(pos) {
+    this.setState({ offsetEnd: pos });
   }
 
   render() {
     const { clip, waveform, zoom, project, deleteClip } = this.props;
-    const { hover, x, y } = this.state;
+    const { hover, offsetStart, offsetEnd, x, y } = this.state;
+    console.log('offset', clip.duration, ' - ', offsetStart, ' + ', offsetEnd);
     return (
       <Draggable
         bounds=".track-list"
@@ -113,26 +144,30 @@ class Clip extends React.Component {
         onStop={this.handleEnd}
         position={{ x, y }}
       >
-        <div
-          style={styles.clip(clip, zoom)}
-          onMouseEnter={this.handleMouseEnter}
-          onMouseLeave={this.handleMouseLeave}
+        <div style={styles.clipWrapper(
+          offsetStart + (clip.startTime * zoom),
+          ((clip.duration * zoom) - offsetStart) + offsetEnd)}
         >
-          <Waveform waveform={waveform} />
-          <div style={styles.clipInfo}>
-            <ClipHandle side="left" handle={this.dragOffsetStart} />
-            {clip.url} starting at {clip.startTime}
-            { hover && <Button
-              style={styles.clipRemove}
-              size="mini"
-              color="red"
-              icon="remove"
-              onClick={() => deleteClip(project, clip.key)}
-            /> }
-            <ClipHandle side="right" handle={this.dragOffsetEnd} />
+          <div
+            style={styles.clip(clip.baseDuration * zoom, offsetStart)}
+            onMouseEnter={this.handleMouseEnter}
+            onMouseLeave={this.handleMouseLeave}
+          >
+            <Waveform waveform={waveform} />
+            <div style={styles.clipInfo}>
+              <ClipHandle side="left" handle={this.dragOffsetStart} />
+              {clip.url} starting at {clip.startTime}
+              { hover && <Button
+                style={styles.clipRemove}
+                size="mini"
+                color="red"
+                icon="remove"
+                onClick={() => deleteClip(project, clip.key)}
+              /> }
+              <ClipHandle side="right" handle={this.dragOffsetEnd} />
+            </div>
           </div>
         </div>
-
       </Draggable>
     );
   }
