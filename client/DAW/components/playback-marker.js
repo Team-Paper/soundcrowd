@@ -4,8 +4,8 @@ import Draggable from 'react-draggable';
 import { setTime } from '../project-store/reducers/timeline/time';
 
 const attrs = {
-  width: 20,
-  color: '#e22',
+  width: 21,
+  color: '#db2828',
 };
 
 const styles = {
@@ -15,7 +15,7 @@ const styles = {
     left: '0',
     width: `${attrs.width}px`,
     height: '100%',
-    marginLeft: `-${(attrs.width - 1) / 2}px`,
+    marginLeft: `-${(attrs.width) / 2}px`,
     cursor: 'col-resize',
     boxShadow: `0 1px 0 ${attrs.color}`,
   },
@@ -30,10 +30,10 @@ const styles = {
   },
   line: {
     position: 'absolute',
-    left: `${attrs.width / 2}px`,
+    left: `${(attrs.width - 1) / 2}px`,
     width: '1px',
     height: '100%',
-    background: '#e22',
+    background: attrs.color,
   },
 };
 
