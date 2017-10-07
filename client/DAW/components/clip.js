@@ -135,15 +135,14 @@ class Clip extends React.Component {
         onStop={this.handleEnd}
         position={{ x, y }}
       >
-        <div style={styles.clipWrapper(
-          (clip.startTime * zoom) + offsetStart,
-          (clip.duration * zoom) + (offsetEnd - offsetStart))}
+        <div
+          style={styles.clipWrapper(
+            (clip.startTime * zoom) + offsetStart,
+            (clip.duration * zoom) + (offsetEnd - offsetStart))}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
         >
-          <div
-            style={styles.clip(clip.baseDuration * zoom, (clip.offset * zoom) + offsetStart)}
-            onMouseEnter={this.handleMouseEnter}
-            onMouseLeave={this.handleMouseLeave}
-          >
+          <div style={styles.clip(clip.baseDuration * zoom, (clip.offset * zoom) + offsetStart)}>
             <Waveform waveform={waveform} />
             <div style={styles.clipDragWindow}>
               <ClipHandle
