@@ -110,7 +110,7 @@ class Clip extends React.Component {
   }
 
   dragOffsetEnd(pos) {
-    this.setState({ offsetEnd: pos });
+    this.setState({ offsetEnd: -(pos) });
   }
 
   updateOffsetEnd() {
