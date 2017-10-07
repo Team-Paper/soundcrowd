@@ -37,7 +37,6 @@ const styles = {
     top: '0',
     left: '20px',
     right: '20px',
-    // margin: '0 20px',
   },
   clipRemove: {
     position: 'absolute',
