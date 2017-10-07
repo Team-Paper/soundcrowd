@@ -97,13 +97,12 @@ class Clip extends React.Component {
   }
 
   updateOffsetStart() {
-    const { clip, zoom, updatePosition, baseClip } = this.props;
+    const { clip, duration, zoom, updatePosition, baseClip } = this.props;
     const diff = this.state.offsetStart / zoom;
     const newOffset = {
       offset: clip.offset + diff,
       startTime: clip.startTime + diff,
-      duration: clip.duration !== undefined ?
-        clip.duration - diff : clip.baseDuration - diff,
+      duration: duration - diff,
     };
     updatePosition(baseClip, newOffset);
     this.setState({ offsetStart: 0 });
@@ -114,18 +113,17 @@ class Clip extends React.Component {
   }
 
   updateOffsetEnd() {
-    const { clip, zoom, updatePosition, baseClip } = this.props;
+    const { duration, zoom, updatePosition, baseClip } = this.props;
     const diff = this.state.offsetEnd / zoom;
     const newOffset = {
-      duration: clip.duration !== undefined ?
-        clip.duration + diff : clip.baseDuration + diff,
+      duration: duration + diff,
     };
     updatePosition(baseClip, newOffset);
     this.setState({ offsetEnd: 0 });
   }
 
   render() {
-    const { clip, waveform, zoom, project, deleteClip } = this.props;
+    const { clip, duration, waveform, zoom, project, deleteClip } = this.props;
     const { hover, offsetStart, offsetEnd, x, y } = this.state;
     return (
       <Draggable
@@ -138,7 +136,7 @@ class Clip extends React.Component {
         <div
           style={styles.clipWrapper(
             (clip.startTime * zoom) + offsetStart,
-            (clip.duration * zoom) + (offsetEnd - offsetStart))}
+            (duration * zoom) + (offsetEnd - offsetStart))}
           onMouseEnter={this.handleMouseEnter}
           onMouseLeave={this.handleMouseLeave}
         >
@@ -153,7 +151,7 @@ class Clip extends React.Component {
                 x={offsetStart}
               />
               <ClipHandle
-                offset={(clip.baseDuration - (clip.offset + clip.duration)) * zoom}
+                offset={(clip.baseDuration - (clip.offset + duration)) * zoom}
                 side="right"
                 handleDrag={this.dragOffsetEnd}
                 handleEnd={this.updateOffsetEnd}
@@ -178,10 +176,12 @@ class Clip extends React.Component {
 }
 
 const mapState = (state, ownProps) => {
-  const baseClip = state.clips[ownProps.clip.key];
+  const clip = ownProps.clip;
+  const baseClip = state.clips[clip.key];
   const soundClip = state.timeline.soundClips[baseClip.fileId];
   return {
     baseClip,
+    duration: clip.duration !== undefined ? clip.duration : clip.baseDuration,
     waveform: soundClip ? soundClip.waveform : [],
   };
 };
