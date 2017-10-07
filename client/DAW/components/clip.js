@@ -65,6 +65,7 @@ class Clip extends React.Component {
     this.dragOffsetStart = this.dragOffsetStart.bind(this);
     this.updateOffsetStart = this.updateOffsetStart.bind(this);
     this.dragOffsetEnd = this.dragOffsetEnd.bind(this);
+    this.updateOffsetEnd = this.updateOffsetEnd.bind(this);
   }
 
   handleMouseEnter() {
@@ -112,6 +113,13 @@ class Clip extends React.Component {
     this.setState({ offsetEnd: pos });
   }
 
+  updateOffsetEnd() {
+    const { clip, zoom, updatePosition, baseClip } = this.props;
+    const diff = this.state.offsetEnd / zoom;
+    console.log(diff);
+    this.setState({ offsetEnd: 0 });
+  }
+
   render() {
     const { clip, waveform, zoom, project, deleteClip } = this.props;
     const { hover, offsetStart, offsetEnd, x, y } = this.state;
@@ -139,6 +147,13 @@ class Clip extends React.Component {
                 side="left"
                 handleDrag={this.dragOffsetStart}
                 handleEnd={this.updateOffsetStart}
+                x={offsetStart}
+              />
+              <ClipHandle
+                offset={(clip.baseDuration - (clip.offset + clip.duration)) * zoom}
+                side="right"
+                handleDrag={this.dragOffsetEnd}
+                handleEnd={this.updateOffsetEnd}
                 x={offsetStart}
               />
             </div>

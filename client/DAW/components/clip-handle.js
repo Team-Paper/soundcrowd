@@ -27,6 +27,7 @@ class ClipHandle extends React.Component {
   }
 
   handleDrag(e, data) {
+    console.log(this.props.offset, data.x);
     if (this.props.offset + data.x > 0) {
       this.props.handleDrag(data.x);
     } else {
