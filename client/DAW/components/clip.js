@@ -11,13 +11,13 @@ const styles = {
       position: 'absolute',
       left: `${start}px`,
       width: `${length}px`,
-      border: '2px solid red', // visualizing border
       height: '154px',
-      // overflow: 'hidden',
+      overflow: 'hidden',
     };
   },
   clip(length, offset) {
     return {
+      position: 'relative',
       width: `${length}px`,
       height: '100%',
       marginLeft: `${-(offset)}px`,
@@ -26,13 +26,18 @@ const styles = {
       cursor: 'move',
     };
   },
+  clipDragWindow: {
+    position: 'absolute',
+    top: '0',
+    width: '100%',
+    height: '100%',
+  },
   clipInfo: {
     position: 'absolute',
     top: '0',
-    // TODO: fix width resizing issues
-    width: '100%',
-    height: '100%',
-    border: '2px solid green', // visualizing border
+    left: '20px',
+    right: '20px',
+    // margin: '0 20px',
   },
   clipRemove: {
     position: 'absolute',
@@ -129,7 +134,7 @@ class Clip extends React.Component {
             onMouseLeave={this.handleMouseLeave}
           >
             <Waveform waveform={waveform} />
-            <div style={styles.clipInfo}>
+            <div style={styles.clipDragWindow}>
               <ClipHandle
                 offset={clip.offset * zoom}
                 side="left"
@@ -137,15 +142,17 @@ class Clip extends React.Component {
                 handleEnd={this.updateOffsetStart}
                 x={offsetStart}
               />
-              {clip.url} starting at {clip.startTime}
-              { hover && <Button
-                style={styles.clipRemove}
-                size="mini"
-                color="red"
-                icon="remove"
-                onClick={() => deleteClip(project, clip.key)}
-              /> }
             </div>
+          </div>
+          <div style={styles.clipInfo}>
+            {clip.url} starting at {clip.startTime}
+            { hover && <Button
+              style={styles.clipRemove}
+              size="mini"
+              color="red"
+              icon="remove"
+              onClick={() => deleteClip(project, clip.key)}
+            /> }
           </div>
         </div>
       </Draggable>
