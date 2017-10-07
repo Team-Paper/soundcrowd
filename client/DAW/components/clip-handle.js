@@ -27,7 +27,11 @@ class ClipHandle extends React.Component {
   }
 
   handleDrag(e, data) {
-    if (this.props.offset + data.x > 0) this.props.handleDrag(data.x);
+    if (this.props.offset + data.x > 0) {
+      this.props.handleDrag(data.x);
+    } else {
+      this.props.handleDrag(-(this.props.offset));
+    }
     this.setState({ x: 0 });
   }
 
@@ -37,6 +41,7 @@ class ClipHandle extends React.Component {
     return (
       <Draggable
         axis="x"
+        bounds="parent"
         onStart={e => e.stopPropagation()}
         onDrag={this.handleDrag}
         onStop={this.props.handleEnd}
