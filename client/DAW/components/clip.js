@@ -116,7 +116,11 @@ class Clip extends React.Component {
   updateOffsetEnd() {
     const { clip, zoom, updatePosition, baseClip } = this.props;
     const diff = this.state.offsetEnd / zoom;
-    console.log(diff);
+    const newOffset = {
+      duration: clip.duration !== undefined ?
+        clip.duration + diff : clip.baseDuration + diff,
+    };
+    updatePosition(baseClip, newOffset);
     this.setState({ offsetEnd: 0 });
   }
 
