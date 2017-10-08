@@ -9,9 +9,10 @@ const styles = {
       [side]: offset,
       height: '100%',
       width: '20px',
-      background: hover ? 'black' : 'none',
+      background: `linear-gradient(to ${side}, rgba(0,0,0,0), rgba(0,0,0,.5))`,
       cursor: 'ew-resize',
-      opacity: '0.8',
+      opacity: hover ? '0.8' : '0',
+      transition: 'opacity 0.2s',
     };
   },
 };
