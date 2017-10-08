@@ -191,7 +191,7 @@ class Timeline extends React.Component {
     this.settingsRef.off();
   }
 
-  playSound(buffer, startTime, playAt, track) {
+  playSound(buffer, startTime, playAt, offset, duration, track) {
     console.log('played sound track is', track);
     const source = context.createBufferSource();
     if (!startTime) {
@@ -199,7 +199,7 @@ class Timeline extends React.Component {
     }
     source.buffer = buffer;
     this.trackEffectsLoop(source, track, context).connect(context.destination);
-    source.start(playAt, startTime);
+    source.start(playAt, startTime + offset, duration);
     this.setState({ playing: this.state.playing.concat(source) });
   }
 
@@ -378,8 +378,9 @@ class Timeline extends React.Component {
           const track = tracks[clip.track];
           const soundClip = soundClips[clip.fileId];
           const playAt = context.currentTime + (clip.startTime - time);
+          const { offset, duration } = clip;
           clip.played = true;
-          this.playSound(soundClip.sound.buffer, time - clip.startTime, playAt, track);
+          this.playSound(soundClip.sound.buffer, time - clip.startTime, playAt, offset, duration, track);
         }
       }
     }
