@@ -10,7 +10,7 @@ const Soundfile = db.define('soundfile', {
   url: {
     type: Sequelize.VIRTUAL,
     get() {
-      return 'https://s3.amazonaws.com/soundcrowd-files-fullstack/' + this.getDataValue('filename');
+      return '/' + this.getDataValue('filename');
     }
   },
 });

@@ -45,7 +45,7 @@ export const createSoundClips = (files, soundClips) => dispatch => {
     if (soundClips.hasOwnProperty(file.id)) {
       return;
     } else {
-      return axios.get(file.url, { responseType: 'arraybuffer' })
+      return axios.get(`//d3oysef4ue4h90.cloudfront.net${file.url}`, { responseType: 'arraybuffer' })
         .then(res => res.data)
         .then(responseAudio => context.decodeAudioData(responseAudio))
         .then(audio => {

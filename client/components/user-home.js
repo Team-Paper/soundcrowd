@@ -2,8 +2,9 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Container, Item, Grid, Image, Header, Button, Select } from 'semantic-ui-react';
-import { fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchFriends, fetchUser } from '../store';
+import { Container, Item, Grid, Image, Header, Button, Select, Form } from 'semantic-ui-react';
+import axios from 'axios';
+import { fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchFriends, fetchUser, addProject } from '../store';
 import SongView from './song-view';
 
 /**
@@ -18,6 +19,7 @@ class UserHome extends React.Component {
     };
     this.addCollaborator = this.addCollaborator.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
+    this.createProject = this.createProject.bind(this);
   }
 
 
@@ -45,6 +47,14 @@ class UserHome extends React.Component {
     const userId = this.state.userToAdd;
     if (!!userId) this.props.addCollaborator(userId, projectId);
     else console.log('you cannot');
+  }
+
+  createProject(e) {
+    const { addProject } = this.props;
+    axios.post('/api/projects', { title: e.target.title.value })
+      .then(res => res.data)
+      .then(project => addProject(project))
+      .catch(console.error)
   }
 
   render() {
@@ -81,10 +91,18 @@ class UserHome extends React.Component {
                 })
               }
             </Item.Group>
-            { !!projects.length &&
+
             <Item.Group>
               <Header dividing>Your Projects:</Header>
+              <Form onSubmit={this.createProject}>
+                <Form.Field>
+                  <label>Project Title</label>
+                  <input placeholder='Title' name='title' />
+                </Form.Field>
+                <Button type='submit'>Create Project</Button>
+              </Form>
               {
+                !!projects.length &&
                 projects.map((project) => {
                   return (
                     <div key={project.id}>
@@ -96,7 +114,6 @@ class UserHome extends React.Component {
                 })
               }
             </Item.Group>
-            }
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -144,6 +161,7 @@ const mapDispatchMyPage = (dispatch) => {
       dispatch(clearSongs());
     },
     addCollaborator: (fbId, projectId) => dispatch(addCollaborator(fbId, projectId)),
+    addProject: project => dispatch(addProject(project)),
   };
 };
 
