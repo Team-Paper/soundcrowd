@@ -12,6 +12,8 @@ const styles = {
       left: `${start}px`,
       width: `${length}px`,
       height: '154px',
+      borderRadius: '4px',
+      boxShadow: '0 0 0 1px rgba(34,36,38,.15)',
       overflow: 'hidden',
     };
   },

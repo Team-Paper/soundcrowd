@@ -2,15 +2,15 @@ import React from 'react';
 import Draggable from 'react-draggable';
 
 const styles = {
-  clipHandle(side, offset) {
+  clipHandle(side, offset, hover) {
     return {
       position: 'absolute',
       top: '0',
       [side]: offset,
       height: '100%',
       width: '20px',
-      background: 'black',
-      cursor: 'col-resize',
+      background: hover ? 'black' : 'none',
+      cursor: 'ew-resize',
       opacity: '0.8',
     };
   },
@@ -20,6 +20,7 @@ class ClipHandle extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      hover: false,
       x: 0,
     };
 
@@ -39,7 +40,7 @@ class ClipHandle extends React.Component {
 
   render() {
     const { offset, side } = this.props;
-    const { x } = this.state;
+    const { hover, x } = this.state;
     return (
       <Draggable
         axis="x"
@@ -49,7 +50,11 @@ class ClipHandle extends React.Component {
         onStop={this.props.handleEnd}
         position={{ x, y: 0 }}
       >
-        <div style={styles.clipHandle(side, offset)} />
+        <div
+          style={styles.clipHandle(side, offset, hover)}
+          onMouseEnter={() => this.setState({ hover: true })}
+          onMouseLeave={() => this.setState({ hover: false })}
+        />
       </Draggable>
     );
   }
