@@ -1,7 +1,7 @@
 /* global describe beforeEach afterEach it */
 
 import {expect} from 'chai'
-import {fetchTopSongs, fetchUserSongs} from './songs'
+import {fetchTopSongs, fetchUserSongs, clearSongs} from './songs'
 import axios from './axios'
 import MockAdapter from 'axios-mock-adapter'
 import configureMockStore from 'redux-mock-store'
@@ -14,8 +14,8 @@ const mockStore = configureMockStore(middlewares)
 
 describe('thunk creators', () => {
   let store
-
-  const initialState = {user: {}}
+  const song1 = {id: 1, url: 'test'}
+  const initialState = {songs: song1}
 
   beforeEach(() => {
     store = mockStore(initialState)
@@ -26,30 +26,25 @@ describe('thunk creators', () => {
   })
 
   describe('Top Songs', () => {
-    it.only('eventually dispatches the GET SOME SONGS action', () => {
+    it('eventually dispatches the GET SOME SONGS action', () => {
       const numSongs = 5;
-      const song1 = 'test123'
-      const songs = []
-      mockAxios.onGet(`/api/songs/top/${numSongs}`).replyOnce(200, {songs})
+      mockAxios.onGet(`/api/songs/top/${numSongs}`).replyOnce(200, {})
       return store.dispatch(fetchTopSongs(numSongs))
         .then(() => {
           const actions = store.getActions()
-          console.log(actions)
           expect(actions[0].type).to.be.equal('GET_SOME_SONGS')
           // expect(actions[0].user).to.be.deep.equal(fakeUser)
         })
     })
   })
 
-  describe('User songs', () => {
-    it('eventually dispatches the REMOVE_USER action', () => {
-      mockAxios.onPost('/auth/logout').replyOnce(204)
-      return store.dispatch(logout())
-        .then(() => {
+  describe('Clear songs', () => {
+    it.only('dispatches the CLEAR SONGS action and removes all songs', () => {
+          store.dispatch(clearSongs())
           const actions = store.getActions()
-          expect(actions[0].type).to.be.equal('REMOVE_USER')
-          expect(history.location.pathname).to.be.equal('/login')
+          console.log(actions)
+          expect(actions[0].type).to.be.equal('CLEAR_SONGS')
+          // expect(history.location.pathname).to.be.equal('/login')
         })
     })
   })
-})
