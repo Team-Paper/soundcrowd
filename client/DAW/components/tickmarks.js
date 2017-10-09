@@ -18,10 +18,10 @@ const TickMarks = (props) => {
     const tickLength = i % 1 ? smallTickLength : bigTickLength;
     const startDistance = i * zoom;
 
-    svgElems.push(<line x1={startDistance.toString()} y1="0" x2={startDistance.toString()} y2={tickLength.toString()} />);
+    svgElems.push(<line x1={startDistance.toString()} y1="0" x2={startDistance.toString()} y2={tickLength.toString()} key={`line${i}`} />);
 
     if (!(i % 1)) {
-      svgElems.push(<text textAnchor="middle" alignmentBaseline="hanging" x={startDistance.toString()} y="25">{i}</text>);
+      svgElems.push(<text textAnchor="middle" alignmentBaseline="hanging" x={startDistance.toString()} y="25" key={`text${i}`}>{i}</text>);
     }
   }
 
