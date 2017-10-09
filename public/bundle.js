@@ -6778,6 +6778,18 @@ Object.keys(_projects).forEach(function (key) {
   });
 });
 
+var _collaborators = __webpack_require__(1199);
+
+Object.keys(_collaborators).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _collaborators[key];
+    }
+  });
+});
+
 var _redux = __webpack_require__(89);
 
 var _reduxLogger = __webpack_require__(501);
@@ -6796,6 +6808,8 @@ var _users2 = _interopRequireDefault(_users);
 
 var _projects2 = _interopRequireDefault(_projects);
 
+var _collaborators2 = _interopRequireDefault(_collaborators);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var reducer = (0, _redux.combineReducers)({
@@ -6803,7 +6817,8 @@ var reducer = (0, _redux.combineReducers)({
   songs: _songs2.default,
   comments: _comments2.default,
   users: _users2.default,
-  projects: _projects2.default
+  projects: _projects2.default,
+  collaborators: _collaborators2.default
 });
 
 var middleware = (0, _redux.applyMiddleware)(_reduxThunk2.default, (0, _reduxLogger.createLogger)({ collapsed: true }));
@@ -8202,6 +8217,15 @@ Object.defineProperty(exports, 'Clip', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_clip).default;
+  }
+});
+
+var _clipHandle = __webpack_require__(1194);
+
+Object.defineProperty(exports, 'ClipHandle', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_clipHandle).default;
   }
 });
 
@@ -10679,7 +10703,7 @@ var addClipThunk = exports.addClipThunk = function addClipThunk(projectId, fileI
   return function () {
     console.log('time is', time);
     selectedTracks.forEach(function (selectedTrack) {
-      var newClip = { fileId: fileId, track: selectedTrack, startTime: time, played: false };
+      var newClip = { fileId: fileId, track: selectedTrack, startTime: time, played: false, offset: 0 };
       _firebase2.default.database().ref(projectId + '/clips').push(newClip);
     });
   };
@@ -10692,8 +10716,7 @@ var updateClipThunk = exports.updateClipThunk = function updateClipThunk(project
 };
 
 var deleteClip = exports.deleteClip = function deleteClip(projectId, clipKey) {
-  return function (dispatch) {
-    console.log('firing delete thunk');
+  return function () {
     _firebase2.default.database().ref(projectId + '/clips/' + clipKey).remove();
   };
 };
@@ -15790,7 +15813,7 @@ var SongView = function SongView(props) {
   return _react2.default.createElement(
     _semanticUiReact.Item,
     { key: song.id },
-    _react2.default.createElement(_semanticUiReact.Item.Image, { size: size, src: song.imageUrl || 'http://via.placeholder.com/150x150' }),
+    _react2.default.createElement(_semanticUiReact.Item.Image, { size: size, src: song.imageUrl || '//via.placeholder.com/150x150' }),
     _react2.default.createElement(
       _semanticUiReact.Item.Content,
       null,
@@ -15835,6 +15858,15 @@ var SongView = function SongView(props) {
           'audio',
           { controls: true },
           _react2.default.createElement('source', { src: song.url, type: 'audio/mp3' })
+        )
+      ),
+      _react2.default.createElement(
+        _semanticUiReact.Icon,
+        { name: 'facebook square', className: 'fb-share-button', 'data-href': 'https://thesoundcrowd/song/' + song.id, 'data-layout': 'button', 'data-size': 'small', 'data-mobile-iframe': 'true' },
+        _react2.default.createElement(
+          'a',
+          { className: 'fb-xfbml-parse-ignore', target: '_blank', href: 'https://www.facebook.com/sharer/sharer.php?u=https://thesoundcrowd/song/' + song.id },
+          'Share'
         )
       )
     )
@@ -53463,7 +53495,7 @@ var Timeline = function (_React$Component) {
     }
   }, {
     key: 'playSound',
-    value: function playSound(buffer, startTime, playAt, track) {
+    value: function playSound(buffer, startTime, playAt, offset, duration, track) {
       console.log('played sound track is', track);
       var source = _context2.default.createBufferSource();
       if (!startTime) {
@@ -53471,7 +53503,7 @@ var Timeline = function (_React$Component) {
       }
       source.buffer = buffer;
       this.trackEffectsLoop(source, track, _context2.default).connect(_context2.default.destination);
-      source.start(playAt, startTime);
+      source.start(playAt, startTime + offset, duration);
       this.setState({ playing: this.state.playing.concat(source) });
     }
   }, {
@@ -53708,8 +53740,11 @@ var Timeline = function (_React$Component) {
             var track = tracks[clip.track];
             var soundClip = soundClips[clip.fileId];
             var playAt = _context2.default.currentTime + (clip.startTime - time);
+            var offset = clip.offset,
+                duration = clip.duration;
+
             clip.played = true;
-            this.playSound(soundClip.sound.buffer, time - clip.startTime, playAt, track);
+            this.playSound(soundClip.sound.buffer, time - clip.startTime, playAt, offset, duration, track);
           }
         }
       }
@@ -54050,6 +54085,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(24);
 
+var _semanticUiReact = __webpack_require__(29);
+
 var _reactDraggable = __webpack_require__(282);
 
 var _reactDraggable2 = _interopRequireDefault(_reactDraggable);
@@ -54057,8 +54094,6 @@ var _reactDraggable2 = _interopRequireDefault(_reactDraggable);
 var _components = __webpack_require__(91);
 
 var _clips = __webpack_require__(127);
-
-var _semanticUiReact = __webpack_require__(29);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -54069,22 +54104,40 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var styles = {
-  clip: function clip(_clip, zoom) {
+  clipWrapper: function clipWrapper(start, length) {
     return {
       position: 'absolute',
-      left: _clip.startTime * zoom + 'px',
-      width: _clip.duration * zoom + 'px',
+      left: start + 'px',
+      width: length + 'px',
       height: '154px',
+      borderRadius: '4px',
+      boxShadow: '0 0 0 1px rgba(34,36,38,.15)',
+      overflow: 'hidden'
+    };
+  },
+  clip: function clip(length, offset) {
+    return {
+      position: 'relative',
+      width: length + 'px',
+      height: '100%',
+      marginLeft: -offset + 'px',
       background: '#22a3ef',
       opacity: '0.8',
       cursor: 'move'
     };
   },
 
+  clipDragWindow: {
+    position: 'absolute',
+    top: '0',
+    width: '100%',
+    height: '100%'
+  },
   clipInfo: {
     position: 'absolute',
     top: '0',
-    width: '100%'
+    left: '20px',
+    right: '20px'
   },
   clipRemove: {
     position: 'absolute',
@@ -54105,6 +54158,8 @@ var Clip = function (_React$Component) {
 
     _this.state = {
       hover: false,
+      offsetStart: 0,
+      offsetEnd: 0,
       x: 0,
       y: 0
     };
@@ -54113,6 +54168,10 @@ var Clip = function (_React$Component) {
     _this.handleMouseLeave = _this.handleMouseLeave.bind(_this);
     _this.handleDrag = _this.handleDrag.bind(_this);
     _this.handleEnd = _this.handleEnd.bind(_this);
+    _this.dragOffsetStart = _this.dragOffsetStart.bind(_this);
+    _this.updateOffsetStart = _this.updateOffsetStart.bind(_this);
+    _this.dragOffsetEnd = _this.dragOffsetEnd.bind(_this);
+    _this.updateOffsetEnd = _this.updateOffsetEnd.bind(_this);
     return _this;
   }
 
@@ -54150,16 +54209,64 @@ var Clip = function (_React$Component) {
       // NOTE: component tries to call setState after switching tracks
     }
   }, {
-    key: 'render',
-    value: function render() {
+    key: 'dragOffsetStart',
+    value: function dragOffsetStart(pos) {
+      this.setState({ offsetStart: pos });
+    }
+  }, {
+    key: 'updateOffsetStart',
+    value: function updateOffsetStart() {
       var _props2 = this.props,
           clip = _props2.clip,
-          waveform = _props2.waveform,
+          duration = _props2.duration,
           zoom = _props2.zoom,
-          project = _props2.project,
-          deleteClip = _props2.deleteClip;
+          updatePosition = _props2.updatePosition,
+          baseClip = _props2.baseClip;
+
+      var diff = this.state.offsetStart / zoom;
+      var newOffset = {
+        offset: clip.offset + diff,
+        startTime: clip.startTime + diff,
+        duration: duration - diff
+      };
+      updatePosition(baseClip, newOffset);
+      this.setState({ offsetStart: 0 });
+    }
+  }, {
+    key: 'dragOffsetEnd',
+    value: function dragOffsetEnd(pos) {
+      this.setState({ offsetEnd: -pos });
+    }
+  }, {
+    key: 'updateOffsetEnd',
+    value: function updateOffsetEnd() {
+      var _props3 = this.props,
+          duration = _props3.duration,
+          zoom = _props3.zoom,
+          updatePosition = _props3.updatePosition,
+          baseClip = _props3.baseClip;
+
+      var diff = this.state.offsetEnd / zoom;
+      var newOffset = {
+        duration: duration + diff
+      };
+      updatePosition(baseClip, newOffset);
+      this.setState({ offsetEnd: 0 });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props4 = this.props,
+          clip = _props4.clip,
+          duration = _props4.duration,
+          waveform = _props4.waveform,
+          zoom = _props4.zoom,
+          project = _props4.project,
+          deleteClip = _props4.deleteClip;
       var _state = this.state,
           hover = _state.hover,
+          offsetStart = _state.offsetStart,
+          offsetEnd = _state.offsetEnd,
           x = _state.x,
           y = _state.y;
 
@@ -54175,11 +54282,33 @@ var Clip = function (_React$Component) {
         _react2.default.createElement(
           'div',
           {
-            style: styles.clip(clip, zoom),
+            style: styles.clipWrapper(clip.startTime * zoom + offsetStart, duration * zoom + (offsetEnd - offsetStart)),
             onMouseEnter: this.handleMouseEnter,
             onMouseLeave: this.handleMouseLeave
           },
-          _react2.default.createElement(_components.Waveform, { waveform: waveform }),
+          _react2.default.createElement(
+            'div',
+            { style: styles.clip(clip.baseDuration * zoom, clip.offset * zoom + offsetStart) },
+            _react2.default.createElement(_components.Waveform, { waveform: waveform }),
+            _react2.default.createElement(
+              'div',
+              { style: styles.clipDragWindow },
+              _react2.default.createElement(_components.ClipHandle, {
+                offset: clip.offset * zoom,
+                side: 'left',
+                handleDrag: this.dragOffsetStart,
+                handleEnd: this.updateOffsetStart,
+                x: offsetStart
+              }),
+              _react2.default.createElement(_components.ClipHandle, {
+                offset: (clip.baseDuration - (clip.offset + duration)) * zoom,
+                side: 'right',
+                handleDrag: this.dragOffsetEnd,
+                handleEnd: this.updateOffsetEnd,
+                x: offsetStart
+              })
+            )
+          ),
           _react2.default.createElement(
             'div',
             { style: styles.clipInfo },
@@ -54205,10 +54334,12 @@ var Clip = function (_React$Component) {
 }(_react2.default.Component);
 
 var mapState = function mapState(state, ownProps) {
-  var baseClip = state.clips[ownProps.clip.key];
+  var clip = ownProps.clip;
+  var baseClip = state.clips[clip.key];
   var soundClip = state.timeline.soundClips[baseClip.fileId];
   return {
     baseClip: baseClip,
+    duration: clip.duration !== undefined ? clip.duration : clip.baseDuration,
     waveform: soundClip ? soundClip.waveform : []
   };
 };
@@ -54881,12 +55012,15 @@ var mapState = function mapState(state) {
     var file = Object.entries(state.files).find(function (entry) {
       return entry[1].id === clip.fileId;
     })[1] || {};
+    var baseClip = state.timeline.soundClips[clip.fileId];
     return {
       url: file.url,
       key: key,
       track: clip.track,
       startTime: clip.startTime,
-      duration: state.timeline.soundClips[clip.fileId] ? state.timeline.soundClips[clip.fileId].duration : 0
+      offset: clip.offset || 0,
+      duration: clip.duration,
+      baseDuration: baseClip ? baseClip.duration : 0
     };
   });
   return { clips: clips, length: state.settings.length || 10 };
@@ -56104,9 +56238,25 @@ var _axios2 = _interopRequireDefault(_axios);
 
 var _store = __webpack_require__(72);
 
-var _songView = __webpack_require__(205);
+var _songList = __webpack_require__(1195);
 
-var _songView2 = _interopRequireDefault(_songView);
+var _songList2 = _interopRequireDefault(_songList);
+
+var _projectList = __webpack_require__(1196);
+
+var _projectList2 = _interopRequireDefault(_projectList);
+
+var _projectAdd = __webpack_require__(1197);
+
+var _projectAdd2 = _interopRequireDefault(_projectAdd);
+
+var _collaboratorList = __webpack_require__(1198);
+
+var _collaboratorList2 = _interopRequireDefault(_collaboratorList);
+
+var _commentList = __webpack_require__(1202);
+
+var _commentList2 = _interopRequireDefault(_commentList);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -56195,109 +56345,88 @@ var UserHome = function (_React$Component) {
 
       if (!user || !songs || !projects) return _react2.default.createElement('div', null);
 
+      var panes = [{ menuItem: 'Songs', render: function render() {
+          return _react2.default.createElement(
+            _semanticUiReact.Tab.Pane,
+            { attached: false },
+            _react2.default.createElement(_songList2.default, { songs: songs })
+          );
+        } }, { menuItem: 'Projects', render: function render() {
+          return _react2.default.createElement(
+            _semanticUiReact.Tab.Pane,
+            { attached: false },
+            _react2.default.createElement(_projectAdd2.default, { createProject: _this2.createProject }),
+            _react2.default.createElement(_projectList2.default, { projects: projects })
+          );
+        } }];
+
+      var styles = {
+        header: { backgroundColor: '#222222' },
+        title: { color: '#ffffff', paddingBottom: 10, paddingTop: 10 },
+        headerImage: { paddingBottom: 10 }
+      };
+
       return _react2.default.createElement(
         _semanticUiReact.Grid,
         null,
         _react2.default.createElement(
           _semanticUiReact.Grid.Row,
-          { columns: 2 },
+          { style: styles.header },
           _react2.default.createElement(
             _semanticUiReact.Grid.Column,
-            { width: 4 },
-            _react2.default.createElement(_semanticUiReact.Image, { inline: true, verticalAlign: 'top', src: user.userImage, size: 'medium' }),
-            _react2.default.createElement(_semanticUiReact.Button, { icon: 'write' })
-          ),
-          _react2.default.createElement(
-            _semanticUiReact.Grid.Column,
-            { width: 8 },
+            { width: 16 },
             _react2.default.createElement(
               _semanticUiReact.Header,
-              { dividing: true, as: 'h3' },
-              pageName
+              { size: 'huge', textAlign: 'center', style: styles.title },
+              user.username
             ),
-            _react2.default.createElement(
-              _semanticUiReact.Header,
-              { dividing: true, as: 'h4' },
-              'Bio:'
-            ),
-            _react2.default.createElement(_semanticUiReact.Button, { icon: 'write' }),
-            _react2.default.createElement(
-              _semanticUiReact.Container,
-              { text: true },
-              user.bio
-            )
+            _react2.default.createElement(_semanticUiReact.Image, { src: user.userImage, style: styles.headerImage, size: 'small', shape: 'circular', centered: true })
           )
         ),
         _react2.default.createElement(
           _semanticUiReact.Grid.Row,
-          { columns: 1 },
+          null,
+          _react2.default.createElement(_semanticUiReact.Grid.Column, { width: 1 }),
           _react2.default.createElement(
             _semanticUiReact.Grid.Column,
-            null,
+            { width: 10 },
+            _react2.default.createElement(_semanticUiReact.Tab, { menu: { attached: false }, panes: panes })
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Grid.Column,
+            { width: 4 },
             _react2.default.createElement(
               _semanticUiReact.Header,
-              { dividing: true },
-              'Posted Songs:'
+              { block: true },
+              'About'
             ),
             _react2.default.createElement(
-              _semanticUiReact.Item.Group,
-              null,
-              songs.map(function (song) {
-                return _react2.default.createElement(_songView2.default, { key: song.id, song: song, size: 'tiny' });
-              })
-            ),
-            _react2.default.createElement(
-              _semanticUiReact.Item.Group,
-              null,
+              _semanticUiReact.Card,
+              { fluid: true },
               _react2.default.createElement(
-                _semanticUiReact.Header,
-                { dividing: true },
-                'Your Projects:'
-              ),
-              _react2.default.createElement(
-                _semanticUiReact.Form,
-                { onSubmit: this.createProject },
+                _semanticUiReact.Card.Content,
+                null,
                 _react2.default.createElement(
-                  _semanticUiReact.Form.Field,
+                  'em',
                   null,
-                  _react2.default.createElement(
-                    'label',
-                    null,
-                    'Project Title'
-                  ),
-                  _react2.default.createElement('input', { placeholder: 'Title', name: 'title' })
-                ),
-                _react2.default.createElement(
-                  _semanticUiReact.Button,
-                  { type: 'submit' },
-                  'Create Project'
+                  user.bio
                 )
-              ),
-              !!projects.length && projects.map(function (project) {
-                return _react2.default.createElement(
-                  'div',
-                  { key: project.id },
-                  _react2.default.createElement(
-                    _semanticUiReact.Header,
-                    null,
-                    _react2.default.createElement(
-                      _reactRouterDom.Link,
-                      { to: '/projects/' + project.id },
-                      project.title
-                    )
-                  ),
-                  _react2.default.createElement(_semanticUiReact.Select, { onChange: _this2.handleSelect, placeholder: 'name', options: _this2.props.usersOptions }),
-                  _react2.default.createElement(
-                    _semanticUiReact.Button,
-                    { onClick: function onClick() {
-                        return _this2.addCollaborator(project.id);
-                      }, positive: true },
-                    'Add Collaborator'
-                  )
-                );
-              })
-            )
-          )
+              )
+            ),
+            _react2.default.createElement(
+              _semanticUiReact.Header,
+              { block: true, inverted: true },
+              'Recent Collaborators'
+            ),
+            _react2.default.createElement(_collaboratorList2.default, { userId: user.id }),
+            _react2.default.createElement(
+              _semanticUiReact.Header,
+              { block: true, inverted: true },
+              'Latest Comments'
+            ),
+            _react2.default.createElement(_commentList2.default, { userId: user.id })
+          ),
+          _react2.default.createElement(_semanticUiReact.Grid.Column, { width: 1 })
         )
       );
     }
@@ -56411,6 +56540,59 @@ var PublicPage = (0, _reactRedux.connect)(mapStatePublicPage, mapDispatchPublicP
 exports.UserHomeConnected = UserHomeConnected;
 exports.PublicPage = PublicPage;
 
+// <Grid.Row columns={2}>
+
+//           <Grid.Column width={4}>
+//             <Image inline verticalAlign='top' src={user.userImage} size='medium' />
+//             <Button icon='write' />
+//           </Grid.Column>
+
+//           <Grid.Column width={8}>
+//             <Header dividing as='h3'>{pageName}</Header>
+//             <Header dividing as='h4'>Bio:</Header><Button icon='write' />
+//             <Container text>{user.bio}</Container>
+//           </Grid.Column>
+
+//         </Grid.Row>
+
+//         <Grid.Row columns={1}>
+//           <Grid.Column>
+//             <Header dividing>Posted Songs:</Header>
+//             <Item.Group>
+//               {
+//                 songs.map((song) => {
+//                   return (
+//                     <SongView key={song.id} song={song} size='tiny' />
+//                   );
+//                 })
+//               }
+//             </Item.Group>
+
+//             <Item.Group>
+//               <Header dividing>Your Projects:</Header>
+//               <Form onSubmit={this.createProject}>
+//                 <Form.Field>
+//                   <label>Project Title</label>
+//                   <input placeholder='Title' name='title' />
+//                 </Form.Field>
+//                 <Button type='submit'>Create Project</Button>
+//               </Form>
+//               {
+//                 !!projects.length &&
+//                 projects.map((project) => {
+//                   return (
+//                     <div key={project.id}>
+//                       <Header><Link to={`/projects/${project.id}`}>{project.title}</Link></Header>
+//                       <Select onChange={this.handleSelect} placeholder='name' options={this.props.usersOptions} />
+//                       <Button onClick={() => this.addCollaborator(project.id)} positive>Add Collaborator</Button>
+//                     </div>
+//                   );
+//                 })
+//               }
+//             </Item.Group>
+//           </Grid.Column>
+//         </Grid.Row>
+
 /***/ }),
 /* 645 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -56456,7 +56638,7 @@ _reactDom2.default.render(_react2.default.createElement(
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.postComment = exports.fetchUserComments = exports.fetchSongComments = exports.getSomeComments = exports.getComment = undefined;
+exports.fetchCommentsAboutUser = exports.postComment = exports.fetchUserComments = exports.fetchSongComments = exports.setComments = exports.getSomeComments = exports.getComment = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -56469,6 +56651,8 @@ exports.default = function () {
       return [].concat(_toConsumableArray(state), [action.comment]);
     case GET_SOME_COMMENTS:
       return [].concat(action.comments, state);
+    case SET_COMMENTS:
+      return action.comments;
     default:
       return state;
   }
@@ -56487,6 +56671,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
  */
 var GET_COMMENT = 'GET_COMMENT';
 var GET_SOME_COMMENTS = 'GET_SOME_COMMENTS';
+var SET_COMMENTS = 'SET_COMMENTS';
 
 /**
  * INITIAL STATE
@@ -56501,6 +56686,9 @@ var getComment = exports.getComment = function getComment(comment) {
 };
 var getSomeComments = exports.getSomeComments = function getSomeComments(comments) {
   return { type: GET_SOME_COMMENTS, comments: comments };
+};
+var setComments = exports.setComments = function setComments(comments) {
+  return { type: SET_COMMENTS, comments: comments };
 };
 
 /**
@@ -56541,6 +56729,16 @@ var postComment = exports.postComment = function postComment(comment) {
       var id = _ref.id;
       return dispatch(getComment(_extends({}, comment, { id: id })));
     }).catch(console.error.bind(console));
+  };
+};
+
+var fetchCommentsAboutUser = exports.fetchCommentsAboutUser = function fetchCommentsAboutUser(userId) {
+  return function (dispatch) {
+    _axios2.default.get('/api/users/' + userId + '/comments-about').then(function (res) {
+      return res.data;
+    }).then(function (comments) {
+      return dispatch(setComments(comments));
+    }).catch(console.error);
   };
 };
 
@@ -103704,12 +103902,12 @@ var TickMarks = function TickMarks(props) {
     var tickLength = i % 1 ? smallTickLength : bigTickLength;
     var startDistance = i * zoom;
 
-    svgElems.push(_react2.default.createElement('line', { x1: startDistance.toString(), y1: '0', x2: startDistance.toString(), y2: tickLength.toString() }));
+    svgElems.push(_react2.default.createElement('line', { x1: startDistance.toString(), y1: '0', x2: startDistance.toString(), y2: tickLength.toString(), key: 'line' + i }));
 
     if (!(i % 1)) {
       svgElems.push(_react2.default.createElement(
         'text',
-        { textAnchor: 'middle', alignmentBaseline: 'hanging', x: startDistance.toString(), y: '25' },
+        { textAnchor: 'middle', alignmentBaseline: 'hanging', x: startDistance.toString(), y: '25', key: 'text' + i },
         i
       ));
     }
@@ -103723,6 +103921,645 @@ var TickMarks = function TickMarks(props) {
 };
 
 exports.default = TickMarks;
+
+/***/ }),
+/* 1194 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDraggable = __webpack_require__(282);
+
+var _reactDraggable2 = _interopRequireDefault(_reactDraggable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var styles = {
+  clipHandle: function clipHandle(side, offset, hover) {
+    var _ref;
+
+    return _ref = {
+      position: 'absolute',
+      top: '0'
+    }, _defineProperty(_ref, side, offset), _defineProperty(_ref, 'height', '100%'), _defineProperty(_ref, 'width', '20px'), _defineProperty(_ref, 'background', 'linear-gradient(to ' + side + ', rgba(0,0,0,0), rgba(0,0,0,.5))'), _defineProperty(_ref, 'cursor', 'ew-resize'), _defineProperty(_ref, 'opacity', hover ? '0.8' : '0'), _defineProperty(_ref, 'transition', 'opacity 0.2s'), _ref;
+  }
+};
+
+var ClipHandle = function (_React$Component) {
+  _inherits(ClipHandle, _React$Component);
+
+  function ClipHandle(props) {
+    _classCallCheck(this, ClipHandle);
+
+    var _this = _possibleConstructorReturn(this, (ClipHandle.__proto__ || Object.getPrototypeOf(ClipHandle)).call(this, props));
+
+    _this.state = {
+      hover: false,
+      x: 0
+    };
+
+    _this.handleDrag = _this.handleDrag.bind(_this);
+    return _this;
+  }
+
+  _createClass(ClipHandle, [{
+    key: 'handleDrag',
+    value: function handleDrag(e, data) {
+      var _props = this.props,
+          offset = _props.offset,
+          side = _props.side;
+
+      var diff = side === 'left' ? data.x : -data.x;
+      if (offset + diff > 0) {
+        this.props.handleDrag(diff);
+      } else {
+        this.props.handleDrag(-offset);
+      }
+      this.setState({ x: 0 });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props2 = this.props,
+          offset = _props2.offset,
+          side = _props2.side;
+      var _state = this.state,
+          hover = _state.hover,
+          x = _state.x;
+
+      return _react2.default.createElement(
+        _reactDraggable2.default,
+        {
+          axis: 'x',
+          bounds: 'parent',
+          onStart: function onStart(e) {
+            return e.stopPropagation();
+          },
+          onDrag: this.handleDrag,
+          onStop: this.props.handleEnd,
+          position: { x: x, y: 0 }
+        },
+        _react2.default.createElement('div', {
+          style: styles.clipHandle(side, offset, hover),
+          onMouseEnter: function onMouseEnter() {
+            return _this2.setState({ hover: true });
+          },
+          onMouseLeave: function onMouseLeave() {
+            return _this2.setState({ hover: false });
+          }
+        })
+      );
+    }
+  }]);
+
+  return ClipHandle;
+}(_react2.default.Component);
+
+exports.default = ClipHandle;
+
+/***/ }),
+/* 1195 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(24);
+
+var _semanticUiReact = __webpack_require__(29);
+
+var _songView = __webpack_require__(205);
+
+var _songView2 = _interopRequireDefault(_songView);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function SongList(_ref) {
+  var songs = _ref.songs;
+
+  return _react2.default.createElement(
+    _semanticUiReact.Item.Group,
+    null,
+    songs.map(function (song) {
+      return _react2.default.createElement(_songView2.default, { key: song.id, song: song, size: 'tiny' });
+    })
+  );
+}
+
+var mapState = function mapState(state, ownProps) {
+  return {};
+};
+
+var mapDispatch = function mapDispatch(dispatch) {
+  return {};
+};
+
+exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(SongList);
+
+/***/ }),
+/* 1196 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(24);
+
+var _semanticUiReact = __webpack_require__(29);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function ProjectList(_ref) {
+  var _this = this;
+
+  var projects = _ref.projects;
+
+  return _react2.default.createElement(
+    _semanticUiReact.Item.Group,
+    null,
+    !!projects.length && projects.map(function (project) {
+      return _react2.default.createElement(
+        'div',
+        { key: project.id },
+        _react2.default.createElement(
+          Header,
+          null,
+          _react2.default.createElement(
+            Link,
+            { to: '/projects/' + project.id },
+            project.title
+          )
+        ),
+        _react2.default.createElement(Select, { onChange: _this.handleSelect, placeholder: 'name', options: _this.props.usersOptions }),
+        _react2.default.createElement(
+          Button,
+          { onClick: function onClick() {
+              return _this.addCollaborator(project.id);
+            }, positive: true },
+          'Add Collaborator'
+        )
+      );
+    })
+  );
+}
+
+var mapState = function mapState(state, ownProps) {
+  return {};
+};
+
+var mapDispatch = function mapDispatch(dispatch) {
+  return {};
+};
+
+exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(ProjectList);
+
+/***/ }),
+/* 1197 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(24);
+
+var _semanticUiReact = __webpack_require__(29);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function ProjectAdd(_ref) {
+  var createProject = _ref.createProject;
+
+  return _react2.default.createElement(
+    _semanticUiReact.Form,
+    { onSubmit: createProject },
+    _react2.default.createElement(
+      _semanticUiReact.Form.Field,
+      null,
+      _react2.default.createElement(
+        'label',
+        null,
+        'Project Title'
+      ),
+      _react2.default.createElement('input', { placeholder: 'Title', name: 'title' })
+    ),
+    _react2.default.createElement(
+      _semanticUiReact.Button,
+      { type: 'submit' },
+      'Create Project'
+    )
+  );
+}
+
+var mapState = function mapState(state, ownProps) {
+  return {};
+};
+
+var mapDispatch = function mapDispatch(dispatch) {
+  return {};
+};
+
+exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(ProjectAdd);
+
+/***/ }),
+/* 1198 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(24);
+
+var _semanticUiReact = __webpack_require__(29);
+
+var _store = __webpack_require__(72);
+
+var _collaboratorEntry = __webpack_require__(1200);
+
+var _collaboratorEntry2 = _interopRequireDefault(_collaboratorEntry);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CollaboratorList = function (_React$Component) {
+  _inherits(CollaboratorList, _React$Component);
+
+  function CollaboratorList() {
+    _classCallCheck(this, CollaboratorList);
+
+    return _possibleConstructorReturn(this, (CollaboratorList.__proto__ || Object.getPrototypeOf(CollaboratorList)).apply(this, arguments));
+  }
+
+  _createClass(CollaboratorList, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _props = this.props,
+          fetchCollaborators = _props.fetchCollaborators,
+          userId = _props.userId;
+
+      fetchCollaborators(userId);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var collaborators = this.props.collaborators;
+
+      console.log('list collaborators are', collaborators);
+      return _react2.default.createElement(
+        _semanticUiReact.Card,
+        { fluid: true },
+        _react2.default.createElement(
+          _semanticUiReact.Card.Content,
+          null,
+          collaborators.map(function (collaborator) {
+            return _react2.default.createElement(_collaboratorEntry2.default, { key: 'collaborator-' + collaborator.id, collaborator: collaborator });
+          })
+        )
+      );
+    }
+  }]);
+
+  return CollaboratorList;
+}(_react2.default.Component);
+
+var mapState = function mapState(state, ownProps) {
+  return {
+    collaborators: state.collaborators
+  };
+};
+
+var mapDispatch = function mapDispatch(dispatch) {
+  return {
+    fetchCollaborators: function fetchCollaborators(userId) {
+      return dispatch((0, _store.fetchCollaborators)(userId));
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(CollaboratorList);
+
+/***/ }),
+/* 1199 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchCollaborators = exports.setCollaborators = undefined;
+exports.default = reducer;
+
+var _axios = __webpack_require__(52);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// ACTION TYPES
+var SET_COLLABORATORS = 'SET_COLLABORATORS';
+
+// ACTION CREATORS
+var setCollaborators = exports.setCollaborators = function setCollaborators(collaborators) {
+  return {
+    type: SET_COLLABORATORS,
+    collaborators: collaborators
+  };
+};
+
+// REDUCER
+function reducer() {
+  var collaborators = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments[1];
+
+  switch (action.type) {
+    case SET_COLLABORATORS:
+      return action.collaborators;
+    default:
+      return collaborators;
+  }
+}
+
+// THUNK CREATORS
+var fetchCollaborators = exports.fetchCollaborators = function fetchCollaborators(userId) {
+  return function (dispatch) {
+    _axios2.default.get('/api/users/' + userId + '/collaborators').then(function (res) {
+      return res.data;
+    }).then(function (collaborators) {
+      return dispatch(setCollaborators(collaborators));
+    }).catch(console.error);
+  };
+};
+
+/***/ }),
+/* 1200 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(24);
+
+var _semanticUiReact = __webpack_require__(29);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function CollaboratorEntry(_ref) {
+  var collaborator = _ref.collaborator;
+
+  console.log('collaborator is', collaborator);
+  return _react2.default.createElement(
+    _semanticUiReact.Feed,
+    null,
+    _react2.default.createElement(
+      _semanticUiReact.Feed.Event,
+      null,
+      _react2.default.createElement(_semanticUiReact.Feed.Label, { image: collaborator.userImage }),
+      _react2.default.createElement(
+        _semanticUiReact.Feed.Content,
+        null,
+        _react2.default.createElement(
+          _semanticUiReact.Feed.Summary,
+          null,
+          _react2.default.createElement(
+            'a',
+            { href: '/user/' + collaborator.id },
+            collaborator.username
+          )
+        )
+      )
+    )
+  );
+}
+
+var mapState = function mapState(state, ownProps) {
+  return {};
+};
+
+var mapDispatch = function mapDispatch(dispatch) {
+  return {};
+};
+
+exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(CollaboratorEntry);
+
+/***/ }),
+/* 1201 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(24);
+
+var _semanticUiReact = __webpack_require__(29);
+
+var _reactRouterDom = __webpack_require__(126);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function CommentEntry(_ref) {
+  var comment = _ref.comment;
+
+  return _react2.default.createElement(
+    _semanticUiReact.Feed,
+    null,
+    _react2.default.createElement(
+      _semanticUiReact.Feed.Event,
+      null,
+      _react2.default.createElement(_semanticUiReact.Feed.Label, { image: comment.user.userImage }),
+      _react2.default.createElement(
+        _semanticUiReact.Feed.Content,
+        null,
+        _react2.default.createElement(
+          _semanticUiReact.Feed.Summary,
+          null,
+          _react2.default.createElement(
+            _reactRouterDom.Link,
+            { to: '/song/' + comment.songId },
+            comment.text
+          )
+        )
+      )
+    )
+  );
+}
+
+var mapState = function mapState(state, ownProps) {
+  return {};
+};
+
+var mapDispatch = function mapDispatch(dispatch) {
+  return {};
+};
+
+exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(CommentEntry);
+
+/***/ }),
+/* 1202 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(24);
+
+var _semanticUiReact = __webpack_require__(29);
+
+var _commentEntry = __webpack_require__(1201);
+
+var _commentEntry2 = _interopRequireDefault(_commentEntry);
+
+var _store = __webpack_require__(72);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CommentList = function (_React$Component) {
+  _inherits(CommentList, _React$Component);
+
+  function CommentList() {
+    _classCallCheck(this, CommentList);
+
+    return _possibleConstructorReturn(this, (CommentList.__proto__ || Object.getPrototypeOf(CommentList)).apply(this, arguments));
+  }
+
+  _createClass(CommentList, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _props = this.props,
+          fetchCommentsAboutUser = _props.fetchCommentsAboutUser,
+          userId = _props.userId;
+
+      fetchCommentsAboutUser(userId);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var comments = this.props.comments;
+
+      return _react2.default.createElement(
+        _semanticUiReact.Card,
+        { fluid: true },
+        _react2.default.createElement(
+          _semanticUiReact.Card.Content,
+          null,
+          comments.map(function (comment) {
+            return _react2.default.createElement(_commentEntry2.default, { key: 'comment-' + comment.id, comment: comment });
+          })
+        )
+      );
+    }
+  }]);
+
+  return CommentList;
+}(_react2.default.Component);
+
+var mapState = function mapState(state, ownProps) {
+  return {
+    comments: state.comments
+  };
+};
+
+var mapDispatch = function mapDispatch(dispatch) {
+  return {
+    fetchCommentsAboutUser: function fetchCommentsAboutUser(userId) {
+      return dispatch((0, _store.fetchCommentsAboutUser)(userId));
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(CommentList);
 
 /***/ })
 /******/ ]);
