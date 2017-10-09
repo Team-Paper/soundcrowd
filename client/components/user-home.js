@@ -2,7 +2,6 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-<<<<<<< HEAD
 import { Container, Item, Grid, Image, Header, Button, Select, Form, Tab, Card, Feed } from 'semantic-ui-react';
 import axios from 'axios';
 import { fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchFriends, fetchUser, addProject } from '../store';
@@ -11,12 +10,6 @@ import ProjectList from './project-list';
 import ProjectAdd from './project-add';
 import CollaboratorList from './collaborator-list';
 import CommentList from './comment-list';
-=======
-import { Container, Item, Grid, Image, Header, Button, Select, Form, Input } from 'semantic-ui-react';
-import axios from 'axios';
-import { fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchFriends, fetchUser, addProject, updateUser } from '../store';
-import SongView from './song-view';
->>>>>>> master
 
 /**
  * COMPONENT
@@ -217,62 +210,7 @@ const mapDispatchPublicPage = (dispatch, ownProps) => {
   };
 };
 
-
 const UserHomeConnected = connect(mapStateMyPage, mapDispatchMyPage)(UserHome);
 const PublicPage = connect(mapStatePublicPage, mapDispatchPublicPage)(UserHome);
 
 export { UserHomeConnected, PublicPage };
-
-
-// <Grid.Row columns={2}>
-
-//           <Grid.Column width={4}>
-//             <Image inline verticalAlign='top' src={user.userImage} size='medium' />
-//             <Button icon='write' />
-//           </Grid.Column>
-
-//           <Grid.Column width={8}>
-//             <Header dividing as='h3'>{pageName}</Header>
-//             <Header dividing as='h4'>Bio:</Header><Button icon='write' />
-//             <Container text>{user.bio}</Container>
-//           </Grid.Column>
-
-//         </Grid.Row>
-
-//         <Grid.Row columns={1}>
-//           <Grid.Column>
-//             <Header dividing>Posted Songs:</Header>
-//             <Item.Group>
-//               {
-//                 songs.map((song) => {
-//                   return (
-//                     <SongView key={song.id} song={song} size='tiny' />
-//                   );
-//                 })
-//               }
-//             </Item.Group>
-
-//             <Item.Group>
-//               <Header dividing>Your Projects:</Header>
-//               <Form onSubmit={this.createProject}>
-//                 <Form.Field>
-//                   <label>Project Title</label>
-//                   <input placeholder='Title' name='title' />
-//                 </Form.Field>
-//                 <Button type='submit'>Create Project</Button>
-//               </Form>
-//               {
-//                 !!projects.length &&
-//                 projects.map((project) => {
-//                   return (
-//                     <div key={project.id}>
-//                       <Header><Link to={`/projects/${project.id}`}>{project.title}</Link></Header>
-//                       <Select onChange={this.handleSelect} placeholder='name' options={this.props.usersOptions} />
-//                       <Button onClick={() => this.addCollaborator(project.id)} positive>Add Collaborator</Button>
-//                     </div>
-//                   );
-//                 })
-//               }
-//             </Item.Group>
-//           </Grid.Column>
-//         </Grid.Row>
