@@ -40,27 +40,26 @@ export default function reducer(soundClips = {}, action) {
 }
 
 // THUNK CREATORS
-export const createSoundClips = (files, soundClips) => dispatch => {
+export const createSoundClips = (files, soundClips) => (dispatch) => {
+  if (!files) return Promise.resolve([]);
   return Promise.all(Object.entries(files).map(([key, file]) => {
     if (soundClips.hasOwnProperty(file.id)) {
-      return;
-    } else {
-      return axios.get(`//d3oysef4ue4h90.cloudfront.net${file.url}`, { responseType: 'arraybuffer' })
-        .then(res => res.data)
-        .then(responseAudio => context.decodeAudioData(responseAudio))
-        .then(audio => {
-          let buffer = context.createBufferSource();
-          console.log('decoding audio data');
-          buffer.connect(context.destination);
-          buffer.buffer = audio;
-          dispatch(addSoundClip(file.id, {
-            sound: buffer,
-            duration: audio.duration,
-            waveform: [],
-          }));
-          return [key, audio];
-        });
+      return null;
     }
+    return axios.get(`//d3oysef4ue4h90.cloudfront.net${file.url}`, { responseType: 'arraybuffer' })
+      .then(res => res.data)
+      .then(responseAudio => context.decodeAudioData(responseAudio))
+      .then((audio) => {
+        const buffer = context.createBufferSource();
+        buffer.connect(context.destination);
+        buffer.buffer = audio;
+        dispatch(addSoundClip(file.id, {
+          sound: buffer,
+          duration: audio.duration,
+          waveform: [],
+        }));
+        return [key, audio];
+      });
   }))
-  .catch(console.error);
-}
+    .catch(console.error);
+};
