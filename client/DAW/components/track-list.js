@@ -32,14 +32,14 @@ const styles = {
 };
 
 const TrackList = (props) => {
-  const { project, length, tracks, clips } = props;
+  const { projectId, length, tracks, clips } = props;
   const zoom = 200; // pixels per second
   return (
     <Container style={styles.trackListWrapper}>
       <div style={styles.trackControlList}>
         {
           Object.entries(tracks).map(([key, track]) => (
-            <TrackControls key={key} track={track} projectId={project} />
+            <TrackControls key={key} track={track} projectId={projectId} />
           ))
         }
       </div>
@@ -52,7 +52,7 @@ const TrackList = (props) => {
               <Track
                 key={`track-${key}`}
                 track={track}
-                project={project}
+                projectId={projectId}
                 zoom={zoom}
                 clips={clips.filter(clip => clip.track === track.id)}
               />

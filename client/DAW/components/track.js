@@ -11,7 +11,7 @@ const styles = {
 };
 
 const Track = (props) => {
-  const { clips, draggedFile, dropFile, isDragging, project, zoom } = props;
+  const { clips, draggedFile, dropFile, isDragging, projectId, zoom } = props;
   return (
     <div
       className="track"
@@ -22,7 +22,7 @@ const Track = (props) => {
         <Clip
           key={clip.key}
           clip={clip}
-          project={project}
+          projectId={projectId}
           zoom={zoom}
         />)) }
     </div>
@@ -35,7 +35,7 @@ const mapState = state => ({
 });
 
 const mapDispatch = (dispatch, ownProps) => ({
-  dropFile: file => dispatch(addClipThunk(ownProps.project, file, [ownProps.track.id], 0)),
+  dropFile: file => dispatch(addClipThunk(ownProps.projectId, file, [ownProps.track.id], 0)),
 });
 
 

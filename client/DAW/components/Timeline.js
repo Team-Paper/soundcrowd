@@ -557,7 +557,7 @@ class Timeline extends React.Component {
           <input type="text" value={length} onChange={e => setLengthThunk(projectId, e.target.value)} />
           <PlaybackControls togglePlay={this.togglePlay} />
         </div>
-        <TrackList project={Number(projectId)} tracks={tracks} />
+        <TrackList projectId={projectId} tracks={tracks} />
       </div>
     );
   }
@@ -565,7 +565,7 @@ class Timeline extends React.Component {
 
 const mapState = (state, ownProps) => {
   return {
-  projectId: ownProps.match.params.id,
+  projectId: Number(ownProps.match.params.id),
   time: state.timeline.time,
   playedAt: state.timeline.playedAt,
   start: state.timeline.start,
