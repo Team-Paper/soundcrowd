@@ -68,7 +68,6 @@ class UserHome extends React.Component {
 
           <Grid.Column width={4}>
             <Image inline verticalAlign='top' src={user.userImage} size='medium' />
-            <Button icon='write' />
           </Grid.Column>
 
           <Grid.Column width={8}>
