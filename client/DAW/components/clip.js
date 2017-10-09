@@ -1,26 +1,44 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Draggable from 'react-draggable';
-import { Waveform } from '../components';
-import { updateClipThunk, deleteClip } from '../project-store/reducers/clips';
 import { Button } from 'semantic-ui-react';
+import Draggable from 'react-draggable';
+import { ClipHandle, Waveform } from '../components';
+import { updateClipThunk, deleteClip } from '../project-store/reducers/clips';
 
 const styles = {
-  clip(clip, zoom) {
+  clipWrapper(start, length) {
     return {
       position: 'absolute',
-      left: `${clip.startTime * zoom}px`,
-      width: `${clip.duration * zoom}px`,
+      left: `${start}px`,
+      width: `${length}px`,
       height: '154px',
+      borderRadius: '4px',
+      boxShadow: '0 0 0 1px rgba(34,36,38,.15)',
+      overflow: 'hidden',
+    };
+  },
+  clip(length, offset) {
+    return {
+      position: 'relative',
+      width: `${length}px`,
+      height: '100%',
+      marginLeft: `${-(offset)}px`,
       background: '#22a3ef',
       opacity: '0.8',
       cursor: 'move',
     };
   },
-  clipInfo: {
+  clipDragWindow: {
     position: 'absolute',
     top: '0',
     width: '100%',
+    height: '100%',
+  },
+  clipInfo: {
+    position: 'absolute',
+    top: '0',
+    left: '20px',
+    right: '20px',
   },
   clipRemove: {
     position: 'absolute',
@@ -31,12 +49,13 @@ const styles = {
   },
 };
 
-
 class Clip extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       hover: false,
+      offsetStart: 0,
+      offsetEnd: 0,
       x: 0,
       y: 0,
     };
@@ -45,6 +64,10 @@ class Clip extends React.Component {
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.handleDrag = this.handleDrag.bind(this);
     this.handleEnd = this.handleEnd.bind(this);
+    this.dragOffsetStart = this.dragOffsetStart.bind(this);
+    this.updateOffsetStart = this.updateOffsetStart.bind(this);
+    this.dragOffsetEnd = this.dragOffsetEnd.bind(this);
+    this.updateOffsetEnd = this.updateOffsetEnd.bind(this);
   }
 
   handleMouseEnter() {
@@ -71,9 +94,39 @@ class Clip extends React.Component {
     // NOTE: component tries to call setState after switching tracks
   }
 
+  dragOffsetStart(pos) {
+    this.setState({ offsetStart: pos });
+  }
+
+  updateOffsetStart() {
+    const { clip, duration, zoom, updatePosition, baseClip } = this.props;
+    const diff = this.state.offsetStart / zoom;
+    const newOffset = {
+      offset: clip.offset + diff,
+      startTime: clip.startTime + diff,
+      duration: duration - diff,
+    };
+    updatePosition(baseClip, newOffset);
+    this.setState({ offsetStart: 0 });
+  }
+
+  dragOffsetEnd(pos) {
+    this.setState({ offsetEnd: -(pos) });
+  }
+
+  updateOffsetEnd() {
+    const { duration, zoom, updatePosition, baseClip } = this.props;
+    const diff = this.state.offsetEnd / zoom;
+    const newOffset = {
+      duration: duration + diff,
+    };
+    updatePosition(baseClip, newOffset);
+    this.setState({ offsetEnd: 0 });
+  }
+
   render() {
-    const { clip, waveform, zoom, project, deleteClip } = this.props;
-    const { hover, x, y } = this.state;
+    const { clip, duration, waveform, zoom, project, deleteClip } = this.props;
+    const { hover, offsetStart, offsetEnd, x, y } = this.state;
     return (
       <Draggable
         bounds=".track-list"
@@ -83,11 +136,31 @@ class Clip extends React.Component {
         position={{ x, y }}
       >
         <div
-          style={styles.clip(clip, zoom)}
+          style={styles.clipWrapper(
+            (clip.startTime * zoom) + offsetStart,
+            (duration * zoom) + (offsetEnd - offsetStart))}
           onMouseEnter={this.handleMouseEnter}
           onMouseLeave={this.handleMouseLeave}
         >
-          <Waveform waveform={waveform} />
+          <div style={styles.clip(clip.baseDuration * zoom, (clip.offset * zoom) + offsetStart)}>
+            <Waveform waveform={waveform} />
+            <div style={styles.clipDragWindow}>
+              <ClipHandle
+                offset={clip.offset * zoom}
+                side="left"
+                handleDrag={this.dragOffsetStart}
+                handleEnd={this.updateOffsetStart}
+                x={offsetStart}
+              />
+              <ClipHandle
+                offset={(clip.baseDuration - (clip.offset + duration)) * zoom}
+                side="right"
+                handleDrag={this.dragOffsetEnd}
+                handleEnd={this.updateOffsetEnd}
+                x={offsetStart}
+              />
+            </div>
+          </div>
           <div style={styles.clipInfo}>
             {clip.url} starting at {clip.startTime}
             { hover && <Button
@@ -99,17 +172,18 @@ class Clip extends React.Component {
             /> }
           </div>
         </div>
-
       </Draggable>
     );
   }
 }
 
 const mapState = (state, ownProps) => {
-  const baseClip = state.clips[ownProps.clip.key];
+  const clip = ownProps.clip;
+  const baseClip = state.clips[clip.key];
   const soundClip = state.timeline.soundClips[baseClip.fileId];
   return {
     baseClip,
+    duration: clip.duration !== undefined ? clip.duration : clip.baseDuration,
     waveform: soundClip ? soundClip.waveform : [],
   };
 };
@@ -119,7 +193,7 @@ const mapDispatch = (dispatch, ownProps) => ({
     const updatedClip = Object.assign({}, clip, newPosition);
     dispatch(updateClipThunk(ownProps.project, ownProps.clip.key, updatedClip));
   },
-  deleteClip: (project, clipKey) => dispatch(deleteClip(project, clipKey))
+  deleteClip: (project, clipKey) => dispatch(deleteClip(project, clipKey)),
 });
 
 export default connect(mapState, mapDispatch)(Clip);
