@@ -484,7 +484,7 @@ class Timeline extends React.Component {
 
 
 
-  mixdown() {
+  mixdown(mixTitle, callback) {
     const { clips, soundClips, length, tracks } = this.props;
     const offlineContext = new OfflineAudioContext(2, length * 44100, 44100); // hardcoded to stereo, length 300 seconds?
     const chunks = [];
@@ -507,6 +507,7 @@ class Timeline extends React.Component {
         const formData = new FormData();
 
         formData.set('blob', blob);
+        formData.set('mixTitle', mixTitle);
         axios({
           method: 'post',
           url: '/api/songs',
@@ -514,8 +515,8 @@ class Timeline extends React.Component {
           data: formData,
         })
           .then(res => res.data)
-          .then(file => {
-            console.log('mixdown upload received!');
+          .then(song => {
+            callback(song);
           })
           .catch(console.error);
       }
@@ -528,19 +529,19 @@ class Timeline extends React.Component {
     Promise.all(Object.entries(clips).map(([key, clip]) => {
       console.log('clip is', clip);
       if (clip.track === null) {
-        return;
+        return null;
       }
       const track = tracks[clip.track];
       const newBufferSource = offlineContext.createBufferSource();
       const soundClip = soundClips[clip.fileId];
+      const duration = clip.duration !== undefined ? clip.duration : soundClip.duration;
       console.log('soundClip is', soundClip);
       newBufferSource.buffer = soundClip.sound.buffer;
-      this.trackEffectsLoop(newBufferSource, track, offlineContext).connect(offlineContext.destination);
-      newBufferSource.start(clip.startTime);
+      this.trackEffectsLoop(newBufferSource, track, offlineContext)
+        .connect(offlineContext.destination);
+      newBufferSource.start(clip.startTime, clip.offset, duration);
     }))
-      .then(() => offlineContext.startRendering())
-
-    const splitter = context.createChannelMerger(clips.length);
+      .then(() => offlineContext.startRendering());
   }
 
   render() {
@@ -551,13 +552,12 @@ class Timeline extends React.Component {
           <div>{time}</div>
           <button onClick={this.startRecord}>Record</button>
           <button onClick={this.stopRecord}>Stop</button>
-          <button onClick={this.mixdown}>Mixdown</button>
           <button onClick={this.addTrack}>Add Track</button>
           <span>length (seconds):</span>
           <input type="text" value={length} onChange={e => setLengthThunk(projectId, e.target.value)} />
-          <PlaybackControls togglePlay={this.togglePlay} />
+          <PlaybackControls mixdown={this.mixdown} togglePlay={this.togglePlay} />
         </div>
-        <TrackList project={Number(projectId)} tracks={tracks} />
+        <TrackList projectId={projectId} tracks={tracks} />
       </div>
     );
   }
@@ -565,7 +565,7 @@ class Timeline extends React.Component {
 
 const mapState = (state, ownProps) => {
   return {
-  projectId: ownProps.match.params.id,
+  projectId: Number(ownProps.match.params.id),
   time: state.timeline.time,
   playedAt: state.timeline.playedAt,
   start: state.timeline.start,

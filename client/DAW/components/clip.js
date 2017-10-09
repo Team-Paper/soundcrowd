@@ -125,7 +125,7 @@ class Clip extends React.Component {
   }
 
   render() {
-    const { clip, duration, waveform, zoom, project, deleteClip } = this.props;
+    const { clip, duration, waveform, zoom, projectId, deleteClip } = this.props;
     const { hover, offsetStart, offsetEnd, x, y } = this.state;
     return (
       <Draggable
@@ -168,7 +168,7 @@ class Clip extends React.Component {
               size="mini"
               color="red"
               icon="remove"
-              onClick={() => deleteClip(project, clip.key)}
+              onClick={() => deleteClip(projectId, clip.key)}
             /> }
           </div>
         </div>
@@ -191,9 +191,9 @@ const mapState = (state, ownProps) => {
 const mapDispatch = (dispatch, ownProps) => ({
   updatePosition: (clip, newPosition) => {
     const updatedClip = Object.assign({}, clip, newPosition);
-    dispatch(updateClipThunk(ownProps.project, ownProps.clip.key, updatedClip));
+    dispatch(updateClipThunk(ownProps.projectId, ownProps.clip.key, updatedClip));
   },
-  deleteClip: (project, clipKey) => dispatch(deleteClip(project, clipKey)),
+  deleteClip: (projectId, clipKey) => dispatch(deleteClip(projectId, clipKey)),
 });
 
 export default connect(mapState, mapDispatch)(Clip);
