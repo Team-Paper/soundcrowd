@@ -5,6 +5,7 @@ import axios from 'axios'
  */
 const GET_COMMENT = 'GET_COMMENT';
 const GET_SOME_COMMENTS = 'GET_SOME_COMMENTS';
+const SET_COMMENTS = 'SET_COMMENTS';
 
 /**
  * INITIAL STATE
@@ -16,7 +17,7 @@ const defaultComments = [];
  */
 export const getComment = comment => ({ type: GET_COMMENT, comment });
 export const getSomeComments = comments => ({ type: GET_SOME_COMMENTS, comments });
-
+export const setComments = comments => ({ type: SET_COMMENTS, comments });
 
 /**
  * THUNK CREATORS
@@ -54,6 +55,13 @@ export const postComment = (comment) => {
   };
 };
 
+export const fetchCommentsAboutUser = (userId) => dispatch => {
+  axios.get(`/api/users/${userId}/comments-about`)
+    .then(res => res.data)
+    .then(comments => dispatch(setComments(comments)))
+    .catch(console.error);
+}
+
 /**
  * REDUCER
  */
@@ -63,6 +71,8 @@ export default function (state = defaultComments, action) {
       return [...state, action.comment];
     case GET_SOME_COMMENTS:
       return [].concat(action.comments, state);
+    case SET_COMMENTS:
+      return action.comments;
     default:
       return state;
   }

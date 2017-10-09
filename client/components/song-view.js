@@ -10,7 +10,7 @@ const SongView = (props) => {
 
   return (
     <Item key={song.id}>
-      <Item.Image size={size} src={song.imageUrl || 'http://via.placeholder.com/150x150'} />
+      <Item.Image size={size} src={song.imageUrl || '//via.placeholder.com/150x150'} />
       <Item.Content>
         <Item.Header>
           <Header>
@@ -41,7 +41,7 @@ const SongView = (props) => {
             <source src={song.url} type="audio/mp3" />
           </audio>
         </Item.Description>
-        <Icon name ='facebook square' class="fb-share-button" data-href={`https://thesoundcrowd/song/${song.id}`} data-layout="button" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=https://thesoundcrowd/song/${song.id}`}>Share</a></Icon>
+        <Icon name ='facebook square' className="fb-share-button" data-href={`https://thesoundcrowd/song/${song.id}`} data-layout="button" data-size="small" data-mobile-iframe="true"><a className="fb-xfbml-parse-ignore" target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=https://thesoundcrowd/song/${song.id}`}>Share</a></Icon>
       </Item.Content>
     </Item>
   );

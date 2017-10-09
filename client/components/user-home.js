@@ -2,10 +2,14 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Container, Item, Grid, Image, Header, Button, Select, Form, Input } from 'semantic-ui-react';
+import { Container, Item, Grid, Image, Header, Button, Select, Form, Tab, Card, Feed } from 'semantic-ui-react';
 import axios from 'axios';
-import { fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchFriends, fetchUser, addProject, updateUser } from '../store';
-import SongView from './song-view';
+import { fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchFriends, fetchUser, addProject } from '../store';
+import SongList from './song-list';
+import ProjectList from './project-list';
+import ProjectAdd from './project-add';
+import CollaboratorList from './collaborator-list';
+import CommentList from './comment-list';
 
 /**
  * COMPONENT
@@ -78,65 +82,43 @@ class UserHome extends React.Component {
 
     if (!user || !songs || !projects) return <div />;
 
+    const panes = [
+      { menuItem: 'Songs', render: () => <Tab.Pane attached={false}><SongList songs={songs} /></Tab.Pane> },
+      { menuItem: 'Projects', render: () => <Tab.Pane attached={false}><ProjectAdd createProject={this.createProject} /><ProjectList projects={projects} /></Tab.Pane> },
+    ];
+
+    const styles = {
+      header: { backgroundColor: '#222222' },
+      title: { color: '#ffffff', paddingBottom: 10, paddingTop: 10 },
+      headerImage: { paddingBottom: 10 },
+    }
+
     return (
       <Grid>
-        <Grid.Row columns={2}>
-
-          <Grid.Column width={4}>
-            <Image inline verticalAlign='top' src={user.userImage} size='medium' />
+        <Grid.Row style={ styles.header }>
+          <Grid.Column width={16} >
+            <Header size='huge' textAlign='center' style={styles.title}>{user.username}</Header>
+            <Image src={user.userImage} style={styles.headerImage} size='small' shape='circular' centered />
           </Grid.Column>
-
-          <Grid.Column width={8}>
-            <Header dividing as='h3'>{pageName}</Header>
-            <Header dividing as='h4'>Bio:</Header>
-            <Input as={this.props.isSelf ? Input : Container} fluid onChange={this.handleBioChange} transparent={!this.props.isSelf} value={this.state.bio} />
-            {
-              this.props.isSelf &&
-              <Button onClick={this.handleBioSave} disabled={!this.state.bioDirty}>Save Changes</Button>
-            }
-          </Grid.Column>
-
         </Grid.Row>
-
-        <Grid.Row columns={1}>
-          <Grid.Column>
-            <Header dividing>Posted Songs:</Header>
-            <Item.Group>
-              {
-                songs.map((song) => {
-                  return (
-                    <SongView key={song.id} song={song} size='tiny' />
-                  );
-                })
-              }
-            </Item.Group>
-
-            {this.props.isSelf &&
-
-              <Item.Group>
-                <Header dividing>Your Projects:</Header>
-                <Form onSubmit={this.createProject}>
-                  <Form.Field>
-                    <label>Project Title</label>
-                    <input placeholder='Title' name='title' />
-                  </Form.Field>
-                  <Button type='submit'>Create Project</Button>
-                </Form>
-                {
-                  !!projects.length &&
-                  projects.map((project) => {
-                    return (
-                      <div key={project.id}>
-                        <Header><Link to={`/projects/${project.id}`}>{project.title}</Link></Header>
-                        <Select onChange={this.handleSelect} placeholder='name' options={this.props.usersOptions} />
-                        <Button onClick={() => this.addCollaborator(project.id)} positive>Add Collaborator</Button>
-                      </div>
-                    );
-                  })
-                }
-              </Item.Group>
-            }
+        <Grid.Row>
+          <Grid.Column width={1} />
+          <Grid.Column width={10} >
+            <Tab menu={{ attached: false }} panes={panes} />
           </Grid.Column>
+          <Grid.Column width={4} >
+          <Header block >About</Header>
+          <Card fluid>
+            <Card.Content>
+              <em>{user.bio}</em>
+            </Card.Content>
+          </Card>
+          <Header block inverted>Recent Collaborators</Header>
+          <CollaboratorList userId={user.id} />
+          <Header block inverted>Latest Comments</Header>
+          <CommentList userId={user.id} />
+          </Grid.Column>
+          <Grid.Column width={1} />
         </Grid.Row>
       </Grid>
     );
@@ -189,7 +171,6 @@ const mapDispatchMyPage = (dispatch) => {
   };
 };
 
-
 /**
  * CONTAINER FOR PUBLIC USER PAGE
  */
@@ -228,7 +209,6 @@ const mapDispatchPublicPage = (dispatch, ownProps) => {
     },
   };
 };
-
 
 const UserHomeConnected = connect(mapStateMyPage, mapDispatchMyPage)(UserHome);
 const PublicPage = connect(mapStatePublicPage, mapDispatchPublicPage)(UserHome);

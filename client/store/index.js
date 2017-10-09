@@ -6,6 +6,7 @@ import songs from './songs';
 import comments from './comments';
 import users from './users';
 import projects from './projects';
+import collaborators from './collaborators';
 
 const reducer = combineReducers({
   user,
@@ -13,6 +14,7 @@ const reducer = combineReducers({
   comments,
   users,
   projects,
+  collaborators,
 });
 
 const middleware = applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }));
@@ -24,3 +26,4 @@ export * from './songs';
 export * from './comments';
 export * from './users';
 export * from './projects';
+export * from './collaborators';

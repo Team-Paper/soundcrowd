@@ -3,6 +3,7 @@ const Song = require('./song')
 const Comment = require('./comment')
 const Project = require('./project')
 const Soundfile = require('./soundfile')
+const Collaborators = require('./collaborators')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -13,9 +14,8 @@ const Soundfile = require('./soundfile')
 
 //each song can belong to many users as collaborators
 //each collaborator can have many songs
-Song.belongsToMany(User, { through: 'collaborators', as: 'artist' });
-User.belongsToMany(Song, { through: 'collaborators', as: 'compositions' });
-
+Song.belongsToMany(User, { through: Collaborators, as: 'artist' });
+User.belongsToMany(Song, { through: Collaborators, as: 'compositions' });
 
 //'Likes' tables is just a join table
 Song.belongsToMany(User, { through: 'likes' });
@@ -49,4 +49,5 @@ module.exports = {
   Song,
   Soundfile,
   Project,
+  Collaborators,
 }
