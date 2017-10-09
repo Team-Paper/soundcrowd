@@ -2,7 +2,7 @@
 
 import {expect} from 'chai'
 import {fetchTopSongs, fetchUserSongs} from './songs'
-import axios from 'axios'
+import axios from './axios'
 import MockAdapter from 'axios-mock-adapter'
 import configureMockStore from 'redux-mock-store'
 import thunkMiddleware from 'redux-thunk'
@@ -28,12 +28,14 @@ describe('thunk creators', () => {
   describe('Top Songs', () => {
     it.only('eventually dispatches the GET SOME SONGS action', () => {
       const numSongs = 5;
-      mockAxios.onGet(`/api/songs/top/${numSongs}`).replyOnce(200, {})
+      const song1 = 'test123'
+      const songs = []
+      mockAxios.onGet(`/api/songs/top/${numSongs}`).replyOnce(200, {songs})
       return store.dispatch(fetchTopSongs(numSongs))
         .then(() => {
           const actions = store.getActions()
           console.log(actions)
-          // expect(actions[0].type).to.be.equal('GET_SOME_SONGS')
+          expect(actions[0].type).to.be.equal('GET_SOME_SONGS')
           // expect(actions[0].user).to.be.deep.equal(fakeUser)
         })
     })
