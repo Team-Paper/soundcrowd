@@ -29,7 +29,6 @@ class MixdownModal extends React.Component {
   progressTimer(start) {
     const { length } = this.props;
     const diff = (Date.now() - start) / (length * 1000);
-    console.log('timer', diff);
     if (diff > 1) {
       this.setState({ progress: 100 });
     } else {
@@ -39,18 +38,19 @@ class MixdownModal extends React.Component {
   }
 
   render() {
-    const { progress } = this.state;
+    const { mixTitle, progress } = this.state;
     return (
       <Modal size="tiny" trigger={<Menu.Item>mixdown</Menu.Item>}>
         <Modal.Header>Mixdown project</Modal.Header>
         <Modal.Content>
           <Input
-            value={this.state.mixTitle}
+            value={mixTitle}
             placeholder="project name"
             onChange={this.handleChange}
           />
           <Button
             positive
+            disabled={mixTitle === ''}
             icon="checkmark"
             labelPosition="right"
             content="mixdown"
