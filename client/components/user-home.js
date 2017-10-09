@@ -2,6 +2,7 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+<<<<<<< HEAD
 import { Container, Item, Grid, Image, Header, Button, Select, Form, Tab, Card, Feed } from 'semantic-ui-react';
 import axios from 'axios';
 import { fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchFriends, fetchUser, addProject } from '../store';
@@ -10,6 +11,12 @@ import ProjectList from './project-list';
 import ProjectAdd from './project-add';
 import CollaboratorList from './collaborator-list';
 import CommentList from './comment-list';
+=======
+import { Container, Item, Grid, Image, Header, Button, Select, Form, Input } from 'semantic-ui-react';
+import axios from 'axios';
+import { fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchFriends, fetchUser, addProject, updateUser } from '../store';
+import SongView from './song-view';
+>>>>>>> master
 
 /**
  * COMPONENT
@@ -20,10 +27,14 @@ class UserHome extends React.Component {
 
     this.state = {
       userToAdd: -1,
+      bio: '',
+      bioDirty: false,
     };
     this.addCollaborator = this.addCollaborator.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.createProject = this.createProject.bind(this);
+    this.handleBioChange = this.handleBioChange.bind(this);
+    this.handleBioSave = this.handleBioSave.bind(this);
   }
 
 
@@ -35,10 +46,22 @@ class UserHome extends React.Component {
     if (!this.props.user && (newProps.user || newProps.loadfirst)) {
       newProps.loadData(newProps.user);
     }
+    if (!this.state.bio && newProps.user && newProps.user.bio) {
+      this.setState({ bio: newProps.user.bio });
+    }
   }
 
   componentWillUnmount() {
     this.props.clearData();
+  }
+
+  handleBioChange(event) {
+    this.setState({ bio: event.target.value, bioDirty: true });
+  }
+
+  handleBioSave() {
+    this.props.saveBio(this.props.user, this.state.bio);
+    this.setState({ bioDirty: false });
   }
 
   handleSelect(event, { value }) {
@@ -134,6 +157,7 @@ const mapStateMyPage = (state) => {
     songs: userSongs,
     comments: state.comments.filter(comment => comment.userId === state.user.id),
     projects: userProjects,
+    isSelf: true,
   };
 };
 
@@ -150,6 +174,7 @@ const mapDispatchMyPage = (dispatch) => {
     },
     addCollaborator: (fbId, projectId) => dispatch(addCollaborator(fbId, projectId)),
     addProject: project => dispatch(addProject(project)),
+    saveBio: (user, bio) => dispatch(updateUser({ ...user, bio })),
   };
 };
 
@@ -174,6 +199,7 @@ const mapStatePublicPage = (state, ownProps) => {
     pageName: username,
     songs: userSongs,
     projects: [],
+    isSelf: false,
   };
 };
 

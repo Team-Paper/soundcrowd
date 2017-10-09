@@ -79,13 +79,13 @@ class SingleSong extends React.Component {
 
               <Comment.Group size='large'>
                 <Header as='h3' dividing>Comments</Header>
-                { user.id ?
-                <Form reply onSubmit={this.handleCommentSubmit}>
-                  <Form.TextArea onChange={this.handleChange} />
-                  <Button content='Add Comment' icon='edit' primary />
-                </Form>
-                :
-                <p>Log in or sign up to leave comments</p>
+                {user.id ?
+                  <Form reply onSubmit={this.handleCommentSubmit}>
+                    <Form.TextArea onChange={this.handleChange} />
+                    <Button content='Add Comment' icon='edit' primary />
+                  </Form>
+                  :
+                  <p>Log in or sign up to leave comments</p>
                 }
 
                 {
@@ -94,8 +94,7 @@ class SingleSong extends React.Component {
                       <Comment key={comment.id}>
                         <Comment.Avatar src={comment.user.userImage} />
                         <Comment.Author>
-                          {comment.user.email // this is terrible, they need usernames
-                          }
+                          {comment.user.username}
                         </Comment.Author>
                         <Comment.Content>
                           {comment.text}
