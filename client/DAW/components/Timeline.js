@@ -529,19 +529,19 @@ class Timeline extends React.Component {
     Promise.all(Object.entries(clips).map(([key, clip]) => {
       console.log('clip is', clip);
       if (clip.track === null) {
-        return;
+        return null;
       }
       const track = tracks[clip.track];
       const newBufferSource = offlineContext.createBufferSource();
       const soundClip = soundClips[clip.fileId];
+      const duration = clip.duration !== undefined ? clip.duration : soundClip.duration;
       console.log('soundClip is', soundClip);
       newBufferSource.buffer = soundClip.sound.buffer;
-      this.trackEffectsLoop(newBufferSource, track, offlineContext).connect(offlineContext.destination);
-      newBufferSource.start(clip.startTime);
+      this.trackEffectsLoop(newBufferSource, track, offlineContext)
+        .connect(offlineContext.destination);
+      newBufferSource.start(clip.startTime, clip.offset, duration);
     }))
-      .then(() => offlineContext.startRendering())
-
-    const splitter = context.createChannelMerger(clips.length);
+      .then(() => offlineContext.startRendering());
   }
 
   render() {
