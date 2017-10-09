@@ -484,7 +484,7 @@ class Timeline extends React.Component {
 
 
 
-  mixdown() {
+  mixdown(mixTitle) {
     const { clips, soundClips, length, tracks } = this.props;
     const offlineContext = new OfflineAudioContext(2, length * 44100, 44100); // hardcoded to stereo, length 300 seconds?
     const chunks = [];
@@ -507,6 +507,7 @@ class Timeline extends React.Component {
         const formData = new FormData();
 
         formData.set('blob', blob);
+        formData.set('mixTitle', mixTitle);
         axios({
           method: 'post',
           url: '/api/songs',

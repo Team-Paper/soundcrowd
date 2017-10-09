@@ -31,7 +31,7 @@ class MixdownModal extends React.Component {
             icon="checkmark"
             labelPosition="right"
             content="mixdown"
-            onClick={() => mixdown()}
+            onClick={() => mixdown(this.state.mixTitle)}
           />
         </Modal.Content>
       </Modal>
