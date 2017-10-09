@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { Comment } = require('../db/models')
+const { Comment, User } = require('../db/models')
 const { isSelf } = require('./gatekeepers')
 
 module.exports = router
@@ -9,14 +9,21 @@ module.exports = router
 router.use((req, res, next) => {
   if (req.user) req.body.userId = req.user.id;
   next();
-})
+});
+
+// get 5 latest comments
+router.get('/', (req, res, next) => {
+  Comment.findAll({ limit: 5, include: [{ model: User }], order: [['createdAt', 'DESC']] })
+    .then(comments => res.json(comments))
+    .catch(next);
+});
 
 //get a specific comment
 router.get('/:id', (req, res, next) => {
   Comment.findById(Number(req.params.id))
     .then(comment => res.json(comment))
     .catch(next)
-})
+});
 
 //post a new comment
 router.post('/', isSelf, (req, res, next) => {
