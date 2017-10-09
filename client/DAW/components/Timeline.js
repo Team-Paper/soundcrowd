@@ -551,11 +551,10 @@ class Timeline extends React.Component {
           <div>{time}</div>
           <button onClick={this.startRecord}>Record</button>
           <button onClick={this.stopRecord}>Stop</button>
-          <button onClick={this.mixdown}>Mixdown</button>
           <button onClick={this.addTrack}>Add Track</button>
           <span>length (seconds):</span>
           <input type="text" value={length} onChange={e => setLengthThunk(projectId, e.target.value)} />
-          <PlaybackControls togglePlay={this.togglePlay} />
+          <PlaybackControls mixdown={this.mixdown} togglePlay={this.togglePlay} />
         </div>
         <TrackList projectId={projectId} tracks={tracks} />
       </div>
