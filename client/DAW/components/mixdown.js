@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Input, Menu, Modal, Progress } from 'semantic-ui-react';
+import history from '../../history';
 
 class MixdownModal extends React.Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class MixdownModal extends React.Component {
   handleMixdown() {
     const { mixTitle } = this.state;
     const { mixdown } = this.props;
-    mixdown(mixTitle, song => console.log('song finished!', song));
+    mixdown(mixTitle, () => history.push('/home'));
     this.progressTimer(Date.now());
   }
 
