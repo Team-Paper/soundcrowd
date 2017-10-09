@@ -84,7 +84,7 @@ class UserHome extends React.Component {
 
     const panes = [
       { menuItem: 'Songs', render: () => <Tab.Pane attached={false}><SongList songs={songs} /></Tab.Pane> },
-      { menuItem: 'Projects', render: () => <Tab.Pane attached={false}><ProjectAdd createProject={this.createProject} /><ProjectList projects={projects} /></Tab.Pane> },
+      { menuItem: 'Projects', render: () => <Tab.Pane attached={false}><ProjectAdd createProject={this.createProject} /><ProjectList projects={projects} handleSelect={this.handleSelect} usersOptions={this.props.usersOptions} addCollaborator={this.addCollaborator} /></Tab.Pane> },
     ];
 
     const styles = {

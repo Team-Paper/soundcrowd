@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Item } from 'semantic-ui-react';
+import { Item, Header, Select, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
-function ProjectList({ projects }) {
+function ProjectList({ projects, handleSelect, usersOptions, addCollaborator }) {
   return (
     <Item.Group>
       {
@@ -11,8 +12,8 @@ function ProjectList({ projects }) {
             return (
               <div key={project.id}>
                 <Header><Link to={`/projects/${project.id}`}>{project.title}</Link></Header>
-                <Select onChange={this.handleSelect} placeholder='name' options={this.props.usersOptions} />
-                <Button onClick={() => this.addCollaborator(project.id)} positive>Add Collaborator</Button>
+                <Select onChange={handleSelect} placeholder='name' options={usersOptions} />
+                <Button onClick={() => addCollaborator(project.id)} positive>Add Collaborator</Button>
               </div>
             );
           })
