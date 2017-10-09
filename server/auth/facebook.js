@@ -11,7 +11,7 @@ const strategy = new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID || '',
   clientSecret: process.env.FACEBOOK_APP_SECRET || '',
   callbackURL: process.env.FACEBOOK_CALLBACK || '',
-  profileFields:['id','displayName','emails'],
+  profileFields:['id','displayName','emails', 'picture'],
   passReqToCallback: true
 
 },

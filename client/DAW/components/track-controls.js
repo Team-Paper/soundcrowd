@@ -48,7 +48,6 @@ class TrackControls extends React.Component {
       <Card.Content>
         <Card.Header>
           <Input type="text" transparent value={track.name || this.state.dirty ? track.name : `Track #${track.id}`} onChange={e => this.handleChange(projectId, track, e.target.value)} />
-          {/* {track.name ? track.name : `Track #${track.id}`} */}
         </Card.Header>
         <Card.Description>
           <Button circular icon onClick={isSelected ? deselectTrack : selectTrack}>

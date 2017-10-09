@@ -62,6 +62,7 @@ class SingleSong extends React.Component {
               </audio>
             </Grid.Column>
 
+
             <Grid.Column>
               <Header dividing>Notes:</Header>
               <Container text textAlign='justified'>
