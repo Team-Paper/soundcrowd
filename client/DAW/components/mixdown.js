@@ -1,15 +1,18 @@
 import React from 'react';
-import { Button, Input, Menu, Modal } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Button, Input, Menu, Modal, Progress } from 'semantic-ui-react';
 
 class MixdownModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       mixTitle: '',
+      progress: 0,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleMixdown = this.handleMixdown.bind(this);
+    this.progressTimer = this.progressTimer.bind(this);
   }
 
   handleChange(e) {
@@ -20,9 +23,23 @@ class MixdownModal extends React.Component {
     const { mixTitle } = this.state;
     const { mixdown } = this.props;
     mixdown(mixTitle, song => console.log('song finished!', song));
+    this.progressTimer(Date.now());
+  }
+
+  progressTimer(start) {
+    const { length } = this.props;
+    const diff = (Date.now() - start) / (length * 1000);
+    console.log('timer', diff);
+    if (diff > 1) {
+      this.setState({ progress: 100 });
+    } else {
+      this.setState({ progress: parseInt(diff * 100, 10) });
+      setTimeout(() => this.progressTimer(start), 10);
+    }
   }
 
   render() {
+    const { progress } = this.state;
     return (
       <Modal size="tiny" trigger={<Menu.Item>mixdown</Menu.Item>}>
         <Modal.Header>Mixdown project</Modal.Header>
@@ -39,10 +56,15 @@ class MixdownModal extends React.Component {
             content="mixdown"
             onClick={this.handleMixdown}
           />
+          <Progress color="green" percent={progress} />
         </Modal.Content>
       </Modal>
     );
   }
 }
 
-export default MixdownModal;
+const mapState = state => ({
+  length: state.settings.length,
+});
+
+export default connect(mapState)(MixdownModal);
