@@ -1,5 +1,5 @@
 import React from 'react';
-import { Item, Header } from 'semantic-ui-react';
+import { Item, Header, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 
@@ -41,6 +41,7 @@ const SongView = (props) => {
             <source src={song.url} type="audio/mp3" />
           </audio>
         </Item.Description>
+        <Icon name ='facebook square' class="fb-share-button" data-href={`https://thesoundcrowd/song/${song.id}`} data-layout="button" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=https://thesoundcrowd/song/${song.id}`}>Share</a></Icon>
       </Item.Content>
     </Item>
   );

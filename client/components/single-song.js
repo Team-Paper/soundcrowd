@@ -60,7 +60,6 @@ class SingleSong extends React.Component {
               <audio controls>
                 <source src={song.url} type="audio/mp3" />
               </audio>
-              <Icon name ='facebook square' class="fb-share-button" data-href="http://localhost:8080/song/4" data-layout="button" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:8080/song/4">Share</a></Icon>
             </Grid.Column>
 
 
