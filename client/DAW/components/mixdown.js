@@ -43,26 +43,31 @@ class MixdownModal extends React.Component {
       <Modal size="tiny" trigger={<Menu.Item>mixdown</Menu.Item>}>
         <Modal.Header>Mixdown project</Modal.Header>
         <Modal.Content>
-          { !progress ?
-            <div>
-              <Input
-                value={mixTitle}
-                placeholder="project name"
-                onChange={this.handleChange}
-              />
-              <Button
-                positive
-                disabled={mixTitle === ''}
-                icon="checkmark"
-                labelPosition="right"
-                content="mixdown"
-                onClick={this.handleMixdown}
-              />
-            </div> :
-            <div>
-              <p>Processing {mixTitle}</p>
-              <Progress color="green" percent={progress} />
-            </div>
+          {
+            !progress ?
+              <div>
+                <Input
+                  value={mixTitle}
+                  placeholder="project name"
+                  onChange={this.handleChange}
+                />
+                <Button
+                  positive
+                  disabled={mixTitle === ''}
+                  icon="checkmark"
+                  labelPosition="right"
+                  content="mixdown"
+                  onClick={this.handleMixdown}
+                />
+              </div> :
+              <div>
+                {
+                  progress < 100 ?
+                    <p>Processing {mixTitle}</p> :
+                    <p>Saving {mixTitle}</p>
+                }
+                <Progress color="green" percent={progress} />
+              </div>
           }
         </Modal.Content>
       </Modal>
