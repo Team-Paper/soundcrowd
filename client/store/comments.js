@@ -63,6 +63,17 @@ export const fetchCommentsAboutUser = (userId) => dispatch => {
     .catch(console.error);
 }
 
+export const fetchComments = () => dispatch => {
+  axios.get(`/api/comments/`)
+    .then(res => res.data)
+    .then(comments => {
+      console.log('comments are', comments);
+      return comments;
+    })
+    .then(comments => dispatch(setComments(comments)))
+    .catch(console.error);
+};
+
 /**
  * REDUCER
  */

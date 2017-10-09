@@ -107,16 +107,16 @@ class UserHome extends React.Component {
             <Tab menu={{ attached: false }} panes={panes} />
           </Grid.Column>
           <Grid.Column width={4} >
-          <Header block >About</Header>
-          <Card fluid>
-            <Card.Content>
-              <em>{user.bio}</em>
-            </Card.Content>
-          </Card>
-          <Header block inverted>Recent Collaborators</Header>
-          <CollaboratorList userId={user.id} />
-          <Header block inverted>Latest Comments</Header>
-          <CommentList userId={user.id} />
+            <Header block >About</Header>
+            <Card fluid>
+              <Card.Content>
+                <em>{user.bio}</em>
+              </Card.Content>
+            </Card>
+            <Header block inverted>Recent Collaborators</Header>
+            <CollaboratorList userId={user.id} />
+            <Header block inverted>Latest Comments</Header>
+            <CommentList userId={user.id} />
           </Grid.Column>
           <Grid.Column width={1} />
         </Grid.Row>

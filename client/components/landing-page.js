@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Item, Header } from 'semantic-ui-react';
+import { Grid, Header, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { fetchTopSongs, clearSongs } from '../store';
-import SongView from './song-view'
+import SongList from './song-list';
+import CommentList from './comment-list';
 
 /**
  * COMPONENT
@@ -14,33 +15,41 @@ class LandingPage extends React.Component {
     if (this.props.fetchData) this.props.fetchData();
   }
 
-  // componentWillReceiveProps(newProps) {
-  //   if (!this.props.fetchData && newProps.fetchData) {
-  //     newProps.fetchData();
-  //   }
-  // }
-
   componentWillUnmount() {
     this.props.clearData();
   }
 
   render() {
-    if (!this.props.songs) return <div />;
-
+    const styles = {
+      header: { backgroundColor: '#222222' },
+      title: { color: '#ffffff', paddingBottom: 10, paddingTop: 10 },
+    }
+    const { songs } = this.props
     return (
-      <div>
-        <Header>Top 50 Songs</Header>
-        <Item.Group relaxed>
-          {
-            this.props.songs.map((song, index) => {
-              return (
-                <SongView key={song.id} index={index} song={song} size='large' />
-              );
-            })
-          }
-        </Item.Group>
-      </div>
-    );
+      <Grid>
+        <Grid.Row style={styles.header} >
+          <Grid.Column width={16} >
+            <Header size='huge' textAlign='center' style={styles.title}>SoundCrowd.</Header>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column width={1} />
+          <Grid.Column width={10} >
+            <Header block>Top Songs</Header>
+            <Card fluid>
+              <Card.Content>
+                <SongList songs={songs}/>
+              </Card.Content>
+            </Card>
+          </Grid.Column>
+          <Grid.Column width={4} >
+            <Header block inverted>Latest Comments</Header>
+            <CommentList userId={null} />
+          </Grid.Column>
+          <Grid.Column width={1} />
+        </Grid.Row>
+        </Grid>
+      );
   }
 }
 
@@ -60,14 +69,6 @@ const mapDispatch = (dispatch) => {
     },
     clearData: () => dispatch(clearSongs()),
   };
-};
-
-/**
- * PROP TYPES
- */
-LandingPage.propTypes = {
-  fetchData: PropTypes.func.isRequired,
-  songs: PropTypes.array.isRequired,
 };
 
 export default connect(mapState, mapDispatch)(LandingPage);

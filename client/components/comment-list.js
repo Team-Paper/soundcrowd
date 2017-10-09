@@ -2,12 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Card } from 'semantic-ui-react';
 import CommentEntry from './comment-entry';
-import { fetchCommentsAboutUser } from '../store';
+import { fetchCommentsAboutUser, fetchComments } from '../store';
 
 class CommentList extends React.Component {
   componentDidMount() {
-    const { fetchCommentsAboutUser, userId } = this.props;
-    fetchCommentsAboutUser(userId);
+    const { fetchCommentsAboutUser, userId, fetchComments } = this.props;
+    if (userId === null) {
+      fetchComments();
+    } else {
+      fetchCommentsAboutUser(userId);
+    }
   }
 
   render() {
@@ -30,6 +34,7 @@ const mapState = (state, ownProps) => ({
 
 const mapDispatch = dispatch => ({
   fetchCommentsAboutUser: userId => dispatch(fetchCommentsAboutUser(userId)),
+  fetchComments: () => dispatch(fetchComments()),
 });
 
 export default connect(mapState, mapDispatch)(CommentList);
