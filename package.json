@@ -13,7 +13,7 @@
     "start": "node server",
     "start-dev": "npm run build-client-watch & npm run start-server",
     "start-server": "NODE_ENV='development' nodemon server -e html,js,scss --ignore public",
-    "test": "NODE_ENV='test' DATABASE_URL='postgres://localhost:5432/boilermaker-test' mocha ./**/*.spec.js --compilers js:babel-register"
+    "test": "NODE_ENV='test' DATABASE_URL='postgres://localhost:5432/boilermaker-test' mocha ./{client,server}/**/*.spec.js --compilers js:babel-register"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +22,8 @@
     "axios": "^0.15.3",
     "body-parser": "^1.16.1",
     "connect-session-sequelize": "^4.1.0",
+    "expect": "^21.2.1",
+    "expect.js": "^0.3.1",
     "express": "^4.14.1",
     "express-session": "^1.15.1",
     "firebase": "^4.4.0",
