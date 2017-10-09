@@ -52,3 +52,11 @@ router.get('/:id', (req, res, next) => {
     .then(users => res.json(users))
     .catch(next);
 });
+
+
+router.put('/:id', (req, res, next) => {
+  User.findById(Number(req.params.id))
+    .then(user => user.update(req.body))
+    .then(updatedUser => res.json(updatedUser))
+    .catch(next);
+});
