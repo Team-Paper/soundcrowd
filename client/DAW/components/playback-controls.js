@@ -2,14 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Icon, Menu } from 'semantic-ui-react';
 import { setTime } from '../project-store/reducers/timeline/time';
+import { MixdownModal } from '../components';
 
 const PlaybackControls = (props) => {
   const { mixdown, isPlaying, resetTime, togglePlay } = props;
   return (
     <Menu compact icon>
-      <Menu.Item name="mixdown" onClick={() => mixdown()}>
-        mixdown
-      </Menu.Item>
+      <Menu.Item as={MixdownModal} name="mixdown" mixdown={mixdown} />
       <Menu.Item
         name="reset"
         onClick={() => {
