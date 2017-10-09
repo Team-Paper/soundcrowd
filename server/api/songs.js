@@ -20,6 +20,7 @@ router.get('/', (req, res, next) => {
 router.post('/', upload.single('blob'), upload2AWS, (req, res, next) => {
   Song.create({
     filename: req.file.filename,
+    title: req.body.mixTitle,
   })
     .then((song) => {
       song.addArtist(req.session.passport.user);
