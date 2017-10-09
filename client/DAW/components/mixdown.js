@@ -9,14 +9,20 @@ class MixdownModal extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleMixdown = this.handleMixdown.bind(this);
   }
 
   handleChange(e) {
     this.setState({ mixTitle: e.target.value });
   }
 
-  render() {
+  handleMixdown() {
+    const { mixTitle } = this.state;
     const { mixdown } = this.props;
+    mixdown(mixTitle, song => console.log('song finished!', song));
+  }
+
+  render() {
     return (
       <Modal size="tiny" trigger={<Menu.Item>mixdown</Menu.Item>}>
         <Modal.Header>Mixdown project</Modal.Header>
@@ -31,7 +37,7 @@ class MixdownModal extends React.Component {
             icon="checkmark"
             labelPosition="right"
             content="mixdown"
-            onClick={() => mixdown(this.state.mixTitle)}
+            onClick={this.handleMixdown}
           />
         </Modal.Content>
       </Modal>

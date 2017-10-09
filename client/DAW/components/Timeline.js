@@ -484,7 +484,7 @@ class Timeline extends React.Component {
 
 
 
-  mixdown(mixTitle) {
+  mixdown(mixTitle, callback) {
     const { clips, soundClips, length, tracks } = this.props;
     const offlineContext = new OfflineAudioContext(2, length * 44100, 44100); // hardcoded to stereo, length 300 seconds?
     const chunks = [];
@@ -515,8 +515,8 @@ class Timeline extends React.Component {
           data: formData,
         })
           .then(res => res.data)
-          .then(file => {
-            console.log('mixdown upload received!');
+          .then(song => {
+            callback(song);
           })
           .catch(console.error);
       }
