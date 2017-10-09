@@ -6,6 +6,7 @@ import axios from 'axios'
 const GET_COMMENT = 'GET_COMMENT';
 const GET_SOME_COMMENTS = 'GET_SOME_COMMENTS';
 
+export { GET_COMMENT, GET_SOME_COMMENTS };
 /**
  * INITIAL STATE
  */
