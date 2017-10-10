@@ -11,7 +11,7 @@ function SongList({ songs }) {
       {
         songs.map((song) => {
           return (
-            <SongView key={song.id} song={song} size='tiny' />
+            <SongView key={song.id} song={song} />
           );
         })
       }

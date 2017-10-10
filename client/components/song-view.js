@@ -31,11 +31,10 @@ class SongView extends React.Component {
   }
 
   render() {
-    const { size, song, index } = this.props;
+    const { song, index } = this.props;
 
     return (
       <Item key={song.id}>
-        <Item.Image size={size || 'small'} src={song.imageUrl || '//via.placeholder.com/150x150'} />
         <Item.Content>
           <Item.Header>
             <Header>
