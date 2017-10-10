@@ -11,8 +11,8 @@ const TickMarks = (props) => {
   const { length, zoom } = props;
   const interval = 0.25;
 
-  const smallTickLength = 5;
-  const bigTickLength = 10;
+  const smallTickLength = 8;
+  const bigTickLength = 12;
 
   const svgElems = [];
   for (let i = 0; i <= length + 0.05; i += interval) {
