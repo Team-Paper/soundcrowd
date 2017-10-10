@@ -31,7 +31,6 @@ const styles = {
   },
   trackListView: {
     height: '100%',
-    marginLeft: '-11px',
     paddingLeft: '1px',
     overflowX: 'scroll',
   },
