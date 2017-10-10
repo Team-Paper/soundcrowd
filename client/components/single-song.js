@@ -1,20 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Grid, Image, Header, Label, Icon, Comment, Form, Button } from 'semantic-ui-react';
+import { Container, Grid, Header, Label, Icon, Comment, Form, Button } from 'semantic-ui-react';
+import axios from 'axios';
 import { fetchSong, fetchSongComments, postComment } from '../store';
+import context from '../DAW/context';
+import { createWaveform } from '../DAW/waveformBuilder';
 
 class SingleSong extends React.Component {
   constructor() {
     super();
     this.state = {
       text: '',
+      waveform: [],
     };
     this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
-    this.props.loadData();
+    this.props.loadData()
+      .then(action => action.song)
+      .then(song => axios.get(song.url, { responseType: 'arraybuffer' }))
+      .then(res => res.data)
+      .then(responseAudio => context.decodeAudioData(responseAudio))
+      .then(audio => this.setState({ waveform: createWaveform(audio, audio.length / 1000) }))
+      .catch(console.error);
   }
 
   // componentWillReceiveProps(newProps) {
@@ -130,8 +140,8 @@ const mapDispatch = (dispatch, ownProps) => {
   const id = Number(ownProps.match.params.id);
   return {
     loadData: () => {
-      dispatch(fetchSong(id));
       dispatch(fetchSongComments(id));
+      return dispatch(fetchSong(id));
     },
     play: () => {
       // TODO: add thunks to the store to dispatch a play event to the api
