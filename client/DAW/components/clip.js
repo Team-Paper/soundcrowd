@@ -127,6 +127,7 @@ class Clip extends React.Component {
   render() {
     const { clip, duration, waveform, zoom, projectId, deleteClip } = this.props;
     const { hover, offsetStart, offsetEnd, x, y } = this.state;
+    console.log('clips', this.props)
     return (
       <Draggable
         bounds=".track-list"
