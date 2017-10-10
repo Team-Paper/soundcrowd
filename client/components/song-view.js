@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import context from '../DAW/context';
 import { createWaveform } from '../DAW/waveformBuilder';
+import { Waveform } from '../DAW/components';
 
 
 class SongView extends React.Component {
@@ -56,7 +57,8 @@ class SongView extends React.Component {
             }
           </Item.Meta>
           <Item.Description>
-            <audio id={song.filename} controls>
+            <Waveform waveform={this.state.waveform} />
+            <audio controls>
               <source src={song.url} type="audio/ogg" />
             </audio>
           </Item.Description>
