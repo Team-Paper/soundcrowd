@@ -26,7 +26,7 @@ class SongView extends React.Component {
     axios.get(song.url, { responseType: 'arraybuffer' })
       .then(res => res.data)
       .then(responseAudio => context.decodeAudioData(responseAudio))
-      .then(audio => this.setState({ waveform: createWaveform(audio) }))
+      .then(audio => this.setState({ waveform: createWaveform(audio, audio.length / 1000) }))
       .catch(console.error);
   }
 
