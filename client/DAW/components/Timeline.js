@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import { Card, Button, Icon, Input } from 'semantic-ui-react';
 import { PlaybackControls, TrackList } from '../components';
 import context from '../context';
 import getUserMedia from '../getUserMedia';
@@ -545,17 +546,11 @@ class Timeline extends React.Component {
   }
 
   render() {
-    const { projectId, tracks, time, setLengthThunk, length } = this.props;
+    const { projectId, tracks, setLengthThunk, length } = this.props;
     return (
       <div style={{ display: 'flex', flexDirection: 'column', position: 'relative', height: '100%' }}>
         <div className="project-controls">
-          <div>{time}</div>
-          <button onClick={this.startRecord}>Record</button>
-          <button onClick={this.stopRecord}>Stop</button>
-          <button onClick={this.addTrack}>Add Track</button>
-          <span>length (seconds):</span>
-          <input type="text" value={length} onChange={e => setLengthThunk(projectId, e.target.value)} />
-          <PlaybackControls mixdown={this.mixdown} togglePlay={this.togglePlay} />
+          <PlaybackControls mixdown={this.mixdown} togglePlay={this.togglePlay} startRecord={this.startRecord} stopRecord={this.stopRecord} addTrack={this.addTrack} projectId={projectId} />
         </div>
         <TrackList projectId={projectId} tracks={tracks} />
       </div>

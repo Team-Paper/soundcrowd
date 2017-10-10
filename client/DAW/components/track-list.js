@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container } from 'semantic-ui-react';
+import { Container, Card } from 'semantic-ui-react';
 import { PlaybackMarker, Track, TrackControls, TickMarks, WaveformGradient } from '../components';
 
 const styles = {
@@ -35,7 +35,8 @@ const TrackList = (props) => {
   const { projectId, length, tracks, clips } = props;
   const zoom = 200; // pixels per second
   return (
-    <Container style={styles.trackListWrapper}>
+    <Card fluid style={{height: '100%'}}>
+    <div style={styles.trackListWrapper}>
       <div style={styles.trackControlList}>
         {
           Object.entries(tracks).map(([key, track]) => (
@@ -60,7 +61,8 @@ const TrackList = (props) => {
           <PlaybackMarker zoom={zoom} />
         </div>
       </div>
-    </Container>
+    </div>
+    </Card>
   );
 };
 

@@ -11,7 +11,7 @@ function EqualizerModal({ projectId, track, setTrackEQBandGain, toggleTrackEQ })
   }
 
   return (
-    <Modal trigger={<Button>EQ</Button>}>
+    <Modal trigger={<Button color={track.eq.on ? 'grey' : '' } size='mini'>EQ</Button>}>
     <Modal.Header>12-Band Equalizer (Track {track.id})</Modal.Header>
     <Modal.Content>
       <Modal.Description>

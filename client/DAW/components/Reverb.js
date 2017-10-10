@@ -7,7 +7,7 @@ const ReverbModal = function({ projectId, track, setTrackReverbGain, toggleTrack
   const reverbOptions = Object.entries(reverbs).map(([key, reverb]) => ({ key: key, value: key, text: reverb.title }))
 
   return (
-    <Modal trigger={<Button>R</Button>}>
+    <Modal trigger={<Button color={track.reverb.on ? 'grey' : '' } size='mini'>R</Button>}>
     <Modal.Header>Convolution Reverb (Track {track.id})</Modal.Header>
     <Modal.Content>
       <Modal.Description>

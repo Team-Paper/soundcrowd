@@ -6,7 +6,7 @@ import { setTrackCompressorThreshold, setTrackCompressorKnee, setTrackCompressor
 function CompressorModal({ projectId, track, setTrackCompressorThreshold, setTrackCompressorKnee, setTrackCompressorRatio, setTrackCompressorAttack, setTrackCompressorRelease, toggleTrackCompressor }) {
 
   return (
-    <Modal trigger={<Button>C</Button>}>
+    <Modal trigger={<Button color={track.compressor.on ? 'grey' : '' } size='mini'>C</Button>}>
     <Modal.Header>Compressor (Track {track.id})</Modal.Header>
     <Modal.Content>
       <Modal.Description>

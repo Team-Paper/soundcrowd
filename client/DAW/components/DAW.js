@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Header, List } from 'semantic-ui-react';
+import { Grid, Header, List, Card } from 'semantic-ui-react';
 import { Timeline, FileItem } from '../components';
 
 
@@ -10,15 +10,17 @@ import { Timeline, FileItem } from '../components';
 export const DAW = (props) => {
   const { name, files, settings } = props;
   return (
-    <Grid divided padded>
+    <Grid padded style={{backgroundColor: '#eeeeee', height: '100%', marginTop: -14}}>
       <Grid.Column width={3}>
-        <Header as="h3">{name}</Header>
-        <p>Tempo: {settings.tempo}</p>
-        <List>
+        <Header block inverted as="h3" style={{height: 48, marginTop: 0}}>{name}</Header>
+        <Header block as="h4" style={{marginTop: 14}}>Files:</Header>
+        <Card fluid>
+        <List style={{padding:14}}>
           {files.map(item => (
             <FileItem key={item.id} item={item} />
           ))}
         </List>
+        </Card>
       </Grid.Column>
       <Grid.Column width={13}>
         <Timeline {...props} />
