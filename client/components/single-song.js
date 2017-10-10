@@ -5,6 +5,7 @@ import axios from 'axios';
 import { fetchSong, fetchSongComments, postComment } from '../store';
 import context from '../DAW/context';
 import { createWaveform } from '../DAW/waveformBuilder';
+import { Waveform, WaveformGradient } from '../DAW/components';
 
 class SingleSong extends React.Component {
   constructor() {
@@ -55,6 +56,7 @@ class SingleSong extends React.Component {
       header: { backgroundColor: '#222222' },
       title: { color: '#ffffff', paddingBottom: 10, paddingTop: 10 },
       comments: { maxWidth: '100%' },
+      waveform: { height: '154px', background: '#22a3ef' },
     };
     const { song, user } = this.props;
     if (!song) return <div />;
@@ -65,6 +67,10 @@ class SingleSong extends React.Component {
             <Header size='huge' textAlign='center' style={styles.title}>
               {song.title}
             </Header>
+            <div style={styles.waveform}>
+              <WaveformGradient />
+              <Waveform waveform={this.state.waveform} />
+            </div>
             <audio controls>
               <source src={song.url} type="audio/mp3" />
             </audio>
