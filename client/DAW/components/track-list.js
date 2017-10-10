@@ -17,15 +17,21 @@ const styles = {
   trackList(width) {
     return {
       position: 'relative',
-      width: `${width}px`,
+      width: `${width + 21}px`,
       height: '100%',
       margin: '1px 0',
-      boxShadow: '0 1px 0 0 rgba(34,36,38,.15)',
-      overflow: 'hidden',
     };
+  },
+  tracksWrapper: {
+    position: 'relative',
+    width: '100%',
+    margin: '1px 0',
+    boxShadow: '0 1px 0 0 rgba(34,36,38,.15)',
+    overflow: 'hidden',
   },
   trackListView: {
     height: '100%',
+    marginLeft: '-11px',
     paddingLeft: '1px',
     overflowX: 'scroll',
   },
@@ -46,18 +52,20 @@ const TrackList = (props) => {
         </div>
         <div style={styles.trackListView}>
           <WaveformGradient />
-          <div className="track-list" style={styles.trackList(length * zoom)}>
+          <div style={styles.trackList(length * zoom)}>
             <TickMarks length={length} zoom={zoom} />
-            {
-              Object.entries(tracks).map(([key, track]) => (
-                <Track
-                  key={`track-${key}`}
-                  track={track}
-                  projectId={projectId}
-                  zoom={zoom}
-                  clips={clips.filter(clip => clip.track === track.id)}
-                />
-              )) }
+            <div className="track-list" style={styles.tracksWrapper}>
+              {
+                Object.entries(tracks).map(([key, track]) => (
+                  <Track
+                    key={`track-${key}`}
+                    track={track}
+                    projectId={projectId}
+                    zoom={zoom}
+                    clips={clips.filter(clip => clip.track === track.id)}
+                  />
+                )) }
+            </div>
             <PlaybackMarker zoom={zoom} />
           </div>
         </div>
