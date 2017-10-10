@@ -41,74 +41,78 @@ class SingleSong extends React.Component {
   }
 
   render() {
+    const styles = {
+      header: { backgroundColor: '#222222' },
+      title: { color: '#ffffff', paddingBottom: 10, paddingTop: 10 },
+      comments: { maxWidth: '100%' },
+    };
     const { song, user } = this.props;
     if (!song) return <div />;
     return (
-      <Container>
-        <Grid columns={2}>
-          <Grid.Row>
-            {/* This is the column for the album image, title, artists, etc as well as the actual player */}
-            <Grid.Column>
-              <Image src={song.trackArtUrl || 'http://via.placeholder.com/300x300'} />
-              <br />
-              <Header>
-                {song.title}
-              </Header>
-              <Header>
-                by {song.artist.map(art => art.username).join(', ') || 'unknown'}
-              </Header>
-              <audio controls>
-                <source src={song.url} type="audio/mp3" />
-              </audio>
-            </Grid.Column>
+      <Grid centered>
+        <Grid.Row style={styles.header} >
+          <Grid.Column width={14} >
+            <Header size='huge' textAlign='center' style={styles.title}>
+              {song.title}
+            </Header>
+            <audio controls>
+              <source src={song.url} type="audio/mp3" />
+            </audio>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column width={7}>
+            <Header>
+              by {song.artist.map(art => art.username).join(', ') || 'unknown'}
+            </Header>
+            <Label>
+              {/* TODO: THIS IS HARD CODED RIGHT NOW, FIX LATER */}
+              <Icon name='heart' /> {40}
+            </Label>
+            <Label>
+              {/* TODO: THIS IS HARD CODED RIGHT NOW, FIX LATER */}
+              <Icon name='play' /> {song.playcount}
+            </Label>
+          </Grid.Column>
+          <Grid.Column width={7}>
+            <Header dividing>Notes:</Header>
+            <Container text textAlign='justified'>
+              {song.notes}
+            </Container>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column width={14}>
+            <Comment.Group style={styles.comments} size='large'>
+              <Header as='h3' dividing>Comments</Header>
+              {user.id ?
+                <Form reply onSubmit={this.handleCommentSubmit}>
+                  <Form.TextArea onChange={this.handleChange} />
+                  <Button content='Add Comment' icon='edit' primary />
+                </Form>
+                :
+                <p>Log in or sign up to leave comments</p>
+              }
 
-
-            <Grid.Column>
-              <Header dividing>Notes:</Header>
-              <Container text textAlign='justified'>
-                {song.notes}
-              </Container>
-              <Label>
-                {/* TODO: THIS IS HARD CODED RIGHT NOW, FIX LATER */}
-                <Icon name='heart' /> {40}
-              </Label>
-              <Label>
-                {/* TODO: THIS IS HARD CODED RIGHT NOW, FIX LATER */}
-                <Icon name='play' /> {song.playcount}
-              </Label>
-
-              <Comment.Group size='large'>
-                <Header as='h3' dividing>Comments</Header>
-                {user.id ?
-                  <Form reply onSubmit={this.handleCommentSubmit}>
-                    <Form.TextArea onChange={this.handleChange} />
-                    <Button content='Add Comment' icon='edit' primary />
-                  </Form>
-                  :
-                  <p>Log in or sign up to leave comments</p>
-                }
-
-                {
-                  this.props.comments.map((comment) => {
-                    return (
-                      <Comment key={comment.id}>
-                        <Comment.Avatar src={comment.user.userImage} />
-                        <Comment.Author>
-                          {comment.user.username}
-                        </Comment.Author>
-                        <Comment.Content>
-                          {comment.text}
-                        </Comment.Content>
-                      </Comment>
-                    );
-                  })
-                }
-              </Comment.Group>
-
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Container>
+              {
+                this.props.comments.map((comment) => {
+                  return (
+                    <Comment key={comment.id}>
+                      <Comment.Avatar src={comment.user.userImage} />
+                      <Comment.Author>
+                        {comment.user.username}
+                      </Comment.Author>
+                      <Comment.Content>
+                        {comment.text}
+                      </Comment.Content>
+                    </Comment>
+                  );
+                })
+              }
+            </Comment.Group>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     );
   }
 }
