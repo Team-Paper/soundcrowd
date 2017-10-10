@@ -26,10 +26,10 @@ const TickMarks = (props) => {
   }
 
 return (
-  <svg width="100%" height="25px" viewBox={"0 0 " + length * zoom + " 50"} style={style}>
-    {svgElems}
-  </svg>
-);
+    <svg width="100%" height="25px" viewBox={"0 0 " + length * zoom + " 50"} style={style}>
+      {svgElems}
+    </svg>
+  );
 };
 
 export default TickMarks;

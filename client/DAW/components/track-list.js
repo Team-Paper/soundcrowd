@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Card } from 'semantic-ui-react';
+import { Card } from 'semantic-ui-react';
 import { PlaybackMarker, Track, TrackControls, TickMarks, WaveformGradient } from '../components';
 
 const styles = {
@@ -35,33 +35,33 @@ const TrackList = (props) => {
   const { projectId, length, tracks, clips } = props;
   const zoom = 200; // pixels per second
   return (
-    <Card fluid style={{height: '100%'}}>
-    <div style={styles.trackListWrapper}>
-      <div style={styles.trackControlList}>
-        {
-          Object.entries(tracks).map(([key, track]) => (
-            <TrackControls key={key} track={track} projectId={projectId} />
-          ))
-        }
-      </div>
-      <div style={styles.trackListView}>
-        <WaveformGradient />
-        <TickMarks length={length} zoom={zoom} />
-        <div className="track-list" style={styles.trackList(length * zoom)}>
+    <Card fluid style={{ height: '100%' }}>
+      <div style={styles.trackListWrapper}>
+        <div style={styles.trackControlList}>
           {
             Object.entries(tracks).map(([key, track]) => (
-              <Track
-                key={`track-${key}`}
-                track={track}
-                projectId={projectId}
-                zoom={zoom}
-                clips={clips.filter(clip => clip.track === track.id)}
-              />
-            )) }
-          <PlaybackMarker zoom={zoom} />
+              <TrackControls key={key} track={track} projectId={projectId} />
+            ))
+          }
+        </div>
+        <div style={styles.trackListView}>
+          <WaveformGradient />
+          <div className="track-list" style={styles.trackList(length * zoom)}>
+            <TickMarks length={length} zoom={zoom} />
+            {
+              Object.entries(tracks).map(([key, track]) => (
+                <Track
+                  key={`track-${key}`}
+                  track={track}
+                  projectId={projectId}
+                  zoom={zoom}
+                  clips={clips.filter(clip => clip.track === track.id)}
+                />
+              )) }
+            <PlaybackMarker zoom={zoom} />
+          </div>
         </div>
       </div>
-    </div>
     </Card>
   );
 };
