@@ -55,8 +55,9 @@ class SingleSong extends React.Component {
     const styles = {
       header: { backgroundColor: '#222222' },
       title: { color: '#ffffff', paddingBottom: 10, paddingTop: 10 },
-      comments: { maxWidth: '100%' },
+      controls: { width: '100%' },
       waveform: { height: '154px', background: '#22a3ef' },
+      comments: { maxWidth: '100%' },
     };
     const { song, user } = this.props;
     if (!song) return <div />;
@@ -71,7 +72,7 @@ class SingleSong extends React.Component {
               <WaveformGradient />
               <Waveform waveform={this.state.waveform} />
             </div>
-            <audio controls>
+            <audio controls style={styles.controls}>
               <source src={song.url} type="audio/mp3" />
             </audio>
           </Grid.Column>
