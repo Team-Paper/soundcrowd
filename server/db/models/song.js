@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
 
-const hostDir = process.env.NODE_ENV !== 'production' ? '../songs/' : '//d3oysef4ue4h90.cloudfront.net/songs/';
+const hostDir = process.env.NODE_ENV !== 'production' ? '/songs/' : '//d3oysef4ue4h90.cloudfront.net/songs/';
 
 const Song = db.define('song', {
   filename: {
