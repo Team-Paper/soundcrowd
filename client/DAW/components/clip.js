@@ -127,7 +127,6 @@ class Clip extends React.Component {
   render() {
     const { clip, duration, waveform, zoom, projectId, deleteClip } = this.props;
     const { hover, offsetStart, offsetEnd, x, y } = this.state;
-    console.log('clips', this.props)
     return (
       <Draggable
         bounds=".track-list"
@@ -163,7 +162,7 @@ class Clip extends React.Component {
             </div>
           </div>
           <div style={styles.clipInfo}>
-            {clip.url} starting at {clip.startTime}
+            {clip.name || clip.url || ''}
             { hover && <Button
               style={styles.clipRemove}
               size="mini"
