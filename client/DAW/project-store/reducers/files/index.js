@@ -26,3 +26,7 @@ export const setFilesThunk = (projectId, files) => dispatch => {
 export const addFileThunk = (projectId, file) => dispatch => {
   firebase.database().ref(`${projectId}/files/${file.id}`).set(file);
 }
+
+export const setName = (projectId, file, newName) => dispatch => {
+  firebase.database().ref(`${projectId}/files/${file.id}/name`).set(newName);
+}

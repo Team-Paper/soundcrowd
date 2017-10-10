@@ -162,7 +162,7 @@ class Clip extends React.Component {
             </div>
           </div>
           <div style={styles.clipInfo}>
-            {clip.url} starting at {clip.startTime}
+            {clip.name || clip.url || ''}
             { hover && <Button
               style={styles.clipRemove}
               size="mini"

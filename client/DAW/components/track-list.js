@@ -72,6 +72,7 @@ const mapState = (state) => {
     const baseClip = state.timeline.soundClips[clip.fileId];
     return {
       url: file.url,
+      name: file.name,
       key,
       track: clip.track,
       startTime: clip.startTime,
