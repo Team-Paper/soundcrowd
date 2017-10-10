@@ -33,13 +33,14 @@ const AuthForm = (props) => {
           {/* <Image src='/logo.png' /> */}
           {''}{displayName}
         </Header>
-        <Form size='large'>
+        <Form onSubmit={handleSubmit} size='large' name={name}>
           <Segment stacked>
             <Form.Input
               fluid
               icon='user'
               iconPosition='left'
               placeholder='E-mail address'
+              name='email'
             />
             <Form.Input
               fluid
@@ -47,13 +48,17 @@ const AuthForm = (props) => {
               iconPosition='left'
               placeholder='Password'
               type='password'
+              name='password'
             />
 
-            <Button color='teal' fluid size='large'>Login</Button>
+            <Button color='black' type='submit' fluid size='large'>{displayName}</Button>
           </Segment>
         </Form>
         <Message>
-          New to us? <a href='#'>Sign Up</a>
+
+        <a href='/auth/facebook'>{displayName} with Facebook</a>
+
+          {/* New to us? <a href='#'>Sign Up</a> */}
         </Message>
       </Grid.Column>
     </Grid>
