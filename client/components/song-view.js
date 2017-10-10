@@ -3,18 +3,24 @@ import { Item, Header, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import context from '../DAW/context';
+import { createWaveform } from '../DAW/waveformBuilder';
 
 
 class SongView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      waveform: [],
+    };
+  }
+
   componentDidMount() {
     const { song } = this.props;
     console.log(song.url);
     axios.get(song.url, { responseType: 'arraybuffer' })
       .then(res => res.data)
       .then(responseAudio => context.decodeAudioData(responseAudio))
-      .then((audio) => {
-        console.log(data);
-      })
+      .then(audio => this.setState({ waveform: createWaveform(audio) }))
       .catch(console.error);
   }
 
