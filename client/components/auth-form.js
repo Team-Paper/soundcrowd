@@ -112,28 +112,4 @@ AuthForm.propTypes = {
   displayName: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.object,
-};
-
-
-
-{/* <Container>
-<Form onSubmit={handleSubmit} name={name}>
-  <Form.Field>
-    <Label htmlFor='email'><small>Email</small></Label>
-    <Input name='email' type='text' />
-  </Form.Field>
-  <Form.Field>
-    <Label htmlFor='password'><small>Password</small></Label>
-    <Input name='password' type='password' />
-  </Form.Field>
-  <Form.Field>
-    <Container textAlign='center'>
-      <Button positive type='submit'>{displayName}</Button>
-    </Container>
-  </Form.Field>
-  {error && error.response && <div> {error.response.data} </div>}
-</Form>
-<Container textAlign='center'>
-  <a href='/auth/facebook'>{displayName} with Facebook</a>
-</Container>
-</Container> */}
+}
