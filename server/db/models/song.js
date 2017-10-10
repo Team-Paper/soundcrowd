@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
 
+const hostDir = process.env.NODE_ENV !== 'production' ? '../songs/' : '//d3oysef4ue4h90.cloudfront.net/songs/';
+
 const Song = db.define('song', {
   filename: {
     type: Sequelize.STRING,
@@ -25,10 +27,10 @@ const Song = db.define('song', {
   },
   url: {
     type: Sequelize.VIRTUAL,
-    get(){
-      return '//d3oysef4ue4h90.cloudfront.net/songs/' + this.getDataValue('filename');
-    }
-  }
+    get() {
+      return `${hostDir}${this.getDataValue('filename')}`;
+    },
+  },
 });
 
 Song.prototype.incrementPlaycount = function () {
