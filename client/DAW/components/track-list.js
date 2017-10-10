@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Card } from 'semantic-ui-react';
+import { Card } from 'semantic-ui-react';
 import { PlaybackMarker, Track, TrackControls, TickMarks, WaveformGradient } from '../components';
 
 const styles = {
@@ -14,15 +14,20 @@ const styles = {
     height: '100%',
     margin: '31px 0 1px 1px',
   },
-  trackList(width) {
+  trackList(width, height) {
     return {
       position: 'relative',
-      width: `${width}px`,
-      height: '100%',
+      width: `${width + 21}px`,
+      height: `${height + 31}px`,
       margin: '1px 0',
-      boxShadow: '0 1px 0 0 rgba(34,36,38,.15)',
-      overflow: 'hidden',
     };
+  },
+  tracksWrapper: {
+    position: 'absolute',
+    left: '10px',
+    right: '10px',
+    boxShadow: '0 1px 0 0 rgba(34,36,38,.15)',
+    overflow: 'hidden',
   },
   trackListView: {
     height: '100%',
@@ -35,33 +40,35 @@ const TrackList = (props) => {
   const { projectId, length, tracks, clips } = props;
   const zoom = 200; // pixels per second
   return (
-    <Card fluid style={{height: '100%'}}>
-    <div style={styles.trackListWrapper}>
-      <div style={styles.trackControlList}>
-        {
-          Object.entries(tracks).map(([key, track]) => (
-            <TrackControls key={key} track={track} projectId={projectId} />
-          ))
-        }
-      </div>
-      <div style={styles.trackListView}>
-        <WaveformGradient />
-        <TickMarks length={length} zoom={zoom} />
-        <div className="track-list" style={styles.trackList(length * zoom)}>
+    <Card fluid style={{ height: '100%' }}>
+      <div style={styles.trackListWrapper}>
+        <div style={styles.trackControlList}>
           {
             Object.entries(tracks).map(([key, track]) => (
-              <Track
-                key={`track-${key}`}
-                track={track}
-                projectId={projectId}
-                zoom={zoom}
-                clips={clips.filter(clip => clip.track === track.id)}
-              />
-            )) }
-          <PlaybackMarker zoom={zoom} />
+              <TrackControls key={key} track={track} projectId={projectId} />
+            ))
+          }
+        </div>
+        <div style={styles.trackListView}>
+          <WaveformGradient />
+          <div style={styles.trackList(length * zoom, Object.entries(tracks).length * 154)}>
+            <TickMarks length={length} zoom={zoom} />
+            <div className="track-list" style={styles.tracksWrapper}>
+              {
+                Object.entries(tracks).map(([key, track]) => (
+                  <Track
+                    key={`track-${key}`}
+                    track={track}
+                    projectId={projectId}
+                    zoom={zoom}
+                    clips={clips.filter(clip => clip.track === track.id)}
+                  />
+                )) }
+            </div>
+            <PlaybackMarker zoom={zoom} />
+          </div>
         </div>
       </div>
-    </div>
     </Card>
   );
 };

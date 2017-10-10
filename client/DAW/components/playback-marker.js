@@ -15,9 +15,9 @@ const styles = {
     left: '0',
     width: `${attrs.width}px`,
     height: '100%',
-    marginLeft: `-${(attrs.width) / 2}px`,
+    // marginLeft: `-${(attrs.width) / 2}px`,
     cursor: 'col-resize',
-    boxShadow: `0 1px 0 ${attrs.color}`,
+    boxShadow: `0 -1px 0 ${attrs.color} inset`,
   },
   point: {
     position: 'absolute',
