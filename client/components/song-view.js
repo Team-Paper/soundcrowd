@@ -6,6 +6,12 @@ import context from '../DAW/context';
 import { createWaveform } from '../DAW/waveformBuilder';
 import { Waveform } from '../DAW/components';
 
+const styles = {
+  waveform: {
+    height: '154px',
+    background: '#22a3ef',
+  },
+};
 
 class SongView extends React.Component {
   constructor(props) {
@@ -17,7 +23,6 @@ class SongView extends React.Component {
 
   componentDidMount() {
     const { song } = this.props;
-    console.log(song.url);
     axios.get(song.url, { responseType: 'arraybuffer' })
       .then(res => res.data)
       .then(responseAudio => context.decodeAudioData(responseAudio))
@@ -57,11 +62,13 @@ class SongView extends React.Component {
             }
           </Item.Meta>
           <Item.Description>
-            <Waveform waveform={this.state.waveform} />
             <audio controls>
               <source src={song.url} type="audio/ogg" />
             </audio>
           </Item.Description>
+          <div style={styles.waveform}>
+            <Waveform waveform={this.state.waveform} />
+          </div>
           <Icon name ='facebook square' className="fb-share-button" data-href={`https://thesoundcrowd/song/${song.id}`} data-layout="button" data-size="small" data-mobile-iframe="true"><a className="fb-xfbml-parse-ignore" target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=https://thesoundcrowd/song/${song.id}`}>Share</a></Icon>
         </Item.Content>
       </Item>
