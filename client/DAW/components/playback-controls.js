@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Icon, Menu } from 'semantic-ui-react';
+import { Icon, Menu, Input } from 'semantic-ui-react';
 import { setTime } from '../project-store/reducers/timeline/time';
 import { MixdownModal } from '../components';
+import { setLengthThunk } from '../project-store/reducers/settings/length';
 
 const PlaybackControls = (props) => {
-  const { mixdown, isPlaying, resetTime, togglePlay } = props;
+  const { mixdown, isPlaying, resetTime, togglePlay, startRecord, stopRecord, isRecording, time, addTrack, setLengthThunk, length, projectId } = props;
   return (
-    <Menu compact icon>
-      <Menu.Item as={MixdownModal} name="mixdown" mixdown={mixdown} />
+    <Menu >
       <Menu.Item
         name="reset"
         onClick={() => {
@@ -27,16 +27,47 @@ const PlaybackControls = (props) => {
             <Icon name="play" />
           </Menu.Item>
       }
-    </Menu>
+      {
+        isRecording ?
+        <Menu.Item name="stop-record" onClick={() => stopRecord()}>
+          <Icon name='stop circle outline' />
+        </Menu.Item> :
+        <Menu.Item name="record" onClick={() => startRecord()}>
+          <Icon name='record' />
+        </Menu.Item>
+      }
+      <Menu.Item>
+        Time: &nbsp;&nbsp;&nbsp;{time.toFixed(2)}
+      </Menu.Item>
+
+      <Menu.Menu position='right'>
+        <Menu.Item>
+          Length (s):
+        </Menu.Item>
+        <Menu.Item>
+          <Input value={length} onChange={e => setLengthThunk(projectId, e.target.value)} />
+        </Menu.Item>
+        <Menu.Item onClick={() => addTrack()}>
+          Add Track
+        </Menu.Item>
+        <Menu.Item as={MixdownModal} mixdown={mixdown} >
+          Mixdown
+        </Menu.Item>
+      </Menu.Menu>
+      </Menu>
   );
 };
 
 const mapState = state => ({
   isPlaying: state.timeline.isPlaying,
+  isRecording: state.timeline.isRecording,
+  time: state.timeline.time,
+  length: state.settings.length,
 });
 
 const mapDispatch = dispatch => ({
   resetTime: () => dispatch(setTime(0)),
+  setLengthThunk: (projectId, length) => dispatch(setLengthThunk(projectId, length)),
 });
 
 export default connect(mapState, mapDispatch)(PlaybackControls);

@@ -14,6 +14,8 @@ const styles = {
       marginBottom: '1em',
       opacity: isDragging ? '0.8' : '1',
       overflow: 'hidden',
+      borderRadius: 4,
+      padding: 4,
     };
   },
   draggingItem: {

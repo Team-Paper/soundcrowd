@@ -12,7 +12,6 @@ const styles = {
     width: '180px',
     height: '154px',
     margin: '0',
-    borderRadius: '0',
   },
 };
 
@@ -46,6 +45,7 @@ class TrackControls extends React.Component {
   return (
     <Card style={styles.trackControls}>
       <Card.Content>
+      <Button style={{position: 'absolute', right: 0, top: 0, margin: 0}} size='mini' icon="remove" onClick={() => deleteTrack(projectId, track.id)} />
         <Card.Header>
           <Input type="text" transparent value={track.name || this.state.dirty ? track.name : `Track #${track.id}`} onChange={e => this.handleChange(projectId, track, e.target.value)} />
         </Card.Header>
@@ -56,7 +56,6 @@ class TrackControls extends React.Component {
           <Button circular icon onClick={() => toggleMuteTrackThunk(projectId, track)} >
             <Icon color={track.isMuted ? 'red' : 'grey'} name="mute" />
           </Button>
-          <Button color="red" icon="remove" onClick={() => deleteTrack(projectId, track.id)} />
           <input
             type="range"
             value={track.volume}
