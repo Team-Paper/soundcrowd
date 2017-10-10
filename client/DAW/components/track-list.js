@@ -14,18 +14,18 @@ const styles = {
     height: '100%',
     margin: '31px 0 1px 1px',
   },
-  trackList(width) {
+  trackList(width, height) {
     return {
       position: 'relative',
       width: `${width + 21}px`,
-      height: '100%',
+      height: `${height + 31}px`,
       margin: '1px 0',
     };
   },
   tracksWrapper: {
-    position: 'relative',
-    width: '100%',
-    margin: '1px 0',
+    position: 'absolute',
+    left: '10px',
+    right: '10px',
     boxShadow: '0 1px 0 0 rgba(34,36,38,.15)',
     overflow: 'hidden',
   },
@@ -52,7 +52,7 @@ const TrackList = (props) => {
         </div>
         <div style={styles.trackListView}>
           <WaveformGradient />
-          <div style={styles.trackList(length * zoom)}>
+          <div style={styles.trackList(length * zoom, Object.entries(tracks).length * 154)}>
             <TickMarks length={length} zoom={zoom} />
             <div className="track-list" style={styles.tracksWrapper}>
               {

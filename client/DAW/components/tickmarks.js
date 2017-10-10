@@ -1,6 +1,7 @@
 import React from 'react';
 
 const style = {
+  display: 'block',
   stroke: 'black',
   strokeWidth: '1',
 };
@@ -21,12 +22,12 @@ const TickMarks = (props) => {
     svgElems.push(<line x1={startDistance.toString()} y1="0" x2={startDistance.toString()} y2={tickLength.toString()} key={`line${i}`} />);
 
     if (!(i % 1)) {
-      svgElems.push(<text fontSize="10" textAnchor="middle" alignmentBaseline="hanging" x={startDistance.toString()} y="15" key={`text${i}`}>{i}</text>);
+      svgElems.push(<text fontSize="10" textAnchor="middle" alignmentBaseline="hanging" x={startDistance.toString()} y="18" key={`text${i}`}>{i}</text>);
     }
   }
 
   return (
-    <svg width="100%" height="25px" viewBox={`0 0 ${length * zoom} 25`} style={style}>
+    <svg width="100%" height="30px" viewBox={`0 0 ${length * zoom} 30`} style={style}>
       {svgElems}
     </svg>
   );
