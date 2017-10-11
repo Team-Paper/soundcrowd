@@ -49,6 +49,11 @@ export const toggleTrackReverb = (projectId, track) => dispatch => {
   firebase.database().ref(`${projectId}/tracks/${track.id}/reverb/on`).set(val);
 };
 
+export const setTrackReverb = (projectId, track, reverbId) => dispatch => {
+  console.log('set track reverb triggered');
+  firebase.database().ref(`${projectId}/tracks/${track.id}/reverb/id`).set(+reverbId);
+};
+
 export const setTrackEQBandGain = (projectId, track, band, newGain) => dispatch => {
   firebase.database().ref(`${projectId}/tracks/${track.id}/eq/bands/${band}/gain/`).set(+newGain);
 };
