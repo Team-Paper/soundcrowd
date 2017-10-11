@@ -203,7 +203,7 @@ const mapDispatchMyPage = (dispatch) => {
 const mapStatePublicPage = (state, ownProps) => {
   const userId = Number(ownProps.match.params.id);
   let userSongs = state.songs.slice();
-  userSongs = usserSongs.filter((song) => {
+  userSongs = userSongs.filter((song) => {
     // "artist" should be "artists" but Sequelize is pluralizing things weirdly
     const userIds = song.artist.map(user => user.id);
     return userIds.includes(userId);
