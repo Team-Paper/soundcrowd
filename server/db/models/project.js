@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
+const { User } = require('./');
 
 const Project = db.define('project', {
   title: {
@@ -8,5 +9,6 @@ const Project = db.define('project', {
   },
 });
 
+// scopes are defined in index.js
 
 module.exports = Project;

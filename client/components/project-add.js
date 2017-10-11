@@ -1,16 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Item, Form, Button } from 'semantic-ui-react';
+import { Item, Form, Button, Header } from 'semantic-ui-react';
 
 function ProjectAdd({ createProject }) {
   return (
-    <Form onSubmit={createProject}>
-      <Form.Field>
-        <label>Project Title</label>
-        <input placeholder='Title' name='title' />
-      </Form.Field>
-      <Button type='submit'>Create Project</Button>
-    </Form>
+    <div style={{textAlign: 'center'}}>
+      <Form style={{paddingTop: 30, paddingBottom: 30}} onSubmit={createProject}>
+        <Form.Field>
+          <label>Project Title</label>
+          <input placeholder='Title' name='title' />
+        </Form.Field>
+        <Button type='submit'>Create Project</Button>
+      </Form>
+    </div>
   );
 }
 

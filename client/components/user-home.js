@@ -59,13 +59,16 @@ class UserHome extends React.Component {
 
   handleSelect(event, { value }) {
     const userToAdd = Number(value);
+    console.log('userToAdd is', userToAdd)
     this.setState({ userToAdd });
   }
 
   addCollaborator(projectId) {
     // get the userId you want to add from the state
     const userId = this.state.userToAdd;
-    if (!!userId) this.props.addCollaborator(userId, projectId);
+    console.log('userId is', userId)
+    console.log('users', this.props.users)
+    if (userId) this.props.addCollaborator(userId, projectId);
     else console.log('you cannot');
   }
 
@@ -78,14 +81,38 @@ class UserHome extends React.Component {
   }
 
   render() {
-    const { user, songs, projects, pageName } = this.props;
-
+    const { user, songs, projects, pageName, isSelf, usersOptions } = this.props;
+    console.log('props are', this.props)
     if (!user || !songs || !projects) return <div />;
-
+    console.log('usersOptions is', usersOptions);
     const panes = [
       { menuItem: 'Songs', render: () => <Tab.Pane attached={false}><SongList songs={songs} /></Tab.Pane> },
-      { menuItem: 'Projects', render: () => <Tab.Pane attached={false}><ProjectAdd createProject={this.createProject} /><ProjectList projects={projects} handleSelect={this.handleSelect} usersOptions={this.props.usersOptions} addCollaborator={this.addCollaborator} /></Tab.Pane> },
     ];
+
+    if (isSelf) {
+      panes.push({ menuItem: 'Projects', render: () =>
+        <Tab.Pane attached={false}>
+          <Grid divided='vertically'>
+            <Grid.Row>
+              <Grid.Column width={16}>
+                <Header block as='h3'>Create Project</Header>
+                <ProjectAdd createProject={this.createProject} />
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column width={16}>
+                <Header block as='h3'>Existing Projects</Header>
+                <ProjectList
+                  projects={projects}
+                  handleSelect={this.handleSelect}
+                  usersOptions={usersOptions}
+                  addCollaborator={this.addCollaborator}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Tab.Pane> })
+    }
 
     const styles = {
       header: { backgroundColor: '#222222' },
@@ -151,6 +178,7 @@ const mapStateMyPage = (state) => {
     comments: state.comments.filter(comment => comment.userId === state.user.id),
     projects: userProjects,
     isSelf: true,
+    users: state.users,
   };
 };
 
@@ -177,7 +205,7 @@ const mapDispatchMyPage = (dispatch) => {
 const mapStatePublicPage = (state, ownProps) => {
   const userId = Number(ownProps.match.params.id);
   let userSongs = state.songs.slice();
-  userSongs = userSongs.filter((song) => {
+  userSongs = usserSongs.filter((song) => {
     // "artist" should be "artists" but Sequelize is pluralizing things weirdly
     const userIds = song.artist.map(user => user.id);
     return userIds.includes(userId);

@@ -6,7 +6,7 @@ module.exports = router;
 
 // get a specific project
 router.get('/:id', (req, res, next) => {
-  Project.findById(Number(req.params.id))
+  Project.findOne({ where: { id: req.body.id }}, { include: [{ model: User, through: 'usersProjects' }]})
     .then(project => res.json(project))
     .catch(next);
 });
@@ -32,7 +32,7 @@ router.put('/:id', isSelf, (req, res, next) => {
 router.put('/:id/addCollab', (req, res, next) => {
   Project.findOne({ where: { id: Number(req.params.id) }, include: [{ model: User, through: 'usersProjects' }] })
   .then((project) => {
-    project.addUser(req.body.id);
+    project.addUser(+req.body.id);
     return project.save();
   })
   .then(project => res.json(project))

@@ -45,8 +45,14 @@ router.get('/callback', passport.authenticate('facebook', {
 router.get('/friends', (req, res, next) => {
   axios.get(`https://graph.facebook.com/v2.9/${req.session.facebookId}/friends?access_token=${req.session.token}`)
   .then((response) => {
+    const friendsArray = response.data.data;
+    return Promise.all(friendsArray.map(friend => {
+      return User.findOne({ where: { facebookId: friend.id }})
+    }))
     // res.data.data === [{name: 'JK Rowling', id: '5000189'}, {}, {} ....]
-    res.json(response.data.data)
-    })
+  })
+  .then(friends => {
+    res.json(friends.filter(friend => friend !== null))
+  })
   .catch(console.error)})
 
