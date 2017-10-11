@@ -7,7 +7,7 @@ const upload = multer({ storage });
 
 //configuration for AWS
 const myBucket = 'soundcrowd-songs-fullstack';
-const upload2AWS = require('./aws-helper')(myBucket);
+const upload2AWS = require('./aws-helper')(myBucket, 'songs/');
 
 // get all songs
 router.get('/', (req, res, next) => {
