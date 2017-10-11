@@ -32,8 +32,8 @@ const PlaybackControls = (props) => {
           <Menu.Item name="stop-record" onClick={() => stopRecord()}>
             <Icon color="red" name="stop circle outline" />
           </Menu.Item> :
-          <Menu.Item name="record" disabled={!isReady} onClick={() => startRecord()}>
-            <Icon name="circle" />
+          <Menu.Item name="record" onClick={() => isReady ? startRecord() : alert('Select tracks below to start recording')}>
+            <Icon name="circle" color={isReady ? 'black' : 'grey'} />
           </Menu.Item>
       }
       <Menu.Item>
