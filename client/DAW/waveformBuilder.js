@@ -1,6 +1,5 @@
-export const createWaveform = (buffer) => {
-  const sampleSize = 200;
-  const sampleStep = 20;
+export const createWaveform = (buffer, sampleSize = 200) => {
+  const sampleStep = Math.floor(sampleSize / 10);
   const length = Math.floor(buffer.length / sampleSize);
   const peaks = new Array(length);
   for (let c = 0; c < buffer.numberOfChannels; c++) {

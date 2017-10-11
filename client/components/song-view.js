@@ -26,7 +26,7 @@ class SongView extends React.Component {
     axios.get(song.url, { responseType: 'arraybuffer' })
       .then(res => res.data)
       .then(responseAudio => context.decodeAudioData(responseAudio))
-      .then(audio => this.setState({ waveform: createWaveform(audio) }))
+      .then(audio => this.setState({ waveform: createWaveform(audio, audio.length / 1000) }))
       .catch(console.error);
   }
 
@@ -68,7 +68,7 @@ class SongView extends React.Component {
           <div style={styles.waveform}>
             <Waveform waveform={this.state.waveform} />
           </div>
-          <Icon name ='facebook square' className="fb-share-button" data-href={`https://thesoundcrowd/song/${song.id}`} data-layout="button" data-size="small" data-mobile-iframe="true"><a className="fb-xfbml-parse-ignore" target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=https://thesoundcrowd/song/${song.id}`}>Share</a></Icon>
+          <Icon name ='facebook square' className="fb-share-button" data-href={`https://thesoundcrowd.herokuapp.com/song/${song.id}`} data-layout="button" data-size="small" data-mobile-iframe="true"><a className="fb-xfbml-parse-ignore" target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=https://thesoundcrowd.herokuapp.com/song/${song.id}`}>Share</a></Icon>
         </Item.Content>
       </Item>
     );
