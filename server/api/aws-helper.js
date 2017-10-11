@@ -12,7 +12,7 @@ const upload2AWS = (myBucket, folder) => {
       if (err) next(err);
       else {
         const filename = `${folder}${req.file.filename}`
-        const params = { Bucket: myBucket, Key: filename, Body: req.file.buffer };
+        const params = { Bucket: myBucket, Key: filename, Body: req.file.buffer, ACL:'public-read' };
         s3.putObject(params, (err, data) => {
           if (err) next(err);
           else next();
