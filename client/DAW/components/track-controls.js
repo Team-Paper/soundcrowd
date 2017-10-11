@@ -9,7 +9,7 @@ import CompressorModal from './Compressor';
 
 const styles = {
   trackControls: {
-    width: '180px',
+    width: '200px',
     height: '154px',
     margin: '0',
   },
@@ -50,10 +50,11 @@ class TrackControls extends React.Component {
           <Input type="text" transparent value={track.name || this.state.dirty ? track.name : `Track #${track.id}`} onChange={e => this.handleChange(projectId, track, e.target.value)} />
         </Card.Header>
         <Card.Description>
-          <Button circular icon onClick={isSelected ? deselectTrack : selectTrack}>
-            <Icon color={isSelected ? 'green' : 'red'} name="circle" />
+          <Button labelPosition="right" icon onClick={isSelected ? deselectTrack : selectTrack}>
+            select
+            <Icon color={isSelected ? 'green' : 'black'} name="circle" />
           </Button>
-          <Button circular icon onClick={() => toggleMuteTrackThunk(projectId, track)} >
+          <Button size="small" circular icon onClick={() => toggleMuteTrackThunk(projectId, track)} >
             <Icon color={track.isMuted ? 'red' : 'grey'} name="mute" />
           </Button>
           <input
