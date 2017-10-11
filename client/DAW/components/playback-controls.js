@@ -29,12 +29,12 @@ const PlaybackControls = (props) => {
       }
       {
         isRecording ?
-        <Menu.Item name="stop-record" onClick={() => stopRecord()}>
-          <Icon name='stop circle outline' />
-        </Menu.Item> :
-        <Menu.Item name="record" onClick={() => startRecord()}>
-          <Icon name='record' />
-        </Menu.Item>
+          <Menu.Item name="stop-record" onClick={() => stopRecord()}>
+            <Icon color="red" name="stop circle outline" />
+          </Menu.Item> :
+          <Menu.Item name="record" onClick={() => startRecord()}>
+            <Icon name="circle" />
+          </Menu.Item>
       }
       <Menu.Item>
         Time: &nbsp;&nbsp;&nbsp;{time.toFixed(2)}
