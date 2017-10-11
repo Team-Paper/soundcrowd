@@ -57,6 +57,7 @@ class TrackControls extends React.Component {
           <Button size="small" circular icon onClick={() => toggleMuteTrackThunk(projectId, track)} >
             <Icon color={track.isMuted ? 'red' : 'grey'} name="mute" />
           </Button>
+          <Icon name="volume up" />
           <input
             type="range"
             value={track.volume}
