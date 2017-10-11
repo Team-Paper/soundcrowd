@@ -13,16 +13,24 @@ module.exports = {
         loader: 'babel-loader'
       },
       {
-        test: /\.scss$/,
+        test: /\.css$/,
         use: [
           'style-loader',
           'css-loader',
-          'sass-loader'
+          { loader: 'postcss-loader', options: { plugins: [require('postcss-reset-scrollbar')] } },
         ]
       },
       {
-        test: /\.svg$|\.ttf?|\.woff$|\.woff2|\.eof|\.eot/,
-        loader: 'file-loader'
+        test: /\.svg$|\.ttf?|\.woff$|\.woff2|\.eof|\.eot|\.png/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'public/assets/[name].[ext]',
+              publicPath: url => url.replace(/public/, ''),
+            },
+          },
+        ],
       }
     ]
   }
