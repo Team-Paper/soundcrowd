@@ -397,8 +397,12 @@ class Timeline extends React.Component {
   }
 
   tick() {
-    const { time, playedAt, start, setTime, isPlaying, tempo, isRecording } = this.props;
+    const { time, playedAt, start, setTime, isPlaying, tempo, isRecording, length } = this.props;
     setTime((context.currentTime - playedAt) + start);
+    if (time > length) {
+      this.togglePlay();
+      return null;
+    }
     const timeSubDivide = 60 / tempo;
     this.checkAndPlay(time);
     if (this.mediaRecorder.state !== 'recording' && isRecording) {
