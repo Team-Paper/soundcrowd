@@ -47,6 +47,19 @@ const createApp = () => {
   app.use(passport.session())
 
   // auth and api routes
+  app.use(function (req, res, next) {
+    var sslUrl;
+
+    if (process.env.NODE_ENV === 'production' &&
+      req.headers['x-forwarded-proto'] !== 'https') {
+
+      sslUrl = ['https://thesoundcrowd.herokuapp.com', req.url].join('');
+      return res.redirect(sslUrl);
+    }
+
+    return next();
+  });
+
   app.use('/auth', require('./auth'))
   app.use('/api', require('./api'))
 
