@@ -13,16 +13,15 @@ module.exports = {
         loader: 'babel-loader'
       },
       {
-        test: /\.scss$/,
+        test: /\.css$/,
         use: [
           'style-loader',
           'css-loader',
           { loader: 'postcss-loader', options: { plugins: [require('postcss-reset-scrollbar')] } },
-          'sass-loader'
         ]
       },
       {
-        test: /\.svg$|\.ttf?|\.woff$|\.woff2|\.eof|\.eot/,
+        test: /\.svg$|\.ttf?|\.woff$|\.woff2|\.eof|\.eot|\.png/,
         loader: 'file-loader'
       }
     ]
