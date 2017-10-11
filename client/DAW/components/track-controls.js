@@ -9,9 +9,19 @@ import CompressorModal from './Compressor';
 
 const styles = {
   trackControls: {
-    width: '180px',
+    width: '200px',
     height: '154px',
     margin: '0',
+  },
+  volumeControls: {
+    margin: '0.5em 0',
+    padding: '0 0.5em',
+    lineHeight: '28px',
+    boxShadow: '0 1px 0 0 #d4d4d5, 0 -1px 0 0 #d4d4d5',
+  },
+  volumeSlider: {
+    display: 'inline-block',
+    verticalAlign: 'text-bottom',
   },
 };
 
@@ -50,20 +60,25 @@ class TrackControls extends React.Component {
           <Input type="text" transparent value={track.name || this.state.dirty ? track.name : `Track #${track.id}`} onChange={e => this.handleChange(projectId, track, e.target.value)} />
         </Card.Header>
         <Card.Description>
-          <Button circular icon onClick={isSelected ? deselectTrack : selectTrack}>
-            <Icon color={isSelected ? 'green' : 'red'} name="circle" />
+          <Button labelPosition="right" icon onClick={isSelected ? deselectTrack : selectTrack}>
+            select
+            <Icon color={isSelected ? 'green' : 'black'} name="circle" />
           </Button>
-          <Button circular icon onClick={() => toggleMuteTrackThunk(projectId, track)} >
+          <Button size="small" circular icon onClick={() => toggleMuteTrackThunk(projectId, track)} >
             <Icon color={track.isMuted ? 'red' : 'grey'} name="mute" />
           </Button>
-          <input
-            type="range"
-            value={track.volume}
-            onChange={e => setTrackVolume(projectId, track, e.target.value)}
-            min="0"
-            max="100"
-            step="1"
-          />
+          <div style={styles.volumeControls}>
+            <Icon name="volume up" />
+            <input
+              type="range"
+              value={track.volume}
+              onChange={e => setTrackVolume(projectId, track, e.target.value)}
+              min="0"
+              max="100"
+              step="1"
+              style={styles.volumeSlider}
+            />
+          </div>
           <ReverbModal track={track} projectId={projectId} />
           <EqualizerModal track={track} projectId={projectId} />
           <CompressorModal track={track} projectId={projectId} />

@@ -6,7 +6,7 @@ import { MixdownModal } from '../components';
 import { setLengthThunk } from '../project-store/reducers/settings/length';
 
 const PlaybackControls = (props) => {
-  const { mixdown, isPlaying, resetTime, togglePlay, startRecord, stopRecord, isRecording, time, addTrack, setLengthThunk, length, projectId } = props;
+  const { mixdown, isPlaying, isReady, resetTime, togglePlay, startRecord, stopRecord, isRecording, time, addTrack, setLengthThunk, length, projectId } = props;
   return (
     <Menu >
       <Menu.Item
@@ -29,12 +29,12 @@ const PlaybackControls = (props) => {
       }
       {
         isRecording ?
-        <Menu.Item name="stop-record" onClick={() => stopRecord()}>
-          <Icon name='stop circle outline' />
-        </Menu.Item> :
-        <Menu.Item name="record" onClick={() => startRecord()}>
-          <Icon name='record' />
-        </Menu.Item>
+          <Menu.Item name="stop-record" onClick={() => stopRecord()}>
+            <Icon color="red" name="stop circle outline" />
+          </Menu.Item> :
+          <Menu.Item name="record" onClick={() => isReady ? startRecord() : alert('Select tracks below to start recording')}>
+            <Icon name="circle" color={isReady ? 'black' : 'grey'} />
+          </Menu.Item>
       }
       <Menu.Item>
         Time: &nbsp;&nbsp;&nbsp;{time.toFixed(2)}
@@ -61,6 +61,7 @@ const PlaybackControls = (props) => {
 const mapState = state => ({
   isPlaying: state.timeline.isPlaying,
   isRecording: state.timeline.isRecording,
+  isReady: state.timeline.selectedTracks.length > 0,
   time: state.timeline.time,
   length: state.settings.length,
 });
