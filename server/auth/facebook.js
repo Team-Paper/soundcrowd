@@ -11,7 +11,7 @@ const strategy = new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID || '',
   clientSecret: process.env.FACEBOOK_APP_SECRET || '',
   callbackURL: process.env.FACEBOOK_CALLBACK || '',
-  profileFields:['id','displayName','emails', 'picture'],
+  profileFields:['id','displayName','emails', 'picture.type(large)'],
   passReqToCallback: true
 
 },
@@ -20,11 +20,12 @@ function(req, accessToken, refreshToken, profile, done) {
   req.session.facebookId = profile.id
   const facebookId = profile.id
   const name = profile.displayName
-  const email = profile.emails[0].value
+  const email = profile.emails[0].value;
+  const photo = profile._json.picture.data.url;
   return User.find({where: {facebookId: profile.id}})
   .then(user => user
     ? done(null, user)
-    : User.create({username: name, email, facebookId})
+    : User.create({username: name, email, facebookId, userImage: photo })
       .then(user => done(null, user))
   )
   .catch(done)
