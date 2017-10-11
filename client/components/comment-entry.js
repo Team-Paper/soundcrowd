@@ -7,7 +7,7 @@ function CommentEntry({ comment }) {
   return (
     <Feed>
       <Feed.Event>
-        <Feed.Label image={comment.user.userImage} />
+        <Feed.Label image={comment.user.userImage || ''} />
         <Feed.Content>
           <Feed.Summary>
             <Link to={`/song/${comment.songId}`} >{comment.text}</Link>
