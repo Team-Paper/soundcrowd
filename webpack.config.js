@@ -22,7 +22,15 @@ module.exports = {
       },
       {
         test: /\.svg$|\.ttf?|\.woff$|\.woff2|\.eof|\.eot|\.png/,
-        loader: 'file-loader'
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'public/assets/[name].[ext]',
+              publicPath: url => url.replace(/public/, ''),
+            },
+          },
+        ],
       }
     ]
   }
