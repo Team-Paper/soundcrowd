@@ -1,5 +1,5 @@
 const db = require('./server/db/db');
-const { User, Song, Comment } = require('./server/db/models');
+const { User, Song, Comment, Soundfile } = require('./server/db/models');
 
 const users = [
   { username: 'angryTurds', email: 'admin@admin.admin', password: 'admin', bio: 'I am probably an admin account on this website so don\'t piss me off. 💩', userImage: 'https://pbs.twimg.com/profile_images/596511405999661056/f04wv26A.jpg' },
@@ -37,7 +37,7 @@ const comments = [
 ];
 
 db.sync({ force: true })
-  .then(()=> Promise.all(files.map(files => SoundFile.create(file))))
+  .then(()=> Promise.all(files.map(files => Soundfile.create(file))))
   .then(() => Promise.all(users.map(user => User.create(user))))
   .then((createdUsers) => {
     console.log(`created ${createdUsers.length} users`);
