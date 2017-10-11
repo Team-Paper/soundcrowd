@@ -39,9 +39,13 @@ router.get('/:id/comments-about', (req, res, next) => {
 
 router.get('/:id/projects', (req, res, next) => {
   const userId = Number(req.params.id);
-  Project.findAll({ where: { '$users.id$': userId }, include: [{ model: User, though: 'usersProjects' }] })
+  Project.scope('withUsers').findAll({ where: { '$users.id$': userId } })
+    .then(projects => {
+      return Promise.all(projects.map(project => {
+        return Project.scope('withUsers').findOne({ where: { id: project.id }});
+      }))})
     .then(projects => res.json(projects))
-    .catch(next);
+    .catch(next)
 });
 
 router.get('/:id/collaborators', (req, res, next) => {

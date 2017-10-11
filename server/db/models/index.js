@@ -5,13 +5,6 @@ const Project = require('./project')
 const Soundfile = require('./soundfile')
 const Collaborators = require('./collaborators')
 
-/**
- * If we had any associations to make, this would be a great place to put them!
- * ex. if we had another model called BlogPost, we might say:
- *
- *    BlogPost.belongsTo(User)
- */
-
 //each song can belong to many users as collaborators
 //each collaborator can have many songs
 Song.belongsToMany(User, { through: Collaborators, as: 'artist' });
@@ -37,12 +30,8 @@ User.belongsToMany(Project, { through: 'usersProjects' });
 // and the song that is mixed down from it
 Song.belongsTo(Project);
 
-/**
- * We'll export all of our models here, so that any time a module needs a model,
- * we can just require it from 'db/models'
- * for example, we can say: const {User} = require('../db/models')
- * instead of: const User = require('../db/models/user')
- */
+Project.addScope('withUsers', { include: [{ model: User }]});
+
 module.exports = {
   User,
   Comment,

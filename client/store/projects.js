@@ -46,17 +46,9 @@ export const fetchUserProjects = (projectId) => {
   };
 };
 
-export const addCollaborator = (collabId, projectId) => {
+export const addCollaborator = (userId, projectId) => {
   return (dispatch) => {
-    // doing some funky stuff because adding a collaborator
-    // gives you only their FB id
-    // rather than refactoring EVERYTHING to use FB id, i added a route to get the user
-    // based on their FB id, and we use that to find the real id and from there proceed as normal
-    axios.get(`/api/users/fb/${collabId}`)
-      .then(res => res.data)
-      .then((user) => {
-        return axios.put(`/api/projects/${projectId}/addCollab`, { id: user.id });
-      })
+      axios.put(`/api/projects/${projectId}/addCollab`, { id: userId })
       .then(res => res.data)
       .then((project) => {
         dispatch(updateProject(project));
