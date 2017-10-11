@@ -37,7 +37,7 @@ const comments = [
 ];
 
 db.sync({ force: true })
-  .then(()=> Promise.all(files.map(files => Soundfile.create(file))))
+  .then(()=> Promise.all(files.map(file => Soundfile.create(file))))
   .then(() => Promise.all(users.map(user => User.create(user))))
   .then((createdUsers) => {
     console.log(`created ${createdUsers.length} users`);
