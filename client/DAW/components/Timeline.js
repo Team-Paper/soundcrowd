@@ -56,7 +56,6 @@ class Timeline extends React.Component {
       const received = snapshot.val();
       setFiles(Object.assign({}, received));
       // createSoundClips checks for new files, gets them, and puts the audio buffer in the soundClips object
-      console.log('received files are', snapshot.val());
       createSoundClips(received, soundClips)
         .then(buffers => buffers.forEach(([id, audio]) => {
           setWaveform(id, createWaveform(audio));
@@ -196,7 +195,10 @@ class Timeline extends React.Component {
 
     // get reverbs and store them on state
     const reverbs = {
-      1: { id: 1, filename: '1st_baptist_nashville_far_close.wav', title: 'Nashville Church' }
+      1: { id: 1, filename: '1st_baptist_nashville_far_close.wav', title: 'Nashville Church' },
+      2: { id: 2, filename: 'empty_apartment_bedroom_06.wav', title: 'Empty Bedroom'},
+      3: { id: 3, filename: 'st_georges_far.wav', title: 'St. Georges Episcopal Church'},
+      4: { id: 4, filename: 'basement.wav', title: 'Basement'},
       // 1: { id: 1, filename: '2346b5d7ba4918cb48d33f8669ea2389', title: 'test' }
     }
     fetchReverbsThunk(reverbs);
@@ -211,7 +213,6 @@ class Timeline extends React.Component {
   }
 
   playSound(buffer, startTime, playAt, offset, duration, track) {
-    console.log('played sound track is', track);
     const source = context.createBufferSource();
     if (!startTime) {
       startTime = 0;
@@ -330,7 +331,7 @@ class Timeline extends React.Component {
     // reverb settings
     const convolverNode = loopContext.createConvolver();
     const convolverGain = loopContext.createGain();
-    convolverNode.buffer = reverbs['1'].audio.buffer;
+    convolverNode.buffer = reverbs[track.reverb.id].audio.buffer;
     convolverGain.gain.value = track.reverb.gain;
     if (!track.reverb.on) {
       convolverGain.gain.value = 0;
@@ -368,7 +369,6 @@ class Timeline extends React.Component {
   }
 
   togglePlay() {
-    console.log('playing toggled')
     const { isPlaying, play, pause, setPlayedAt, setPlayedAtThunk, soundClips, playThunk, setStartThunk, time, clips, isRecording, stopRecord } = this.props;
     if (!isPlaying) {
       setStartThunk(time)
@@ -379,7 +379,6 @@ class Timeline extends React.Component {
         // setTimeout(this.tick, 20);
     } else {
       if (isRecording) {
-        console.log('mediarecorder state is', this.mediaRecorder.state);
         this.mediaRecorder.stop();
         stopRecord();
       }
@@ -432,13 +431,10 @@ class Timeline extends React.Component {
     const { time, selectedTracks, setStartRecordTime, isPlaying, isRecording, startRecord } = this.props;
     if (!selectedTracks.length || isRecording) return;
     startRecord();
-    console.log('startRecordTime should be', time);
     setStartRecordTime(time);
     if (!isPlaying) {
       this.togglePlay();
     }
-    console.log('mediaRecorder state is', this.mediaRecorder.state);
-    console.log('recorder started');
   }
 
   stopRecord() {
@@ -448,8 +444,6 @@ class Timeline extends React.Component {
     if (isPlaying) {
       this.togglePlay(); //togglePlay will call this.mediaRecorder.stop();
     }
-    console.log('mediaRecorder state is', this.mediaRecorder.state);
-    console.log('recorder stopped');
   }
 
   addTrack() {
@@ -503,7 +497,6 @@ class Timeline extends React.Component {
       source.connect(dest); // this connects the mixed-down buffer to the mediaRecorder
 
       mediaRecorder.ondataavailable = e => {
-        console.log('data available');
         chunks.push(e.data);
       }
 
@@ -532,7 +525,6 @@ class Timeline extends React.Component {
     }
 
     Promise.all(Object.entries(clips).map(([key, clip]) => {
-      console.log('clip is', clip);
       if (clip.track === null) {
         return null;
       }
@@ -540,7 +532,6 @@ class Timeline extends React.Component {
       const newBufferSource = offlineContext.createBufferSource();
       const soundClip = soundClips[clip.fileId];
       const duration = clip.duration !== undefined ? clip.duration : soundClip.duration;
-      console.log('soundClip is', soundClip);
       newBufferSource.buffer = soundClip.sound.buffer;
       this.trackEffectsLoop(newBufferSource, track, offlineContext)
         .connect(offlineContext.destination);
