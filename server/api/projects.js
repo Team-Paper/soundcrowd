@@ -32,9 +32,9 @@ router.put('/:id', isSelf, (req, res, next) => {
 router.put('/:id/addCollab', (req, res, next) => {
   Project.findOne({ where: { id: Number(req.params.id) }, include: [{ model: User, through: 'usersProjects' }] })
   .then((project) => {
-    project.addUser(+req.body.id);
-    return project.save();
+    return project.addUser(+req.body.id);
   })
+  .then(() => Project.scope('withUsers').findById(req.params.id))
   .then(project => res.json(project))
   .catch(next);
 });

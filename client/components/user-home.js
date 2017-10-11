@@ -66,8 +66,6 @@ class UserHome extends React.Component {
   addCollaborator(projectId) {
     // get the userId you want to add from the state
     const userId = this.state.userToAdd;
-    console.log('userId is', userId)
-    console.log('users', this.props.users)
     if (userId) this.props.addCollaborator(userId, projectId);
     else console.log('you cannot');
   }
