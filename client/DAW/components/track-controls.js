@@ -13,6 +13,16 @@ const styles = {
     height: '154px',
     margin: '0',
   },
+  volumeControls: {
+    margin: '0.5em 0',
+    padding: '0 0.5em',
+    lineHeight: '28px',
+    boxShadow: '0 1px 0 0 #d4d4d5, 0 -1px 0 0 #d4d4d5',
+  },
+  volumeSlider: {
+    display: 'inline-block',
+    verticalAlign: 'text-bottom',
+  },
 };
 
 class TrackControls extends React.Component {
@@ -57,15 +67,18 @@ class TrackControls extends React.Component {
           <Button size="small" circular icon onClick={() => toggleMuteTrackThunk(projectId, track)} >
             <Icon color={track.isMuted ? 'red' : 'grey'} name="mute" />
           </Button>
-          <Icon name="volume up" />
-          <input
-            type="range"
-            value={track.volume}
-            onChange={e => setTrackVolume(projectId, track, e.target.value)}
-            min="0"
-            max="100"
-            step="1"
-          />
+          <div style={styles.volumeControls}>
+            <Icon name="volume up" />
+            <input
+              type="range"
+              value={track.volume}
+              onChange={e => setTrackVolume(projectId, track, e.target.value)}
+              min="0"
+              max="100"
+              step="1"
+              style={styles.volumeSlider}
+            />
+          </div>
           <ReverbModal track={track} projectId={projectId} />
           <EqualizerModal track={track} projectId={projectId} />
           <CompressorModal track={track} projectId={projectId} />
