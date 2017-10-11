@@ -22,6 +22,8 @@ const files = [
 
 const songs = [
   { filename: '03_My_Song_For_January.mp3', notes: 'this is a song i wrote about january and the feelings it gives me (not really, it is creative commons licensed music actually)', length: 452, playcount: 15, title: 'My Song for January' },
+  { filename: '3ed9dce4-fe8e-4989-b099-6b5bbeb07b49.webm', notes: 'First song on this site! Be nice!', length: 50, playcount: 500, title: 'My first Song' }, // I think this is Chris singing? It sounds nice so it's in our seed file now
+  { filename: '436dde4d-b90d-4bde-8d14-68fc05821cb7.webm', notes: 'Just testing my microphone and thought you might like to hear it', length: 4, playcount: 3, title: 'Ambient Noise' }, // Just one of our garbage noisy mixdowns from testing
 ];
 
 const comments = [
