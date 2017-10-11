@@ -17,6 +17,7 @@ module.exports = {
         use: [
           'style-loader',
           'css-loader',
+          { loader: 'postcss-loader', options: { plugins: [require('postcss-reset-scrollbar')] } },
           'sass-loader'
         ]
       },
