@@ -11,6 +11,7 @@ import ProjectAdd from './project-add';
 import CollaboratorList from './collaborator-list';
 import CommentList from './comment-list';
 import { WaveformGradient } from '../DAW/components';
+import firebase from '../firebase';
 
 /**
  * COMPONENT
@@ -75,6 +76,10 @@ class UserHome extends React.Component {
     const { addProject } = this.props;
     axios.post('/api/projects', { title: e.target.title.value })
       .then(res => res.data)
+      .then(project => {
+        firebase.database().ref(`${project.id}/settings/length/`).set(30);
+        return project;
+      })
       .then(project => addProject(project))
       .catch(console.error)
   }
