@@ -1,5 +1,5 @@
 import React from 'react';
-import { Item, Header, Icon } from 'semantic-ui-react';
+import { Item, Header, Icon, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import context from '../DAW/context';
@@ -67,7 +67,20 @@ class SongView extends React.Component {
           <audio controls style={styles.controls}>
             <source src={song.url} type="audio/ogg" />
           </audio>
-          <Icon name ='facebook square' className="fb-share-button" data-href={`https://thesoundcrowd.herokuapp.com/song/${song.id}`} data-layout="button" data-size="small" data-mobile-iframe="true"><a className="fb-xfbml-parse-ignore" target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=https://thesoundcrowd.herokuapp.com/song/${song.id}`}>Share</a></Icon>
+          <Button
+            as="a"
+            color="facebook"
+            className="fb-share-button fb-xfbml-parse-ignore"
+            data-href={`https://thesoundcrowd.herokuapp.com/song/${song.id}`}
+            data-layout="button"
+            data-size="small"
+            data-mobile-iframe="true"
+            target="_blank"
+            href={`https://www.facebook.com/sharer/sharer.php?u=https://thesoundcrowd.herokuapp.com/song/${song.id}`}
+          >
+            <Icon name="facebook" />
+            Share
+          </Button>
         </Item.Content>
       </Item>
     );
