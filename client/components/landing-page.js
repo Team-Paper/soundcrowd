@@ -36,7 +36,7 @@ class LandingPage extends React.Component {
         <Grid.Row>
           <Grid.Column width={1} />
           <Grid.Column width={10} >
-            <Header block>Top Songs</Header>
+            <Header as="h2" block>Top Songs</Header>
             <Card fluid>
               <Card.Content>
                 <WaveformGradient />
