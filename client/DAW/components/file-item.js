@@ -13,9 +13,9 @@ const styles = {
       position: 'relative',
       background: '#22a3ef',
       cursor: 'move',
-      marginBottom: '1em',
+      margin: '1em 0',
       opacity: isDragging ? '0.8' : '1',
-      borderRadius: 4,
+      borderRadius: '4px',
       padding: '0 .6em',
       lineHeight: '3em',
     };
