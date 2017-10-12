@@ -93,7 +93,7 @@ class SingleSong extends React.Component {
           </Grid.Column>
           <Grid.Column width={7}>
             <Header dividing>Notes:</Header>
-            <Container text textAlign='justified'>
+            <Container fluid text textAlign='justified'>
               {song.notes}
             </Container>
           </Grid.Column>
