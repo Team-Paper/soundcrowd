@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { fetchTopSongs, clearSongs } from '../store';
 import SongList from './song-list';
 import CommentList from './comment-list';
+import { WaveformGradient } from '../DAW/components';
 
 /**
  * COMPONENT
@@ -38,6 +39,7 @@ class LandingPage extends React.Component {
             <Header block>Top Songs</Header>
             <Card fluid>
               <Card.Content>
+                <WaveformGradient />
                 <SongList songs={songs}/>
               </Card.Content>
             </Card>
