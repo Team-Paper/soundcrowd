@@ -10,11 +10,11 @@ import { setName } from '../project-store/reducers/files';
 const styles = {
   listItem(isDragging) {
     return {
+      position: 'relative',
       background: '#22a3ef',
       cursor: 'move',
       marginBottom: '1em',
       opacity: isDragging ? '0.8' : '1',
-      overflow: 'hidden',
       borderRadius: 4,
       padding: '0 .6em',
       lineHeight: '3em',
@@ -29,6 +29,11 @@ const styles = {
   draggingItem(isDragging) {
     if (!isDragging) return {
       position: 'absolute',
+      top: '0',
+      left: '0',
+      height: '100%',
+      width: '100%',
+      opacity: '0',
     };
     return {
       position: 'absolute',
@@ -90,11 +95,9 @@ class FileItem extends React.Component {
           onChange={e => this.handleChange(projectId, item, e.target.value)}
         />
         <span style={styles.dragHandle}><Icon name="move" /></span>
-      {/*
         <Draggable onStart={this.handleStart} position={{ x, y }} >
-          <div style={styles.draggingItem(isDragging)}>{item.filename}</div> :
+          <div style={styles.draggingItem(isDragging)}>{item.filename}</div>
         </Draggable>
-      */}
       </List.Item>
     );
   }
