@@ -6,7 +6,7 @@ import { WaveformGradient } from '../DAW/components';
 
 function SongList({ songs }) {
   return (
-    <Item.Group>
+    <Item.Group divided>
       <WaveformGradient />
       {
         songs.map((song) => {

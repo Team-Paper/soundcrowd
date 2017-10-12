@@ -7,9 +7,11 @@ import { createWaveform } from '../DAW/waveformBuilder';
 import { Waveform } from '../DAW/components';
 
 const styles = {
-  controls: { width: '100%' },
+  song: { padding: '2em 0' },
+  controls: { width: '100%', marginBottom: '1em' },
   waveform: {
     height: '154px',
+    marginTop: '2em',
     background: '#22a3ef',
   },
 };
@@ -35,7 +37,7 @@ class SongView extends React.Component {
     const { song, index } = this.props;
 
     return (
-      <Item key={song.id}>
+      <Item key={song.id} style={styles.song}>
         <Item.Content>
           <Item.Header>
             <Header>
