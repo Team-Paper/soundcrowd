@@ -116,10 +116,10 @@ class SingleSong extends React.Component {
                   return (
                     <Comment key={comment.id}>
                       <Comment.Avatar src={comment.user.userImage} />
-                      <Comment.Author>
-                        {comment.user.username}
-                      </Comment.Author>
                       <Comment.Content>
+                        <Comment.Author>
+                          {comment.user.username}
+                        </Comment.Author>
                         {comment.text}
                       </Comment.Content>
                     </Comment>
