@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Grid, Header, Label, Icon, Comment, Form, Button } from 'semantic-ui-react';
+import { Container, Grid, Header, Icon, Comment, Form, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { fetchSong, fetchSongComments, postComment } from '../store';
 import context from '../DAW/context';
@@ -82,14 +82,20 @@ class SingleSong extends React.Component {
             <Header>
               by {song.artist.map(art => art.username).join(', ') || 'unknown'}
             </Header>
-            <Label>
-              {/* TODO: THIS IS HARD CODED RIGHT NOW, FIX LATER */}
-              <Icon name='heart' /> {40}
-            </Label>
-            <Label>
-              {/* TODO: THIS IS HARD CODED RIGHT NOW, FIX LATER */}
-              <Icon name='play' /> {song.playcount}
-            </Label>
+            <Button
+              as="a"
+              color="facebook"
+              className="fb-share-button fb-xfbml-parse-ignore"
+              data-href={`https://thesoundcrowd.herokuapp.com/song/${song.id}`}
+              data-layout="button"
+              data-size="small"
+              data-mobile-iframe="true"
+              target="_blank"
+              href={`https://www.facebook.com/sharer/sharer.php?u=https://thesoundcrowd.herokuapp.com/song/${song.id}`}
+            >
+              <Icon name="facebook" />
+              Share
+            </Button>
           </Grid.Column>
           <Grid.Column width={7}>
             <Header dividing>Notes:</Header>
