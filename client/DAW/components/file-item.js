@@ -10,23 +10,40 @@ import { setName } from '../project-store/reducers/files';
 const styles = {
   listItem(isDragging) {
     return {
+      position: 'relative',
       background: '#22a3ef',
       cursor: 'move',
-      marginBottom: '1em',
+      margin: '1em 0',
       opacity: isDragging ? '0.8' : '1',
-      overflow: 'hidden',
-      borderRadius: 4,
-      padding: 4,
+      borderRadius: '4px',
+      padding: '0 .6em',
+      lineHeight: '3em',
     };
   },
-  draggingItem: {
-    position: 'absolute',
-    height: '140px',
-    marginTop: '-70px',
-    background: '#22a3ef',
-    opacity: '0.5',
-    pointerEvents: 'none',
-    zIndex: '20',
+  dragHandle: {
+    display: 'inline-block',
+    height: '100%',
+    borderLeft: 'solid 1px rgba(34, 36, 38, 0.15)',
+    paddingLeft: '1em',
+  },
+  draggingItem(isDragging) {
+    if (!isDragging) return {
+      position: 'absolute',
+      top: '0',
+      left: '0',
+      height: '100%',
+      width: '100%',
+      opacity: '0',
+    };
+    return {
+      position: 'absolute',
+      height: '140px',
+      marginTop: '-70px',
+      background: '#22a3ef',
+      opacity: '0.5',
+      pointerEvents: 'none',
+      zIndex: '20',
+    };
   },
 };
 
@@ -70,15 +87,17 @@ class FileItem extends React.Component {
         style={styles.listItem(isDragging)}
         key={item.id}
       >
-        <Draggable
-          onStart={this.handleStart}
-          position={{ x, y }}
-        >
-          { isDragging ?
-            <div style={styles.draggingItem}>{item.filename}</div> :
-            <Icon name="move" /> }
+        <Input
+          type="text"
+          transparent
+          style={{ width: '145px' }}
+          value={item.name || this.state.dirty ? item.name : item.filename}
+          onChange={e => this.handleChange(projectId, item, e.target.value)}
+        />
+        <span style={styles.dragHandle}><Icon name="move" /></span>
+        <Draggable onStart={this.handleStart} position={{ x, y }} >
+          <div style={styles.draggingItem(isDragging)}>{item.filename}</div>
         </Draggable>
-        <Input type="text" transparent value={item.name || this.state.dirty ? item.name : item.filename} onChange={e => this.handleChange(projectId, item, e.target.value)} />
       </List.Item>
     );
   }
