@@ -10,6 +10,7 @@ import ProjectList from './project-list';
 import ProjectAdd from './project-add';
 import CollaboratorList from './collaborator-list';
 import CommentList from './comment-list';
+import { WaveformGradient } from '../DAW/components';
 
 /**
  * COMPONENT
@@ -129,6 +130,7 @@ class UserHome extends React.Component {
         <Grid.Row>
           <Grid.Column width={1} />
           <Grid.Column width={10} >
+            <WaveformGradient />
             <Tab menu={{ attached: false }} panes={panes} />
           </Grid.Column>
           <Grid.Column width={4} >
