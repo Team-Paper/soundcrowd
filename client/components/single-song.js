@@ -55,7 +55,7 @@ class SingleSong extends React.Component {
     const styles = {
       header: { backgroundColor: '#222222' },
       title: { color: '#ffffff', paddingBottom: 10, paddingTop: 10 },
-      controls: { width: '100%' },
+      controls: { width: '100%', marginBottom: '1em' },
       waveform: { height: '154px', background: '#22a3ef' },
       comments: { maxWidth: '100%' },
     };
@@ -77,7 +77,7 @@ class SingleSong extends React.Component {
             </audio>
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row>
+        <Grid.Row style={{ padding: '2em 0' }}>
           <Grid.Column width={7}>
             <Header>
               by {song.artist.map(art => art.username).join(', ') || 'unknown'}
@@ -109,7 +109,7 @@ class SingleSong extends React.Component {
             <Comment.Group style={styles.comments} size='large'>
               <Header as='h3' dividing>Comments</Header>
               {user.id ?
-                <Form reply onSubmit={this.handleCommentSubmit}>
+                <Form reply style={{ paddingBottom: '2em' }} onSubmit={this.handleCommentSubmit}>
                   <Form.TextArea onChange={this.handleChange} />
                   <Button content='Add Comment' icon='edit' primary />
                 </Form>
