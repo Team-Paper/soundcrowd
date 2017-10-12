@@ -1,5 +1,5 @@
 import React from 'react';
-import { Item, Header, Icon } from 'semantic-ui-react';
+import { Item, Header, Icon, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import context from '../DAW/context';
@@ -7,8 +7,11 @@ import { createWaveform } from '../DAW/waveformBuilder';
 import { Waveform } from '../DAW/components';
 
 const styles = {
+  song: { padding: '2em 0' },
+  controls: { width: '100%', marginBottom: '1em' },
   waveform: {
     height: '154px',
+    marginTop: '2em',
     background: '#22a3ef',
   },
 };
@@ -34,7 +37,7 @@ class SongView extends React.Component {
     const { song, index } = this.props;
 
     return (
-      <Item key={song.id}>
+      <Item key={song.id} style={styles.song}>
         <Item.Content>
           <Item.Header>
             <Header>
@@ -60,15 +63,26 @@ class SongView extends React.Component {
               })
             }
           </Item.Meta>
-          <Item.Description>
-            <audio controls>
-              <source src={song.url} type="audio/ogg" />
-            </audio>
-          </Item.Description>
           <div style={styles.waveform}>
             <Waveform waveform={this.state.waveform} />
           </div>
-          <Icon name ='facebook square' className="fb-share-button" data-href={`https://thesoundcrowd.herokuapp.com/song/${song.id}`} data-layout="button" data-size="small" data-mobile-iframe="true"><a className="fb-xfbml-parse-ignore" target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=https://thesoundcrowd.herokuapp.com/song/${song.id}`}>Share</a></Icon>
+          <audio controls style={styles.controls}>
+            <source src={song.url} type="audio/ogg" />
+          </audio>
+          <Button
+            as="a"
+            color="facebook"
+            className="fb-share-button fb-xfbml-parse-ignore"
+            data-href={`https://thesoundcrowd.herokuapp.com/song/${song.id}`}
+            data-layout="button"
+            data-size="small"
+            data-mobile-iframe="true"
+            target="_blank"
+            href={`https://www.facebook.com/sharer/sharer.php?u=https://thesoundcrowd.herokuapp.com/song/${song.id}`}
+          >
+            <Icon name="facebook" />
+            Share
+          </Button>
         </Item.Content>
       </Item>
     );
