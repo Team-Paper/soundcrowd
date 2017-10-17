@@ -13,7 +13,7 @@
     "start": "node server",
     "start-dev": "npm run build-client-watch & npm run start-server",
     "start-server": "NODE_ENV='development' nodemon server -e html,js,scss --ignore public",
-    "test": "NODE_ENV='test' DATABASE_URL='postgres://localhost:5432/boilermaker-test' mocha ./{client,server}/**/*.spec.js --compilers js:babel-register"
+    "test": "NODE_ENV='test' DATABASE_URL='postgres://localhost:5432/boilermaker-test' mocha ./test.js ./{client,server}/**/*.spec.js --compilers js:babel-register"
   },
   "author": "",
   "license": "ISC",
@@ -77,6 +77,7 @@
     "redux-mock-store": "^1.2.3",
     "style-loader": "^0.13.1",
     "supertest": "^3.0.0",
+    "web-audio-test-api": "^0.5.2",
     "webpack": "^2.2.1"
   }
 }
