@@ -10,7 +10,6 @@ const styles = {
   listItem(isDragging) {
     return {
       display: 'flex',
-      position: 'relative',
       background: '#22a3ef',
       cursor: 'move',
       margin: '1em 0',
@@ -23,18 +22,16 @@ const styles = {
   dragHandle: {
     display: 'inline-block',
     height: '100%',
-    width: '38px',
+    width: '2.72em',
     borderLeft: 'solid 1px rgba(34, 36, 38, 0.15)',
     paddingLeft: '1em',
   },
   draggingItem(isDragging) {
     if (!isDragging) {
       return {
-        position: 'absolute',
-        top: '0',
-        right: '0',
-        height: '100%',
-        width: '38px',
+        marginLeft: '-2.72em',
+        height: '3em',
+        width: '2.72em',
         opacity: '0',
       };
     }
