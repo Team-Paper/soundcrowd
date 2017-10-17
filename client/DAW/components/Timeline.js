@@ -54,6 +54,7 @@ class Timeline extends React.Component {
     // subscribe redux to firebase
     this.filesRef.on('value', snapshot => {
       const received = snapshot.val();
+      const { soundClips } = this.props;
       setFiles(Object.assign({}, received));
       // createSoundClips checks for new files, gets them, and puts the audio buffer in the soundClips object
       createSoundClips(received, soundClips)
