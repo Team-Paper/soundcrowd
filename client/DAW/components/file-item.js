@@ -9,6 +9,7 @@ import { setName } from '../project-store/reducers/files';
 const styles = {
   listItem(isDragging) {
     return {
+      display: 'flex',
       position: 'relative',
       background: '#22a3ef',
       cursor: 'move',
@@ -22,6 +23,7 @@ const styles = {
   dragHandle: {
     display: 'inline-block',
     height: '100%',
+    width: '38px',
     borderLeft: 'solid 1px rgba(34, 36, 38, 0.15)',
     paddingLeft: '1em',
   },
@@ -90,7 +92,7 @@ class FileItem extends React.Component {
         <Input
           type="text"
           transparent
-          style={{ width: '145px' }}
+          style={{ flex: '1' }}
           value={item.name || this.state.dirty ? item.name : item.filename}
           onChange={e => this.handleChange(projectId, item, e.target.value)}
         />
