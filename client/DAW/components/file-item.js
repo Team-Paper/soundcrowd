@@ -3,7 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
 import { List, Icon, Input } from 'semantic-ui-react';
-// import { updateClipThunk } from '../project-store/reducers/clips';
 import { startDragging, stopDragging } from '../project-store/reducers/dragging';
 import { setName } from '../project-store/reducers/files';
 
@@ -27,14 +26,16 @@ const styles = {
     paddingLeft: '1em',
   },
   draggingItem(isDragging) {
-    if (!isDragging) return {
-      position: 'absolute',
-      top: '0',
-      left: '0',
-      height: '100%',
-      width: '100%',
-      opacity: '0',
-    };
+    if (!isDragging) {
+      return {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        height: '100%',
+        width: '100%',
+        opacity: '0',
+      };
+    }
     return {
       position: 'absolute',
       height: '140px',
@@ -54,12 +55,12 @@ class FileItem extends React.Component {
     this.state = {
       x: 0,
       y: 0,
-      dirty: false
+      dirty: false,
     };
 
     this.handleStart = this.handleStart.bind(this);
     this.handleEnd = this.handleEnd.bind(this);
-    this.handleChange = this.handleChange.bind(this)
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleStart() {
@@ -73,15 +74,14 @@ class FileItem extends React.Component {
     this.setState({ x: 0, y: 0 });
   }
 
-  handleChange(projectId, file, newName){
-    this.setState({dirty: true})
-    this.props.setName(projectId, file, newName)
+  handleChange(projectId, file, newName) {
+    this.setState({ dirty: true });
+    this.props.setName(projectId, file, newName);
   }
 
   render() {
-    const { isDragging, item, setName, projectId } = this.props;
+    const { isDragging, item, projectId } = this.props;
     const { x, y } = this.state;
-    console.log(this.props)
     return (
       <List.Item
         style={styles.listItem(isDragging)}
