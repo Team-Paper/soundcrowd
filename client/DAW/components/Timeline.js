@@ -5,7 +5,6 @@ import { Card, Button, Icon, Input } from 'semantic-ui-react';
 import { PlaybackControls, TrackList } from '../components';
 import context from '../context';
 import getUserMedia from '../getUserMedia';
-import { createWaveform } from '../waveformBuilder';
 import { setTime } from '../project-store/reducers/timeline/time';
 import { setFiles, setFilesThunk, addFileThunk } from '../project-store/reducers/files';
 import { setClips, setClipsThunk, addClipThunk } from '../project-store/reducers/clips';
@@ -57,10 +56,7 @@ class Timeline extends React.Component {
       const { soundClips } = this.props;
       setFiles(Object.assign({}, received));
       // createSoundClips checks for new files, gets them, and puts the audio buffer in the soundClips object
-      createSoundClips(received, soundClips)
-        .then(buffers => buffers.forEach(([id, audio]) => {
-          setWaveform(id, createWaveform(audio));
-        }));
+      createSoundClips(received, soundClips);
     });
     this.clipsRef.on('value', snapshot => {
       const received = snapshot.val();

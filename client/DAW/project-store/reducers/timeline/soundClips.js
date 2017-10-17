@@ -1,5 +1,6 @@
 import axios from 'axios';
 import context from '../../../context';
+import { createWaveform } from '../../../waveformBuilder';
 
 // ACTION TYPES
 const ADD_SOUND_CLIP = 'ADD_SOUND_CLIP';
@@ -43,8 +44,8 @@ export default function reducer(soundClips = {}, action) {
 export const createSoundClips = (files, soundClips) => (dispatch) => {
   if (!files) return Promise.resolve([]);
   return Promise.all(Object.entries(files).map(([key, file]) => {
-    if (soundClips.hasOwnProperty(file.id)) {
-      return null;
+    if (soundClips.hasOwnProperty(key)) {
+      return false;
     }
     return axios.get(`//d3oysef4ue4h90.cloudfront.net${file.url}`, { responseType: 'arraybuffer' })
       .then(res => res.data)
@@ -56,9 +57,9 @@ export const createSoundClips = (files, soundClips) => (dispatch) => {
         dispatch(addSoundClip(file.id, {
           sound: buffer,
           duration: audio.duration,
-          waveform: [],
+          waveform: createWaveform(audio),
         }));
-        return [key, audio];
+        return true;
       });
   }))
     .catch(console.error);
