@@ -22,13 +22,13 @@ class LandingPage extends React.Component {
     const styles = {
       header: { backgroundColor: '#222222' },
       title: { color: '#ffffff', paddingBottom: 10, paddingTop: 10 },
-    }
-    const { songs } = this.props
+    };
+    const { songs } = this.props;
     return (
       <Grid>
         <Grid.Row style={styles.header} >
           <Grid.Column width={16} >
-            <Header size='huge' textAlign='center' style={styles.title}>SoundCrowd.</Header>
+            <Header size="huge" textAlign="center" style={styles.title}>SoundCrowd.</Header>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
@@ -53,22 +53,18 @@ class LandingPage extends React.Component {
   }
 }
 
-const mapState = (state) => {
-  return {
-    // sort the songs and take the top 50 for this component
-    // we could have other songs in the state but we don't care about those right now
-    songs: state.songs.sort((songA, songB) => songB.playcount - songA.playcount).slice(0, 50),
-  };
-};
+const mapState = state => ({
+  // sort the songs and take the top 50 for this component
+  // we could have other songs in the state but we don't care about those right now
+  songs: state.songs.sort((songA, songB) => songB.playcount - songA.playcount).slice(0, 50),
+});
 
-const mapDispatch = (dispatch) => {
-  return {
-    fetchData: () => {
-      // fetches the top 50 songs
-      dispatch(fetchTopSongs(50));
-    },
-    clearData: () => dispatch(clearSongs()),
-  };
-};
+const mapDispatch = dispatch => ({
+  fetchData: () => {
+    // fetches the top 50 songs
+    dispatch(fetchTopSongs(50));
+  },
+  clearData: () => dispatch(clearSongs()),
+});
 
 export default connect(mapState, mapDispatch)(LandingPage);

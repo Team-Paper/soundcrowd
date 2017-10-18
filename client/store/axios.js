@@ -1,6 +1,6 @@
-import axios from 'axios'
+import axios from 'axios';
 
 
-const myAxios = axios.create()
+const myAxios = axios.create();
 
-export default myAxios
+export default myAxios;

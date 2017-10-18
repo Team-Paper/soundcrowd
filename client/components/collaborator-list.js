@@ -29,7 +29,7 @@ const mapState = state => ({
 });
 
 const mapDispatch = dispatch => ({
-  fetchCollaborators: userId => dispatch(fetchCollaborators(userId))
+  fetchCollaborators: userId => dispatch(fetchCollaborators(userId)),
 });
 
 export default connect(mapState, mapDispatch)(CollaboratorList);

@@ -11,7 +11,7 @@ export const setCollaborators = collaborators => ({
 
 // REDUCER
 export default function reducer(collaborators = [], action) {
-  switch(action.type) {
+  switch (action.type) {
     case SET_COLLABORATORS:
       return action.collaborators;
     default:
@@ -20,9 +20,9 @@ export default function reducer(collaborators = [], action) {
 }
 
 // THUNK CREATORS
-export const fetchCollaborators = userId => dispatch => {
+export const fetchCollaborators = userId => (dispatch) => {
   axios.get(`/api/users/${userId}/collaborators`)
     .then(res => res.data)
     .then(collaborators => dispatch(setCollaborators(collaborators)))
-    .catch(console.error)
+    .catch(console.error);
 };

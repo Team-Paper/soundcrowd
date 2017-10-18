@@ -1,22 +1,22 @@
 /* global describe beforeEach afterEach it */
 
-import { expect } from 'chai'
-import commentReducer from './comments'
-import { getComment, GET_COMMENT, getSomeComments, GET_SOME_COMMENTS } from './comments'
-import axios from 'axios'
-import MockAdapter from 'axios-mock-adapter'
-import configureMockStore from 'redux-mock-store'
-import thunkMiddleware from 'redux-thunk'
-import history from '../history'
+import { expect } from 'chai';
+import commentReducer from './comments';
+import { getComment, GET_COMMENT, getSomeComments, GET_SOME_COMMENTS } from './comments';
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+import configureMockStore from 'redux-mock-store';
+import thunkMiddleware from 'redux-thunk';
+import history from '../history';
 
-const mockAxios = new MockAdapter(axios)
-const middlewares = [thunkMiddleware]
-const mockStore = configureMockStore(middlewares)
+const mockAxios = new MockAdapter(axios);
+const middlewares = [thunkMiddleware];
+const mockStore = configureMockStore(middlewares);
 
 
 describe('Comment redux store', () => {
-  const fakeComment = { id: 1, text: 'This is a comment', user: { name: 'Tess', id: 4 } }
-  const fakeComment2 = { id: 2, text: 'This is a comment', user: { name: 'Tess', id: 4 } }
+  const fakeComment = { id: 1, text: 'This is a comment', user: { name: 'Tess', id: 4 } };
+  const fakeComment2 = { id: 2, text: 'This is a comment', user: { name: 'Tess', id: 4 } };
 
   describe('Action Creators', () => {
     it('returns the correct action for each creator', () => {

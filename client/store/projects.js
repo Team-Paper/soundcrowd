@@ -28,33 +28,23 @@ export const addProject = project => ({ type: ADD_PROJECT, project });
 /**
  * THUNK CREATORS
  */
-export const fetchProject = (id) => {
-  return (dispatch) => {
-    return axios.get(`/api/projects/${id}`)
-      .then(res => res.data)
-      .then(project => dispatch(getProject(project)))
-      .catch(console.error.bind(console));
-  };
-};
+export const fetchProject = id => dispatch => axios.get(`/api/projects/${id}`)
+  .then(res => res.data)
+  .then(project => dispatch(getProject(project)))
+  .catch(console.error.bind(console));
 
-export const fetchUserProjects = (projectId) => {
-  return (dispatch) => {
-    return axios.get(`/api/users/${projectId}/projects`)
-      .then(res => res.data)
-      .then(projects => dispatch(getProjects(projects)))
-      .catch(console.error.bind(console));
-  };
-};
+export const fetchUserProjects = projectId => dispatch => axios.get(`/api/users/${projectId}/projects`)
+  .then(res => res.data)
+  .then(projects => dispatch(getProjects(projects)))
+  .catch(console.error.bind(console));
 
-export const addCollaborator = (userId, projectId) => {
-  return (dispatch) => {
-      axios.put(`/api/projects/${projectId}/addCollab`, { id: userId })
-      .then(res => res.data)
-      .then((project) => {
-        dispatch(updateProject(project));
-      })
-      .catch(console.error.bind(console));
-  };
+export const addCollaborator = (userId, projectId) => (dispatch) => {
+  axios.put(`/api/projects/${projectId}/addCollab`, { id: userId })
+    .then(res => res.data)
+    .then((project) => {
+      dispatch(updateProject(project));
+    })
+    .catch(console.error.bind(console));
 };
 
 /**

@@ -6,7 +6,7 @@ const PAUSE = 'PAUSE';
 // ACTION CREATORS
 export const setIsPlaying = isPlaying => ({
   type: SET_IS_PLAYING,
-  isPlaying
+  isPlaying,
 });
 
 export const play = () => ({
@@ -17,11 +17,11 @@ export const play = () => ({
 export const pause = () => ({
   type: PAUSE,
   isPlaying: false,
-})
+});
 
 // REDUCER
 export default function reducer(isPlaying = false, action) {
-  switch(action.type) {
+  switch (action.type) {
     case SET_IS_PLAYING:
       return action.isPlaying;
     case PLAY:
@@ -29,10 +29,8 @@ export default function reducer(isPlaying = false, action) {
     case PAUSE:
       return action.isPlaying;
     default:
-      return isPlaying
+      return isPlaying;
   }
 }
 
-export const playThunk = () => dispatch => {
-  return Promise.resolve(dispatch(play()));
-};
+export const playThunk = () => dispatch => Promise.resolve(dispatch(play()));

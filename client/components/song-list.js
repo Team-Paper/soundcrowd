@@ -7,11 +7,9 @@ function SongList({ songs }) {
   return (
     <Item.Group divided>
       {
-        songs.map((song) => {
-          return (
-            <SongView key={song.id} song={song} />
-          );
-        })
+        songs.map(song => (
+          <SongView key={song.id} song={song} />
+        ))
       }
     </Item.Group>
   );

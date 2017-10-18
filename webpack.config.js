@@ -2,7 +2,7 @@ module.exports = {
   entry: './client/index.js',
   output: {
     path: __dirname,
-    filename: './public/bundle.js'
+    filename: './public/bundle.js',
   },
   devtool: 'source-map',
   module: {
@@ -10,7 +10,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
       },
       {
         test: /\.css$/,
@@ -18,7 +18,7 @@ module.exports = {
           'style-loader',
           'css-loader',
           { loader: 'postcss-loader', options: { plugins: [require('postcss-reset-scrollbar')] } },
-        ]
+        ],
       },
       {
         test: /\.svg$|\.ttf?|\.woff$|\.woff2|\.eof|\.eot|\.png/,
@@ -31,7 +31,7 @@ module.exports = {
             },
           },
         ],
-      }
-    ]
-  }
-}
+      },
+    ],
+  },
+};

@@ -5,7 +5,7 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-//configuration for AWS
+// configuration for AWS
 const myBucket = 'soundcrowd-songs-fullstack';
 const upload2AWS = require('./aws-helper')(myBucket, 'songs/');
 
@@ -13,7 +13,7 @@ const upload2AWS = require('./aws-helper')(myBucket, 'songs/');
 router.get('/', (req, res, next) => {
   Song.findAll()
     .then(songs => res.json(songs))
-    .catch(next)
+    .catch(next);
 });
 
 // upload a mix
@@ -50,45 +50,49 @@ router.get('/top/:number', (req, res, next) => {
     limit,
     include: [
       {
-        model: User, through: 'collaborators', as: 'artist', attributes: ['id', 'username']
+        model: User, through: 'collaborators', as: 'artist', attributes: ['id', 'username'],
       },
     ],
   })
     .then(songs => res.json(songs))
-    .catch(next)
-})
+    .catch(next);
+});
 
-//get a specific song
+// get a specific song
 router.get('/:id', (req, res, next) => {
   Song.findOne({ where: { id: Number(req.params.id) }, include: [{ model: User, as: 'artist' }] })
     .then(song => res.json(song))
     .catch(next);
-})
+});
 
-//to increment play count
+// to increment play count
 router.put('/played/:id', (req, res, next) => {
   Song.findById(Number(req.params.id))
     .then(song => song.incrementPlaycount())
     .then(song => res.sendStatus(204))
-    .catch(next)
-})
+    .catch(next);
+});
 
-//"like" a song
+// "like" a song
 router.put('/like/:id', (req, res, next) => {
   if (!req.user) res.sendStatus(401);
-  else Song.findById(Number(req.params.id))
-    .then(song => song.like(req.user.id))
-    .then(song => res.sendStatus(200))
-    .catch(next)
-})
+  else {
+    Song.findById(Number(req.params.id))
+      .then(song => song.like(req.user.id))
+      .then(song => res.sendStatus(200))
+      .catch(next);
+  }
+});
 
-//"unlike" a song
+// "unlike" a song
 router.put('/unlike/:id', (req, res, next) => {
   if (!req.user) res.sendStatus(401);
-  else Song.findById(Number(req.params.id))
-    .then(song => song.unlike(req.user.id))
-    .then(song => res.sendStatus(200))
-    .catch(next)
-})
+  else {
+    Song.findById(Number(req.params.id))
+      .then(song => song.unlike(req.user.id))
+      .then(song => res.sendStatus(200))
+      .catch(next);
+  }
+});
 
 module.exports = router;

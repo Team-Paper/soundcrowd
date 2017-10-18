@@ -1,4 +1,4 @@
-let context = new (AudioContext || webkitAudioContext)();
+const context = new (AudioContext || webkitAudioContext)();
 
 console.log('context file ran');
 

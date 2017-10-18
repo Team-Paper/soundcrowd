@@ -10,8 +10,8 @@ const Soundfile = db.define('soundfile', {
   url: {
     type: Sequelize.VIRTUAL,
     get() {
-      return '/' + this.getDataValue('filename');
-    }
+      return `/${this.getDataValue('filename')}`;
+    },
   },
 });
 

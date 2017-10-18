@@ -11,16 +11,16 @@ export const startRecord = () => ({
 export const stopRecord = () => ({
   type: STOP_RECORD,
   isRecording: false,
-})
+});
 
 // REDUCER
 export default function reducer(isRecording = false, action) {
-  switch(action.type) {
+  switch (action.type) {
     case START_RECORD:
       return action.isRecording;
     case STOP_RECORD:
       return action.isRecording;
     default:
-      return isRecording
+      return isRecording;
   }
 }

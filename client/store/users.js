@@ -25,40 +25,32 @@ export const updateOneUser = user => ({ type: UPDATE_USER, user });
  * THUNK CREATORS
  */
 
-export const fetchUser = (userId) => {
-  return (dispatch) => {
-    axios.get(`/api/users/${userId}`)
-      .then(res => res.data)
-      .then(user => dispatch(getUser(user)))
-      .catch(console.error.bind(console));
-  };
+export const fetchUser = userId => (dispatch) => {
+  axios.get(`/api/users/${userId}`)
+    .then(res => res.data)
+    .then(user => dispatch(getUser(user)))
+    .catch(console.error.bind(console));
 };
 
-export const updateUser = (user) => {
-  return (dispatch) => {
-    axios.put(`/api/users/${user.id}`, user)
-      .then(res => res.data)
-      .then(updatedUser => dispatch(updateOneUser(updatedUser)))
-      .catch(console.error.bind(console));
-  };
+export const updateUser = user => (dispatch) => {
+  axios.put(`/api/users/${user.id}`, user)
+    .then(res => res.data)
+    .then(updatedUser => dispatch(updateOneUser(updatedUser)))
+    .catch(console.error.bind(console));
 };
 
-export const fetchAllUsers = () => {
-  return (dispatch) => {
-    axios.get('/api/users/')
-      .then(res => res.data)
-      .then(users => dispatch(getAllUsers(users)))
-      .catch(console.error.bind(console));
-  };
+export const fetchAllUsers = () => (dispatch) => {
+  axios.get('/api/users/')
+    .then(res => res.data)
+    .then(users => dispatch(getAllUsers(users)))
+    .catch(console.error.bind(console));
 };
 
-export const fetchFriends = (userId) => {
-  return (dispatch) => {
-    axios.get('/auth/facebook/friends')
-      .then(res => res.data)
-      .then(users => dispatch(getAllUsers(users)))
-      .catch(console.error.bind(console));
-  };
+export const fetchFriends = userId => (dispatch) => {
+  axios.get('/auth/facebook/friends')
+    .then(res => res.data)
+    .then(users => dispatch(getAllUsers(users)))
+    .catch(console.error.bind(console));
 };
 
 /**

@@ -9,7 +9,7 @@ export const setStartRecordTime = startRecordTime => ({
 
 // REDUCER
 export default function reducer(startRecordTime = 0, action) {
-  switch(action.type) {
+  switch (action.type) {
     case SET_START_RECORD_TIME:
       return action.startRecordTime;
     default:

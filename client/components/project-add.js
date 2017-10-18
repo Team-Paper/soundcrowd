@@ -4,13 +4,13 @@ import { Item, Form, Button, Header } from 'semantic-ui-react';
 
 function ProjectAdd({ createProject }) {
   return (
-    <div style={{textAlign: 'center'}}>
-      <Form style={{paddingTop: 30, paddingBottom: 30}} onSubmit={createProject}>
+    <div style={{ textAlign: 'center' }}>
+      <Form style={{ paddingTop: 30, paddingBottom: 30 }} onSubmit={createProject}>
         <Form.Field>
           <label>Project Title</label>
-          <input placeholder='Title' name='title' />
+          <input placeholder="Title" name="title" />
         </Form.Field>
-        <Button type='submit'>Create Project</Button>
+        <Button type="submit">Create Project</Button>
       </Form>
     </div>
   );
