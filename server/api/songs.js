@@ -69,7 +69,7 @@ router.get('/:id', (req, res, next) => {
 router.put('/played/:id', (req, res, next) => {
   Song.findById(Number(req.params.id))
     .then(song => song.incrementPlaycount())
-    .then(song => res.sendStatus(204))
+    .then(() => res.sendStatus(204))
     .catch(next);
 });
 
@@ -79,7 +79,7 @@ router.put('/like/:id', (req, res, next) => {
   else {
     Song.findById(Number(req.params.id))
       .then(song => song.like(req.user.id))
-      .then(song => res.sendStatus(200))
+      .then(() => res.sendStatus(200))
       .catch(next);
   }
 });
@@ -90,7 +90,7 @@ router.put('/unlike/:id', (req, res, next) => {
   else {
     Song.findById(Number(req.params.id))
       .then(song => song.unlike(req.user.id))
-      .then(song => res.sendStatus(200))
+      .then(() => res.sendStatus(200))
       .catch(next);
   }
 });

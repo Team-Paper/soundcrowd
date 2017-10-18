@@ -31,7 +31,11 @@ router.get('/:id/comments', (req, res, next) => {
 router.get('/:id/comments-about', (req, res, next) => {
   const userId = Number(req.params.id);
   Song.findAll({ where: { '$artist.id$': userId }, include: [{ model: User, as: 'artist', though: Collaborators }, { model: Comment }] })
-    .then(songs => Promise.all(songs.map(song => Comment.findAll({ where: { songId: song.id }, include: [{ model: User }] }))))
+    .then(songs => Promise.all(songs.map(song =>
+      Comment.findAll({
+        where: { songId: song.id },
+        include: [{ model: User }],
+      }))))
     .then(resultArr => resultArr.reduce((arr, val) => arr.concat(val), []))
     .then(result => result.sort((a, b) => b.createdAt - a.createdAt).slice(0, 5))
     .then(result => res.json(result))
