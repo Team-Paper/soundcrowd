@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { Form, Grid, Container, Header, Image, Message, Segment, Input, Button, Label } from 'semantic-ui-react';
+import { Form, Grid, Header, Message, Segment, Button } from 'semantic-ui-react';
 import { auth } from '../store';
 
 /**
@@ -103,13 +102,3 @@ const mapDispatch = (dispatch) => {
 
 export const Login = connect(mapLogin, mapDispatch)(AuthForm);
 export const Signup = connect(mapSignup, mapDispatch)(AuthForm);
-
-/**
- * PROP TYPES
- */
-AuthForm.propTypes = {
-  name: PropTypes.string.isRequired,
-  displayName: PropTypes.string.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  error: PropTypes.object,
-}
