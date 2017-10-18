@@ -12,7 +12,6 @@ class CollaboratorList extends React.Component {
 
   render() {
     const { collaborators } = this.props;
-    console.log('list collaborators are', collaborators);
     return (
       <Card fluid>
         <Card.Content>
@@ -25,7 +24,7 @@ class CollaboratorList extends React.Component {
   }
 }
 
-const mapState = (state, ownProps) => ({
+const mapState = state => ({
   collaborators: state.collaborators,
 });
 
