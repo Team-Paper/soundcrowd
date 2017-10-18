@@ -1,67 +1,51 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Form, Grid, Header, Message, Segment, Button } from 'semantic-ui-react';
+import { Form, Container, Header, Message, Segment, Button } from 'semantic-ui-react';
 import { auth } from '../store';
 
 /**
  * COMPONENT
  */
 const AuthForm = (props) => {
-  const { name, displayName, handleSubmit, error } = props;
+  const { name, displayName, handleSubmit } = props;
 
   return (
-    <div className="login-form">
-      {/*
-      Heads up! The styles below are necessary for the correct render of this example.
-      You can do same with CSS, the main idea is that all the elements up to the `Grid`
-      below must have a height of 100%.
-    */}
-      <style>{`
-      body > div > div,
-      body > div > div > div.login-form {
-        height: 100%;
-      }
-    `}</style>
-      <Grid
-        textAlign="center"
-        style={{ height: '100%' }}
-        verticalAlign="middle"
-      >
-        <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as="h2" color="grey" textAlign="center">
-            {/* <Image src='/logo.png' /> */}
-            {''}{displayName}
-          </Header>
-          <Form onSubmit={handleSubmit} size="large" name={name}>
-            <Segment stacked>
-              <Form.Input
-                fluid
-                icon="user"
-                iconPosition="left"
-                placeholder="E-mail address"
-                name="email"
-              />
-              <Form.Input
-                fluid
-                icon="lock"
-                iconPosition="left"
-                placeholder="Password"
-                type="password"
-                name="password"
-              />
+    <Container
+      textAlign="center"
+      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}
+    >
+      <div style={{ width: '100%', maxWidth: 450 }}>
+        <Header as="h2" color="grey" textAlign="center">
+          {displayName}
+        </Header>
+        <Form onSubmit={handleSubmit} size="large" name={name}>
+          <Segment>
+            <Form.Input
+              fluid
+              icon="user"
+              iconPosition="left"
+              placeholder="E-mail address"
+              name="email"
+            />
+            <Form.Input
+              fluid
+              icon="lock"
+              iconPosition="left"
+              placeholder="Password"
+              type="password"
+              name="password"
+            />
 
-              <Button color="black" type="submit" fluid size="large">{displayName}</Button>
-            </Segment>
-          </Form>
-          <Message>
+            <Button color="black" type="submit" fluid size="large">{displayName}</Button>
+          </Segment>
+        </Form>
+        <Message>
 
-            <a href="/auth/facebook">{displayName} with Facebook</a>
+          <a href="/auth/facebook">{displayName} with Facebook</a>
 
-            {/* New to us? <a href='#'>Sign Up</a> */}
-          </Message>
-        </Grid.Column>
-      </Grid>
-    </div>
+        </Message>
+      </div>
+    </Container>
   );
 };
 
@@ -72,16 +56,14 @@ const AuthForm = (props) => {
  *   function, and share the same Component. This is a good example of how we
  *   can stay DRY with interfaces that are very similar to each other!
  */
-const mapLogin = state => ({
+const mapLogin = () => ({
   name: 'login',
   displayName: 'Login',
-  error: state.user.error,
 });
 
-const mapSignup = state => ({
+const mapSignup = () => ({
   name: 'signup',
   displayName: 'Sign Up',
-  error: state.user.error,
 });
 
 const mapDispatch = dispatch => ({
