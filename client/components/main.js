@@ -41,8 +41,8 @@ const Main = (props) => {
       </Menu>
       {children}
     </div>
-  )
-}
+  );
+};
 
 /**
  * CONTAINER
@@ -50,8 +50,8 @@ const Main = (props) => {
 const mapState = (state) => {
   return {
     isLoggedIn: !!state.user.id
-  }
-}
+  };
+};
 
 const mapDispatch = (dispatch) => {
   return {
