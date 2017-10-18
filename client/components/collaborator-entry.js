@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Feed } from 'semantic-ui-react';
 
 function CollaboratorEntry({ collaborator }) {
-  console.log('collaborator is', collaborator);
   return (
     <Feed>
       <Feed.Event>
@@ -18,8 +17,8 @@ function CollaboratorEntry({ collaborator }) {
   );
 }
 
-const mapState = (state, ownProps) => ({});
+const mapState = () => ({});
 
-const mapDispatch = dispatch => ({});
+const mapDispatch = () => ({});
 
 export default connect(mapState, mapDispatch)(CollaboratorEntry);
