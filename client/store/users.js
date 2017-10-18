@@ -46,7 +46,7 @@ export const fetchAllUsers = () => (dispatch) => {
     .catch(console.error.bind(console));
 };
 
-export const fetchFriends = userId => (dispatch) => {
+export const fetchFriends = () => (dispatch) => {
   axios.get('/auth/facebook/friends')
     .then(res => res.data)
     .then(users => dispatch(getAllUsers(users)))

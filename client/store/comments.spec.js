@@ -1,17 +1,7 @@
-/* global describe beforeEach afterEach it */
+/* global describe it */
 
 import { expect } from 'chai';
-import commentReducer from './comments';
-import { getComment, GET_COMMENT, getSomeComments, GET_SOME_COMMENTS } from './comments';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
-import configureMockStore from 'redux-mock-store';
-import thunkMiddleware from 'redux-thunk';
-import history from '../history';
-
-const mockAxios = new MockAdapter(axios);
-const middlewares = [thunkMiddleware];
-const mockStore = configureMockStore(middlewares);
+import commentReducer, { getComment, GET_COMMENT, getSomeComments, GET_SOME_COMMENTS } from './comments';
 
 
 describe('Comment redux store', () => {

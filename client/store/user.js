@@ -26,7 +26,7 @@ export const me = () =>
     axios.get('/auth/me')
       .then(res =>
         dispatch(getUser(res.data || defaultUser)))
-      .catch(err => console.log(err));
+      .catch(console.error.bind(console));
 
 export const auth = (email, password, method) =>
   dispatch =>
@@ -41,11 +41,11 @@ export const auth = (email, password, method) =>
 export const logout = () =>
   dispatch =>
     axios.post('/auth/logout')
-      .then((res) => {
+      .then(() => {
         dispatch(logoutUser());
         history.push('/login');
       })
-      .catch(err => console.log(err));
+      .catch(console.error.bind(console));
 
 /**
  * REDUCER
