@@ -28,10 +28,6 @@ class SingleSong extends React.Component {
       .catch(console.error);
   }
 
-  // componentWillReceiveProps(newProps) {
-  //   if (!newProps.song) this.props.loadData();
-  // }
-
   handleChange(event) {
     this.setState({ text: event.target.value });
   }
@@ -44,8 +40,6 @@ class SingleSong extends React.Component {
     comment.user = this.props.user;
     comment.userId = this.props.user.id;
     comment.songId = this.props.song.id;
-
-    console.log(comment);
 
     this.props.postComment(comment);
     this.setState({ text: '' });

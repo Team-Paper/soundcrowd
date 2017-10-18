@@ -28,7 +28,7 @@ class CommentList extends React.Component {
   }
 }
 
-const mapState = (state, ownProps) => ({
+const mapState = state => ({
   comments: state.comments,
 });
 
