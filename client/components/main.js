@@ -1,9 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import {withRouter, Link} from 'react-router-dom'
-import {Menu} from 'semantic-ui-react'
-import {logout} from '../store'
+import React from 'react';
+import { connect } from 'react-redux';
+import { withRouter, Link } from 'react-router-dom';
+import { Menu } from 'semantic-ui-react';
+import { logout } from '../store';
 
 const styles = {
   main: {
@@ -14,36 +13,36 @@ const styles = {
 };
 
 const Main = (props) => {
-  const {children, handleClick, isLoggedIn} = props
+  const { children, handleClick, isLoggedIn } = props;
 
   return (
     <div style={styles.main}>
       <Menu stackable >
-      <Menu.Item header as={Link} to="/">SOUNDCROWD</Menu.Item>
+        <Menu.Item header as={Link} to="/">SOUNDCROWD</Menu.Item>
         {
           isLoggedIn
             ? <Menu.Menu>
-                <Menu.Item as={Link} to="/home">
-                  Home
-                </Menu.Item>
-                <Menu.Item onClick={handleClick}>
-                  Logout
-                </Menu.Item>
+              <Menu.Item as={Link} to="/home">
+                Home
+              </Menu.Item>
+              <Menu.Item onClick={handleClick}>
+                Logout
+              </Menu.Item>
             </Menu.Menu>
             : <Menu.Menu>
-                <Menu.Item as={Link} to="/login">
-                  Login
-                </Menu.Item>
-                <Menu.Item as={Link} to="/signup">
-                  Sign Up
-                </Menu.Item>
-              </Menu.Menu>
+              <Menu.Item as={Link} to="/login">
+                Login
+              </Menu.Item>
+              <Menu.Item as={Link} to="/signup">
+                Sign Up
+              </Menu.Item>
+            </Menu.Menu>
         }
       </Menu>
       {children}
     </div>
-  )
-}
+  );
+};
 
 /**
  * CONTAINER
@@ -51,12 +50,12 @@ const Main = (props) => {
 const mapState = (state) => {
   return {
     isLoggedIn: !!state.user.id
-  }
-}
+  };
+};
 
 const mapDispatch = (dispatch) => {
   return {
-    handleClick () {
+    handleClick() {
       dispatch(logout())
     }
   }
@@ -65,12 +64,3 @@ const mapDispatch = (dispatch) => {
 // The `withRouter` wrapper makes sure that updates are not blocked
 // when the url changes
 export default withRouter(connect(mapState, mapDispatch)(Main))
-
-/**
- * PROP TYPES
- */
-Main.propTypes = {
-  children: PropTypes.object,
-  handleClick: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired
-}

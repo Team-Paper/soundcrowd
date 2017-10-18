@@ -3,10 +3,10 @@
  * This way, we can import all of our components from the same place, rather than
  * having to figure out which file they belong to!
  */
-export {default as Main} from './main'
-export {default as Project} from './project'
-export { UserHomeConnected as UserHome, PublicPage } from './user-home'
-export {Login, Signup} from './auth-form'
-export {default as LandingPage} from './landing-page'
-export {default as SingleSong} from './single-song'
-export {default as SongView} from './song-view'
+export { default as Main } from './main';
+export { default as Project } from './project';
+export { UserHomeConnected as UserHome, PublicPage } from './user-home';
+export { Login, Signup } from './auth-form';
+export { default as LandingPage } from './landing-page';
+export { default as SingleSong } from './single-song';
+export { default as SongView } from './song-view';

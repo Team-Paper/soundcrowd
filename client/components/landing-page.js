@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Header, Card } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { fetchTopSongs, clearSongs } from '../store';
 import SongList from './song-list';
 import CommentList from './comment-list';
@@ -40,7 +38,7 @@ class LandingPage extends React.Component {
             <Card fluid>
               <Card.Content>
                 <WaveformGradient />
-                <SongList songs={songs}/>
+                <SongList songs={songs} />
               </Card.Content>
             </Card>
           </Grid.Column>
@@ -50,8 +48,8 @@ class LandingPage extends React.Component {
           </Grid.Column>
           <Grid.Column width={1} />
         </Grid.Row>
-        </Grid>
-      );
+      </Grid>
+    );
   }
 }
 
