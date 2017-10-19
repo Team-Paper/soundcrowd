@@ -33,15 +33,14 @@ export default function reducer(reverbs = {}, action) {
 
 // THUNK CREATORS
 export const fetchReverbsThunk = reverbs => (dispatch) => {
-  Promise.all(Object.entries(reverbs).map(([key, reverb]) => (
+  Promise.all(Object.values(reverbs).map(reverb =>
     axios.get(`/reverbs/${reverb.filename}`, { responseType: 'arraybuffer' })
-  )
-    .then(res => res.data)
-    .then(responseAudio => context.decodeAudioData(responseAudio))
-    .then((audio) => {
-      const buffer = context.createBufferSource();
-      buffer.connect(context.destination);
-      buffer.buffer = audio;
-      dispatch(addReverb({ id: reverb.id, audio: buffer, title: reverb.title }));
-    })));
+      .then(res => res.data)
+      .then(responseAudio => context.decodeAudioData(responseAudio))
+      .then((audio) => {
+        const buffer = context.createBufferSource();
+        buffer.connect(context.destination);
+        buffer.buffer = audio;
+        dispatch(addReverb({ id: reverb.id, audio: buffer, title: reverb.title }));
+      })));
 };
