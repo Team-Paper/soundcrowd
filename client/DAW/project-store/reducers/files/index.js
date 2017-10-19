@@ -19,14 +19,14 @@ export default function reducer(files = {}, action) {
 }
 
 // THUNK CREATORS
-export const setFilesThunk = (projectId, files) => (dispatch) => {
+export const setFilesThunk = (projectId, files) => () => {
   firebase.database().ref(`${projectId}/files`).set(files);
 };
 
-export const addFileThunk = (projectId, file) => (dispatch) => {
+export const addFileThunk = (projectId, file) => () => {
   firebase.database().ref(`${projectId}/files/${file.id}`).set(file);
 };
 
-export const setName = (projectId, file, newName) => (dispatch) => {
+export const setName = (projectId, file, newName) => () => {
   firebase.database().ref(`${projectId}/files/${file.id}/name`).set(newName);
 };

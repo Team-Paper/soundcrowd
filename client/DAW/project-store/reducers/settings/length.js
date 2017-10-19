@@ -20,6 +20,6 @@ export default function reducer(length = 10, action) {
 }
 
 // THUNK CREATORS
-export const setLengthThunk = (projectId, length) => (dispatch) => {
+export const setLengthThunk = (projectId, length) => () => {
   firebase.database().ref(`${projectId}/settings/length`).set(+length);
 };

@@ -17,4 +17,5 @@ export default function reducer(playedAt = 0, action) {
   }
 }
 
-export const setPlayedAtThunk = playedAt => dispatch => Promise.resolve(dispatch(setPlayedAt(playedAt)));
+export const setPlayedAtThunk = playedAt =>
+  dispatch => Promise.resolve(dispatch(setPlayedAt(playedAt)));
