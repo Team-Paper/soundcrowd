@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* global describe beforeEach it */
 
 const { expect } = require('chai');
@@ -24,6 +25,8 @@ describe('User routes', () => {
       .then((res) => {
         expect(res.body).to.be.an('array');
         expect(res.body[0].username).to.be.equal('Test User');
+        // exclude emails in user list
+        expect(res.body[0].email).to.be.undefined;
       }));
   }); // end describe('/api/users')
 }); // end describe('User routes')
