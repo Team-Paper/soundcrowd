@@ -349,7 +349,7 @@ class Timeline extends React.Component {
       return null;
     }
     this.checkAndPlay(time);
-    if (this.mediaRecorder.state !== 'recording' && isRecording) {
+    if (this.mediaRecorder && this.mediaRecorder.state !== 'recording' && isRecording) {
       setTimeout(() => this.mediaRecorder.start(), 40);
     }
     return isPlaying && setTimeout(this.tick, 0);
