@@ -1,10 +1,8 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { Container, Item, Grid, Image, Header, Button, Select, Form, Tab, Card, Feed } from 'semantic-ui-react';
+import { Grid, Image, Header, Tab, Card } from 'semantic-ui-react';
 import axios from 'axios';
-import { fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchFriends, fetchUser, addProject } from '../store';
+import { fetchUserSongs, clearSongs, fetchUserProjects, addCollaborator, fetchFriends, fetchUser, updateUser, addProject } from '../store';
 import SongList from './song-list';
 import ProjectList from './project-list';
 import ProjectAdd from './project-add';
@@ -61,7 +59,6 @@ class UserHome extends React.Component {
 
   handleSelect(event, { value }) {
     const userToAdd = Number(value);
-    console.log('userToAdd is', userToAdd);
     this.setState({ userToAdd });
   }
 
@@ -69,7 +66,7 @@ class UserHome extends React.Component {
     // get the userId you want to add from the state
     const userId = this.state.userToAdd;
     if (userId) this.props.addCollaborator(userId, projectId);
-    else console.log('you cannot');
+    // else console.error('User must be logged in to add collaborators');
   }
 
   createProject(e) {
@@ -85,10 +82,8 @@ class UserHome extends React.Component {
   }
 
   render() {
-    const { user, songs, projects, pageName, isSelf, usersOptions } = this.props;
-    console.log('props are', this.props);
+    const { user, songs, projects, isSelf, usersOptions } = this.props;
     if (!user || !songs || !projects) return <div />;
-    console.log('usersOptions is', usersOptions);
     const panes = [
       { menuItem: 'Songs', render: () => <Tab.Pane attached={false}><SongList songs={songs} /></Tab.Pane> },
     ];
@@ -130,7 +125,13 @@ class UserHome extends React.Component {
         <Grid.Row style={styles.header}>
           <Grid.Column width={16} >
             <Header size="huge" textAlign="center" style={styles.title}>{user.username}</Header>
-            <Image src={user.userImage} style={styles.headerImage} size="small" shape="circular" centered />
+            <Image
+              src={user.userImage}
+              style={styles.headerImage}
+              size="small"
+              shape="circular"
+              centered
+            />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
@@ -176,9 +177,10 @@ const mapStateMyPage = (state) => {
   });
 
   return {
-    pageName: `Hello, ${state.user.username}`,
     user: state.user,
-    usersOptions: state.users.map(user => ({ key: user.id, value: user.id, text: user.username || user.name })),
+    usersOptions: state.users.map(user => (
+      ({ key: user.id, value: user.id, text: user.username || user.name })
+    )),
     songs: userSongs,
     comments: state.comments.filter(comment => comment.userId === state.user.id),
     projects: userProjects,
@@ -244,4 +246,4 @@ const mapDispatchPublicPage = (dispatch, ownProps) => {
 const UserHomeConnected = connect(mapStateMyPage, mapDispatchMyPage)(UserHome);
 const PublicPage = connect(mapStatePublicPage, mapDispatchPublicPage)(UserHome);
 
-export { UserHomeConnected, PublicPage };
+export { UserHome, UserHomeConnected, PublicPage };
