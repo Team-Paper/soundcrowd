@@ -44,7 +44,7 @@ export default function reducer(soundClips = {}, action) {
 export const createSoundClips = (files, soundClips) => (dispatch) => {
   if (!files) return Promise.resolve([]);
   return Promise.all(Object.entries(files).map(([key, file]) => {
-    if (soundClips.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(soundClips, key)) {
       return false;
     }
     return axios.get(`//d3oysef4ue4h90.cloudfront.net${file.url}`, { responseType: 'arraybuffer' })

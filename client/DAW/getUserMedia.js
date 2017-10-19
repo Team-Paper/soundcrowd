@@ -1,4 +1,4 @@
-const navigator = navigator || {};
+/* global navigator */
 
 navigator.getUserMedia = navigator.getUserMedia ||
 navigator.webkitGetUserMedia ||

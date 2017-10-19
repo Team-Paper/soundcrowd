@@ -11,7 +11,7 @@ export const setTempo = tempo => ({
 
 // REDUCER
 export default function reducer(tempo = 80, action) {
-  switch(action.type) {
+  switch (action.type) {
     case SET_TEMPO:
       return action.tempo;
     default:
@@ -20,6 +20,6 @@ export default function reducer(tempo = 80, action) {
 }
 
 // THUNK CREATORS
-export const setTempoThunk = (projectId, tempo) => dispatch => {
+export const setTempoThunk = (projectId, tempo) => () => {
   firebase.database().ref(`${projectId}/settings/tempo`).set(tempo);
 };

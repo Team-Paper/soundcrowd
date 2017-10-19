@@ -1,4 +1,4 @@
-import axios from './axios'
+import axios from './axios';
 
 /**
  * ACTION TYPES
@@ -25,32 +25,20 @@ export const clearSongs = () => ({ type: CLEAR_SONGS });
  * THUNK CREATORS
  */
 
-export const fetchTopSongs = (numSongs) => {
-  return (dispatch) => {
-    return axios.get(`/api/songs/top/${numSongs}`)
-      .then(res => res.data)
-      .then(songs => dispatch(getSomeSongs(songs)))
-      .catch(console.error.bind(console))
-  }
-}
+export const fetchTopSongs = numSongs => dispatch => axios.get(`/api/songs/top/${numSongs}`)
+  .then(res => res.data)
+  .then(songs => dispatch(getSomeSongs(songs)))
+  .catch(console.error.bind(console));
 
-export const fetchSong = (id) => {
-  return (dispatch) => {
-    return axios.get(`/api/songs/${id}`)
-      .then(res => res.data)
-      .then(song => dispatch(getSong(song)))
-      .catch(console.error.bind(console))
-  }
-}
+export const fetchSong = id => dispatch => axios.get(`/api/songs/${id}`)
+  .then(res => res.data)
+  .then(song => dispatch(getSong(song)))
+  .catch(console.error.bind(console));
 
-export const fetchUserSongs = (userId) => {
-  return (dispatch) => {
-    return axios.get(`/api/users/${userId}/songs`)
-      .then(res => res.data)
-      .then(songs => dispatch(getSomeSongs(songs)))
-      .catch(console.error.bind(console))
-  }
-}
+export const fetchUserSongs = userId => dispatch => axios.get(`/api/users/${userId}/songs`)
+  .then(res => res.data)
+  .then(songs => dispatch(getSomeSongs(songs)))
+  .catch(console.error.bind(console));
 
 /**
  * REDUCER

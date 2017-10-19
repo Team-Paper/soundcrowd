@@ -1,7 +1,8 @@
+/* global navigator MediaRecorder Blob FormData OfflineAudioContext */
+
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { Card, Button, Icon, Input } from 'semantic-ui-react';
 import { PlaybackControls, TrackList } from '../components';
 import context from '../context';
 import getUserMedia from '../getUserMedia';
@@ -22,12 +23,12 @@ import { setTempo, setTempoThunk } from '../project-store/reducers/settings/temp
 import firebase from '../../firebase';
 
 class Timeline extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       playing: [],
       reverbBuffers: [],
-    }
+    };
     this.checkAndPlay = this.checkAndPlay.bind(this);
     this.playSound = this.playSound.bind(this);
     this.tick = this.tick.bind(this);
@@ -47,119 +48,58 @@ class Timeline extends React.Component {
   }
 
   componentDidMount() {
-    // calling createSoundClips here for testing purposes, but will need to be done after project files array is retrieved
-    const { setFiles, setFilesThunk, addFileThunk, setClips, setClipsThunk, setTracks, setTracksThunk, addTrackThunk, setTempo, setTempoThunk, createSoundClips, setWaveform, clips, projectId, files, tracks, soundClips, addClipThunk, selectedTracks, length, setLengthThunk, setLength, tempo, fetchReverbsThunk } = this.props;
+    const {
+      setFiles,
+      addFileThunk,
+      setClips,
+      setTracks,
+      setTempo,
+      createSoundClips,
+      projectId,
+      addClipThunk,
+      setLength,
+      fetchReverbsThunk,
+    } = this.props;
 
     // subscribe redux to firebase
-    this.filesRef.on('value', snapshot => {
+    this.filesRef.on('value', (snapshot) => {
       const received = snapshot.val();
       const { soundClips } = this.props;
       setFiles(Object.assign({}, received));
-      // createSoundClips checks for new files, gets them, and puts the audio buffer in the soundClips object
+      // createSoundClips checks for new files, gets them,
+      // and puts the audio buffer in the soundClips object
       createSoundClips(received, soundClips);
     });
-    this.clipsRef.on('value', snapshot => {
+    this.clipsRef.on('value', (snapshot) => {
       const received = snapshot.val();
       setClips(Object.assign({}, received));
     });
-    this.tracksRef.on('value', snapshot => {
+    this.tracksRef.on('value', (snapshot) => {
       const received = snapshot.val();
       setTracks(Object.assign({}, received));
     });
-    this.tempoRef.on('value', snapshot => {
+    this.tempoRef.on('value', (snapshot) => {
       const received = snapshot.val();
       setTempo(received);
     });
-    this.lengthRef.on('value', snapshot => {
+    this.lengthRef.on('value', (snapshot) => {
       const received = snapshot.val();
       setLength(received);
     });
 
-    // start firebase seeding
-    // setFilesThunk(projectId, [
-    //   { id: 1, url: '/NotATumah.mp3' },
-    //   { id: 2, url: '/GetToDaChoppa.mp3' },
-    // ]);
-    // setClipsThunk(projectId, [
-    //   { fileId: 2, startTime: 2, track: 2 },
-    //   { fileId: 1, startTime: 0, track: 1 },
-    // ]);
-    // setTracksThunk(projectId, [
-    //   { id: 1, volume: 100, isMuted: false,
-    //     reverb: { id: 1, on: false, gain: 1 },
-    //     eq: {
-    //       on: false,
-    //       bands: {
-    //         1: { f: 63, q: 4.318, gain: 0},
-    //         2: { f: 125, q: 4.318, gain: 0},
-    //         3: { f: 250, q: 4.318, gain: 0},
-    //         4: { f: 400, q: 4.318, gain: 0},
-    //         5: { f: 630, q: 4.318, gain: 0},
-    //         6: { f: 1000, q: 4.318, gain: 0},
-    //         7: { f: 1600, q: 4.318, gain: 0},
-    //         8: { f: 2500, q: 4.318, gain: 0},
-    //         9: { f: 4000, q: 4.318, gain: 0},
-    //         10: { f: 6300, q: 4.318, gain: 0},
-    //         11: { f: 10000, q: 4.318, gain: 0},
-    //         12: { f: 16000, q: 4.318, gain: 0},
-    //       }
-    //     },
-    //     compressor: {
-    //       on: false,
-    //       threshold: -24,
-    //       knee: 30,
-    //       ratio: 12,
-    //       attack: 0.003,
-    //       release: 0.25,
-    //     }
-    //   },
-    //   { id: 2, volume: 100, isMuted: false,
-    //     reverb: { id: 1, on: false, gain: 1 },
-    //     eq: {
-    //       on: false,
-    //       bands: {
-    //         1: { f: 63, q: 4.318, gain: 0},
-    //         2: { f: 125, q: 4.318, gain: 0},
-    //         3: { f: 250, q: 4.318, gain: 0},
-    //         4: { f: 400, q: 4.318, gain: 0},
-    //         5: { f: 630, q: 4.318, gain: 0},
-    //         6: { f: 1000, q: 4.318, gain: 0},
-    //         7: { f: 1600, q: 4.318, gain: 0},
-    //         8: { f: 2500, q: 4.318, gain: 0},
-    //         9: { f: 4000, q: 4.318, gain: 0},
-    //         10: { f: 6300, q: 4.318, gain: 0},
-    //         11: { f: 10000, q: 4.318, gain: 0},
-    //         12: { f: 16000, q: 4.318, gain: 0},
-    //       }
-    //     },
-    //     compressor: {
-    //       on: false,
-    //       threshold: -24,
-    //       knee: 30,
-    //       ratio: 12,
-    //       attack: 0.003,
-    //       release: 0.25,
-    //     }
-    //   },
-    // ]);
-    // end firebase seeding
-
     // start listening for recording events
     if (getUserMedia) {
-      console.log('getUserMedia supported.');
-      navigator.getUserMedia({ audio: true},
-        stream => {
+      navigator.getUserMedia({ audio: true },
+        (stream) => {
           this.mediaRecorder = new MediaRecorder(stream);
 
-          this.mediaRecorder.ondataavailable = e => {
+          this.mediaRecorder.ondataavailable = (e) => {
             this.audioChunks.push(e.data);
-          }
+          };
 
-          this.mediaRecorder.onstop = e => {
-            console.log('recorder stopped');
-            const blob = new Blob(this.audioChunks, { type: 'audio/ogg; codecs=opus'})
+          this.mediaRecorder.onstop = () => {
+            const blob = new Blob(this.audioChunks, { type: 'audio/ogg; codecs=opus' });
             this.audioChunks = [];
-            console.log('blob is', blob);
 
             const formData = new FormData();
             formData.set('blob', blob);
@@ -180,24 +120,20 @@ class Timeline extends React.Component {
                 );
               })
               .catch(console.error);
-            // const audioURL = window.URL.createObjectURL(blob);
-            // audio.src = audioURL;
-          }
-
-      }, err => console.error(err));
+          };
+        }, err => console.error(err));
     } else {
-      console.log('getUserMedia not supported.');
+      console.error('getUserMedia not supported.');
     }
     // end recording section
 
     // get reverbs and store them on state
     const reverbs = {
       1: { id: 1, filename: '1st_baptist_nashville_far_close.wav', title: 'Nashville Church' },
-      2: { id: 2, filename: 'empty_apartment_bedroom_06.wav', title: 'Empty Bedroom'},
-      3: { id: 3, filename: 'st_georges_far.wav', title: 'St. Georges Episcopal Church'},
-      4: { id: 4, filename: 'basement.wav', title: 'Basement'},
-      // 1: { id: 1, filename: '2346b5d7ba4918cb48d33f8669ea2389', title: 'test' }
-    }
+      2: { id: 2, filename: 'empty_apartment_bedroom_06.wav', title: 'Empty Bedroom' },
+      3: { id: 3, filename: 'st_georges_far.wav', title: 'St. Georges Episcopal Church' },
+      4: { id: 4, filename: 'basement.wav', title: 'Basement' },
+    };
     fetchReverbsThunk(reverbs);
   }
 
@@ -209,11 +145,8 @@ class Timeline extends React.Component {
     this.lengthRef.off();
   }
 
-  playSound(buffer, startTime, playAt, offset, duration, track) {
+  playSound(buffer, startTime = 0, playAt, offset, duration, track) {
     const source = context.createBufferSource();
-    if (!startTime) {
-      startTime = 0;
-    }
     source.buffer = buffer;
     this.trackEffectsLoop(source, track, context).connect(context.destination);
     source.start(playAt, startTime + offset, duration);
@@ -366,66 +299,93 @@ class Timeline extends React.Component {
   }
 
   togglePlay() {
-    const { isPlaying, play, pause, setPlayedAt, setPlayedAtThunk, soundClips, playThunk, setStartThunk, time, clips, isRecording, stopRecord } = this.props;
+    const {
+      isPlaying,
+      pause,
+      setPlayedAtThunk,
+      playThunk,
+      setStartThunk,
+      time,
+      clips,
+      isRecording,
+      stopRecord,
+    } = this.props;
     if (!isPlaying) {
       setStartThunk(time)
         .then(() => playThunk())
         .then(() => setPlayedAtThunk(context.currentTime))
         .then(() => this.tick())
         .catch(console.error);
-        // setTimeout(this.tick, 20);
     } else {
       if (isRecording) {
         this.mediaRecorder.stop();
         stopRecord();
       }
       pause();
-      this.state.playing.forEach(sound => {
+      this.state.playing.forEach((sound) => {
         sound.stop();
       });
-      for (let key in clips) {
-        if (clips.hasOwnProperty(key)) {
-          clips[key].played = false;
-        }
-      }
+      Object.keys(clips).forEach((key) => {
+        clips[key].played = false;
+      });
       this.setState({ playing: [] });
     }
   }
 
   tick() {
-    const { time, playedAt, start, setTime, isPlaying, tempo, isRecording, length } = this.props;
+    const {
+      time,
+      playedAt,
+      start,
+      setTime,
+      isPlaying,
+      isRecording,
+      length,
+    } = this.props;
+
     setTime((context.currentTime - playedAt) + start);
     if (time > length) {
       this.togglePlay();
       return null;
     }
-    const timeSubDivide = 60 / tempo;
     this.checkAndPlay(time);
-    if (this.mediaRecorder.state !== 'recording' && isRecording) {
+    if (this.mediaRecorder && this.mediaRecorder.state !== 'recording' && isRecording) {
       setTimeout(() => this.mediaRecorder.start(), 40);
     }
-    isPlaying && setTimeout(this.tick, 0);
+    return isPlaying && setTimeout(this.tick, 0);
   }
 
   checkAndPlay(time) {
     const { soundClips, isPlaying, clips, tracks } = this.props;
-    for (let key in clips) {
-      if (clips.hasOwnProperty(key)) {
-        const clip = clips[key];
-        if (isPlaying === true && time > clip.startTime && clip.track !== null && clip.played === false) {
-          const track = tracks[clip.track];
-          const soundClip = soundClips[clip.fileId];
-          const playAt = context.currentTime + (clip.startTime - time);
-          const { offset, duration } = clip;
-          clip.played = true;
-          this.playSound(soundClip.sound.buffer, time - clip.startTime, playAt, offset, duration, track);
-        }
+    Object.keys(clips).forEach((key) => {
+      const clip = clips[key];
+      if (isPlaying && time > clip.startTime && clip.track && !clip.played) {
+        const track = tracks[clip.track];
+        const soundClip = soundClips[clip.fileId];
+        const playAt = context.currentTime + (clip.startTime - time);
+        const { offset, duration } = clip;
+        clip.played = true;
+        this.playSound(
+          soundClip.sound.buffer,
+          time - clip.startTime,
+          playAt,
+          offset,
+          duration,
+          track);
       }
-    }
+    });
   }
 
   startRecord() {
-    const { time, selectedTracks, setStartRecordTime, isPlaying, isRecording, startRecord } = this.props;
+    const {
+      time,
+      selectedTracks,
+      setStartRecordTime,
+      isPlaying,
+      isRecording,
+      startRecord,
+    } = this.props;
+
     if (!selectedTracks.length || isRecording) return;
     startRecord();
     setStartRecordTime(time);
@@ -439,32 +399,34 @@ class Timeline extends React.Component {
     if (!isRecording) return;
     stopRecord();
     if (isPlaying) {
-      this.togglePlay(); //togglePlay will call this.mediaRecorder.stop();
+      this.togglePlay(); // togglePlay will call this.mediaRecorder.stop();
     }
   }
 
   addTrack() {
     const { projectId, tracks, addTrackThunk } = this.props;
-    const newTrackId = Object.keys(tracks).length + 1
+    const newTrackId = Object.keys(tracks).length + 1;
 
-    const newTrack =  { id: newTrackId, volume: 100, isMuted: false,
+    const newTrack = { id: newTrackId,
+      volume: 100,
+      isMuted: false,
       reverb: { id: 1, on: false, gain: 1 },
       eq: {
         on: false,
         bands: {
-          1: { f: 63, q: 4.318, gain: 0},
-          2: { f: 125, q: 4.318, gain: 0},
-          3: { f: 250, q: 4.318, gain: 0},
-          4: { f: 400, q: 4.318, gain: 0},
-          5: { f: 630, q: 4.318, gain: 0},
-          6: { f: 1000, q: 4.318, gain: 0},
-          7: { f: 1600, q: 4.318, gain: 0},
-          8: { f: 2500, q: 4.318, gain: 0},
-          9: { f: 4000, q: 4.318, gain: 0},
-          10: { f: 6300, q: 4.318, gain: 0},
-          11: { f: 10000, q: 4.318, gain: 0},
-          12: { f: 16000, q: 4.318, gain: 0},
-        }
+          1: { f: 63, q: 4.318, gain: 0 },
+          2: { f: 125, q: 4.318, gain: 0 },
+          3: { f: 250, q: 4.318, gain: 0 },
+          4: { f: 400, q: 4.318, gain: 0 },
+          5: { f: 630, q: 4.318, gain: 0 },
+          6: { f: 1000, q: 4.318, gain: 0 },
+          7: { f: 1600, q: 4.318, gain: 0 },
+          8: { f: 2500, q: 4.318, gain: 0 },
+          9: { f: 4000, q: 4.318, gain: 0 },
+          10: { f: 6300, q: 4.318, gain: 0 },
+          11: { f: 10000, q: 4.318, gain: 0 },
+          12: { f: 16000, q: 4.318, gain: 0 },
+        },
       },
       compressor: {
         on: false,
@@ -473,19 +435,18 @@ class Timeline extends React.Component {
         ratio: 12,
         attack: 0.003,
         release: 0.25,
-      }
-    }
-    addTrackThunk(projectId, newTrackId, newTrack)
+      },
+    };
+    addTrackThunk(projectId, newTrackId, newTrack);
   }
-
 
 
   mixdown(mixTitle, callback) {
     const { clips, soundClips, length, tracks } = this.props;
-    const offlineContext = new OfflineAudioContext(2, length * 44100, 44100); // hardcoded to stereo, length 300 seconds?
+    const offlineContext = new OfflineAudioContext(2, length * 44100, 44100); // hardcoded to stereo
     const chunks = [];
 
-    offlineContext.oncomplete = e => {
+    offlineContext.oncomplete = (e) => {
       const source = context.createBufferSource();
       const dest = context.createMediaStreamDestination();
       const mediaRecorder = new MediaRecorder(dest.stream);
@@ -493,12 +454,12 @@ class Timeline extends React.Component {
       source.buffer = e.renderedBuffer; // this is the mixed-down audio buffer
       source.connect(dest); // this connects the mixed-down buffer to the mediaRecorder
 
-      mediaRecorder.ondataavailable = e => {
+      mediaRecorder.ondataavailable = (e) => {
         chunks.push(e.data);
-      }
+      };
 
-      mediaRecorder.onstop = e => {
-        const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus'});
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
         const formData = new FormData();
 
         formData.set('blob', blob);
@@ -510,18 +471,18 @@ class Timeline extends React.Component {
           data: formData,
         })
           .then(res => res.data)
-          .then(song => {
+          .then((song) => {
             callback(song);
           })
           .catch(console.error);
-      }
+      };
 
       mediaRecorder.start();
       source.start(0);
       setTimeout(() => mediaRecorder.stop(), (length * 1000));
-    }
+    };
 
-    Promise.all(Object.entries(clips).map(([key, clip]) => {
+    Promise.all(Object.values(clips).map((clip) => {
       if (clip.track === null) {
         return null;
       }
@@ -532,17 +493,24 @@ class Timeline extends React.Component {
       newBufferSource.buffer = soundClip.sound.buffer;
       this.trackEffectsLoop(newBufferSource, track, offlineContext)
         .connect(offlineContext.destination);
-      newBufferSource.start(clip.startTime, clip.offset, duration);
+      return newBufferSource.start(clip.startTime, clip.offset, duration);
     }))
       .then(() => offlineContext.startRendering());
   }
 
   render() {
-    const { projectId, tracks, setLengthThunk, length } = this.props;
+    const { projectId, tracks } = this.props;
     return (
       <div style={{ display: 'flex', flexDirection: 'column', position: 'relative', height: '100%' }}>
         <div className="project-controls">
-          <PlaybackControls mixdown={this.mixdown} togglePlay={this.togglePlay} startRecord={this.startRecord} stopRecord={this.stopRecord} addTrack={this.addTrack} projectId={projectId} />
+          <PlaybackControls
+            mixdown={this.mixdown}
+            togglePlay={this.togglePlay}
+            startRecord={this.startRecord}
+            stopRecord={this.stopRecord}
+            addTrack={this.addTrack}
+            projectId={projectId}
+          />
         </div>
         <TrackList projectId={projectId} tracks={tracks} />
       </div>
@@ -550,8 +518,7 @@ class Timeline extends React.Component {
   }
 }
 
-const mapState = (state, ownProps) => {
-  return {
+const mapState = (state, ownProps) => ({
   projectId: Number(ownProps.match.params.id),
   time: state.timeline.time,
   playedAt: state.timeline.playedAt,
@@ -567,20 +534,22 @@ const mapState = (state, ownProps) => {
   length: state.settings.length,
   reverbs: state.reverbs,
   isRecording: state.timeline.isRecording,
-}};
+});
 
 const mapDispatch = dispatch => ({
-  setTime: (time) => dispatch(setTime(time)),
-  setFiles: (files) => dispatch(setFiles(files)),
+  setTime: time => dispatch(setTime(time)),
+  setFiles: files => dispatch(setFiles(files)),
   setFilesThunk: (projectId, files) => dispatch(setFilesThunk(projectId, files)),
   addFileThunk: (projectId, file) => dispatch(addFileThunk(projectId, file)),
-  setClips: (clips) => dispatch(setClips(clips)),
+  setClips: clips => dispatch(setClips(clips)),
   setClipsThunk: (projectId, clips) => dispatch(setClipsThunk(projectId, clips)),
-  addClipThunk: (projectId, fileId, selectedTracks, time) => dispatch(addClipThunk(projectId, fileId, selectedTracks, time)),
-  addTrackThunk: (projectId, trackId, newTrack) => dispatch(addTrackThunk(projectId, trackId, newTrack)),
-  setTracks: (tracks) => dispatch(setTracks(tracks)),
+  addClipThunk: (projectId, fileId, selectedTracks, time) =>
+    dispatch(addClipThunk(projectId, fileId, selectedTracks, time)),
+  addTrackThunk: (projectId, trackId, newTrack) =>
+    dispatch(addTrackThunk(projectId, trackId, newTrack)),
+  setTracks: tracks => dispatch(setTracks(tracks)),
   setTracksThunk: (projectId, tracks) => dispatch(setTracksThunk(projectId, tracks)),
-  setTempo: (tempo) => dispatch(setTempo(tempo)),
+  setTempo: tempo => dispatch(setTempo(tempo)),
   setTempoThunk: (projectId, tempo) => dispatch(setTempoThunk(projectId, tempo)),
   createSoundClips: (files, soundClips) => dispatch(createSoundClips(files, soundClips)),
   setWaveform: (fileId, waveform) => dispatch(setWaveform(fileId, waveform)),

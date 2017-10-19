@@ -1,3 +1,6 @@
+/* global alert */
+/* eslint-disable no-alert */
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { Icon, Menu, Input } from 'semantic-ui-react';
@@ -6,7 +9,20 @@ import { MixdownModal } from '../components';
 import { setLengthThunk } from '../project-store/reducers/settings/length';
 
 const PlaybackControls = (props) => {
-  const { mixdown, isPlaying, isReady, resetTime, togglePlay, startRecord, stopRecord, isRecording, time, addTrack, setLengthThunk, length, projectId } = props;
+  const {
+    mixdown,
+    isPlaying,
+    isReady,
+    resetTime,
+    togglePlay,
+    startRecord,
+    stopRecord,
+    isRecording,
+    time,
+    addTrack,
+    setLengthThunk,
+    length,
+    projectId } = props;
   return (
     <Menu >
       <Menu.Item
@@ -32,7 +48,7 @@ const PlaybackControls = (props) => {
           <Menu.Item name="stop-record" onClick={() => stopRecord()}>
             <Icon color="red" name="stop circle outline" />
           </Menu.Item> :
-          <Menu.Item name="record" onClick={() => isReady ? startRecord() : alert('Select tracks below to start recording')}>
+          <Menu.Item name="record" onClick={() => (isReady ? startRecord() : alert('Select tracks below to start recording'))}>
             <Icon name="circle" color={isReady ? 'black' : 'grey'} />
           </Menu.Item>
       }
@@ -40,7 +56,7 @@ const PlaybackControls = (props) => {
         Time: &nbsp;&nbsp;&nbsp;{time.toFixed(2)}
       </Menu.Item>
 
-      <Menu.Menu position='right'>
+      <Menu.Menu position="right">
         <Menu.Item>
           Length (s):
         </Menu.Item>
@@ -54,7 +70,7 @@ const PlaybackControls = (props) => {
           Mixdown
         </Menu.Item>
       </Menu.Menu>
-      </Menu>
+    </Menu>
   );
 };
 

@@ -61,7 +61,7 @@ class UserHome extends React.Component {
 
   handleSelect(event, { value }) {
     const userToAdd = Number(value);
-    console.log('userToAdd is', userToAdd)
+    console.log('userToAdd is', userToAdd);
     this.setState({ userToAdd });
   }
 
@@ -76,17 +76,17 @@ class UserHome extends React.Component {
     const { addProject } = this.props;
     axios.post('/api/projects', { title: e.target.title.value })
       .then(res => res.data)
-      .then(project => {
+      .then((project) => {
         firebase.database().ref(`${project.id}/settings/length/`).set(30);
         return project;
       })
       .then(project => addProject(project))
-      .catch(console.error)
+      .catch(console.error);
   }
 
   render() {
     const { user, songs, projects, pageName, isSelf, usersOptions } = this.props;
-    console.log('props are', this.props)
+    console.log('props are', this.props);
     if (!user || !songs || !projects) return <div />;
     console.log('usersOptions is', usersOptions);
     const panes = [
@@ -94,42 +94,43 @@ class UserHome extends React.Component {
     ];
 
     if (isSelf) {
-      panes.push({ menuItem: 'Projects', render: () =>
-        <Tab.Pane attached={false}>
-          <Grid divided='vertically'>
-            <Grid.Row>
-              <Grid.Column width={16}>
-                <Header block as='h3'>Create Project</Header>
-                <ProjectAdd createProject={this.createProject} />
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column width={16}>
-                <Header block as='h3'>Existing Projects</Header>
-                <ProjectList
-                  projects={projects}
-                  handleSelect={this.handleSelect}
-                  usersOptions={usersOptions}
-                  addCollaborator={this.addCollaborator}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Tab.Pane> })
+      panes.push({ menuItem: 'Projects',
+        render: () =>
+          (<Tab.Pane attached={false}>
+            <Grid divided="vertically">
+              <Grid.Row>
+                <Grid.Column width={16}>
+                  <Header block as="h3">Create Project</Header>
+                  <ProjectAdd createProject={this.createProject} />
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column width={16}>
+                  <Header block as="h3">Existing Projects</Header>
+                  <ProjectList
+                    projects={projects}
+                    handleSelect={this.handleSelect}
+                    usersOptions={usersOptions}
+                    addCollaborator={this.addCollaborator}
+                  />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Tab.Pane>) });
     }
 
     const styles = {
       header: { backgroundColor: '#222222' },
       title: { color: '#ffffff', paddingBottom: 10, paddingTop: 10 },
       headerImage: { paddingBottom: 10 },
-    }
+    };
 
     return (
       <Grid>
-        <Grid.Row style={ styles.header }>
+        <Grid.Row style={styles.header}>
           <Grid.Column width={16} >
-            <Header size='huge' textAlign='center' style={styles.title}>{user.username}</Header>
-            <Image src={user.userImage} style={styles.headerImage} size='small' shape='circular' centered />
+            <Header size="huge" textAlign="center" style={styles.title}>{user.username}</Header>
+            <Image src={user.userImage} style={styles.headerImage} size="small" shape="circular" centered />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
@@ -155,7 +156,6 @@ class UserHome extends React.Component {
       </Grid>
     );
   }
-
 }
 
 /**
@@ -187,22 +187,20 @@ const mapStateMyPage = (state) => {
   };
 };
 
-const mapDispatchMyPage = (dispatch) => {
-  return {
-    loadData: (user) => {
-      dispatch(fetchUser(user.id));
-      dispatch(fetchUserSongs(user.id));
-      dispatch(fetchUserProjects(user.id));
-      dispatch(fetchFriends());
-    },
-    clearData: () => {
-      dispatch(clearSongs());
-    },
-    addCollaborator: (fbId, projectId) => dispatch(addCollaborator(fbId, projectId)),
-    addProject: project => dispatch(addProject(project)),
-    saveBio: (user, bio) => dispatch(updateUser({ ...user, bio })),
-  };
-};
+const mapDispatchMyPage = dispatch => ({
+  loadData: (user) => {
+    dispatch(fetchUser(user.id));
+    dispatch(fetchUserSongs(user.id));
+    dispatch(fetchUserProjects(user.id));
+    dispatch(fetchFriends());
+  },
+  clearData: () => {
+    dispatch(clearSongs());
+  },
+  addCollaborator: (fbId, projectId) => dispatch(addCollaborator(fbId, projectId)),
+  addProject: project => dispatch(addProject(project)),
+  saveBio: (user, bio) => dispatch(updateUser({ ...user, bio })),
+});
 
 /**
  * CONTAINER FOR PUBLIC USER PAGE

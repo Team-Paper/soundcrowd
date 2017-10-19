@@ -7,17 +7,17 @@ const users = [
   { username: 'Sarah M. Conner', email: 'skynetsucks@yahoo.com', password: 'humans4eva', bio: 'Working to stop Skynet, one song at a time.', userImage: 'https://pbs.twimg.com/profile_images/875421214805766144/0TYqbMz5_400x400.jpg' },
   { username: 'River Tam', email: 'TwoBy2@gmail.com', password: 'miranda', bio: 'Ain\'t no power in the verse can stop these sick beats.', userImage: 'https://upload.wikimedia.org/wikipedia/en/d/d6/Summer_Glau_as_River_Tam.jpg' },
   { username: 'Rose Lalonde', email: 'tt2@gmail.com', password: 'tangleBuddies', bio: 'Let us bounce', userImage: 'http://cdn.mspaintadventures.com/storyfiles/hs2/00370.gif' },
-  { username: 'Tess McCoolperson', email: 'tessiscool@gmail.com', password: '12345!', bio: 'Nerdcore emo pop punk mood', userImage: 'http://missouriredhawksbaseball.com/wp-content/uploads/2016/06/generic-person-silhouette.jpg'},
-  { username: 'Octocat O\'Rainbowdash', email: 'github@gmail.com', password: 'thebestoctocat!', bio: 'Open source is the best source. Free music is a sign of a free culture.', userImage: 'https://octodex.github.com/images/twenty-percent-cooler-octocat.png'},
-  { username: 'Martin McCoolperson', email: 'martiniscool@gmail.com', password: '12345!', bio: 'Nerdcore emo pop punk mood', userImage: 'http://missouriredhawksbaseball.com/wp-content/uploads/2016/06/generic-person-silhouette.jpg'},
-  { username: 'Greg Coolperson', email: 'gregiscool@gmail.com', password: '12345!', bio: 'Nerdcore emo pop punk mood', userImage: 'http://missouriredhawksbaseball.com/wp-content/uploads/2016/06/generic-person-silhouette.jpg'},
-  { username: 'Chris Coolperson', email: 'chrisiscool@gmail.com', password: '12345!', bio: 'Nerdcore emo pop punk mood', userImage: 'http://missouriredhawksbaseball.com/wp-content/uploads/2016/06/generic-person-silhouette.jpg'},
+  { username: 'Tess McCoolperson', email: 'tessiscool@gmail.com', password: '12345!', bio: 'Nerdcore emo pop punk mood', userImage: 'http://missouriredhawksbaseball.com/wp-content/uploads/2016/06/generic-person-silhouette.jpg' },
+  { username: 'Octocat O\'Rainbowdash', email: 'github@gmail.com', password: 'thebestoctocat!', bio: 'Open source is the best source. Free music is a sign of a free culture.', userImage: 'https://octodex.github.com/images/twenty-percent-cooler-octocat.png' },
+  { username: 'Martin McCoolperson', email: 'martiniscool@gmail.com', password: '12345!', bio: 'Nerdcore emo pop punk mood', userImage: 'http://missouriredhawksbaseball.com/wp-content/uploads/2016/06/generic-person-silhouette.jpg' },
+  { username: 'Greg Coolperson', email: 'gregiscool@gmail.com', password: '12345!', bio: 'Nerdcore emo pop punk mood', userImage: 'http://missouriredhawksbaseball.com/wp-content/uploads/2016/06/generic-person-silhouette.jpg' },
+  { username: 'Chris Coolperson', email: 'chrisiscool@gmail.com', password: '12345!', bio: 'Nerdcore emo pop punk mood', userImage: 'http://missouriredhawksbaseball.com/wp-content/uploads/2016/06/generic-person-silhouette.jpg' },
 ];
 
 const files = [
   { filename: 'beep', url: 'beep.mp3' }, // https://notificationsounds.com/notification-sounds/beep-472 CC-attribution licence
-  { filename: 'chafing', url: 'chafing.mp3' },  // https://notificationsounds.com/sound-effects/chafing-494 CC-attribution licence
-  { filename: 'engine', url: 'engine.mp3' },  // https://notificationsounds.com/message-tones/engine-391 CC-attribution licence
+  { filename: 'chafing', url: 'chafing.mp3' }, // https://notificationsounds.com/sound-effects/chafing-494 CC-attribution licence
+  { filename: 'engine', url: 'engine.mp3' }, // https://notificationsounds.com/message-tones/engine-391 CC-attribution licence
 ];
 
 const songs = [
@@ -37,7 +37,7 @@ const comments = [
 ];
 
 db.sync({ force: true })
-  .then(()=> Promise.all(files.map(file => Soundfile.create(file))))
+  .then(() => Promise.all(files.map(file => Soundfile.create(file))))
   .then(() => Promise.all(users.map(user => User.create(user))))
   .then((createdUsers) => {
     console.log(`created ${createdUsers.length} users`);

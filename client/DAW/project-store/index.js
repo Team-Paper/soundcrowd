@@ -5,8 +5,6 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import rootReducer from './reducers';
 
-// console.log(rootReducer);
-
 const logger = createLogger({ collapsed: true });
 
 export default createStore(

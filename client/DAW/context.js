@@ -1,5 +1,5 @@
-let context = new (AudioContext || webkitAudioContext)();
+/* global AudioContext webkitAudioContext */
 
-console.log('context file ran');
+const context = new (AudioContext || webkitAudioContext)();
 
 export default context;

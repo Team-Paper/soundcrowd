@@ -26,68 +26,82 @@ const styles = {
 };
 
 class TrackControls extends React.Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      dirty : false
-    }
-    this.handleChange = this.handleChange.bind(this)
+      dirty: false,
+    };
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(projectId, track, newName){
-    this.setState({dirty: true})
-    this.props.setName(projectId, track, newName)
+  handleChange(projectId, track, newName) {
+    this.setState({ dirty: true });
+    this.props.setName(projectId, track, newName);
   }
 
   render() {
-  const {
-    isSelected,
-    deselectTrack,
-    selectTrack,
-    track,
-    toggleMuteTrackThunk,
-    projectId,
-    setTrackVolume,
-    deleteTrack,
-  } = this.props;
+    const {
+      isSelected,
+      deselectTrack,
+      selectTrack,
+      track,
+      toggleMuteTrackThunk,
+      projectId,
+      setTrackVolume,
+      deleteTrack,
+    } = this.props;
 
-  return (
-    <Card style={styles.trackControls}>
-      <Card.Content>
-      <Button style={{position: 'absolute', right: 0, top: 0, margin: 0}} size='mini' icon="remove" onClick={() => deleteTrack(projectId, track.id)} />
-        <Card.Header>
-          <Input type="text" transparent value={track.name || this.state.dirty ? track.name : `Track #${track.id}`} onChange={e => this.handleChange(projectId, track, e.target.value)} />
-        </Card.Header>
-        <Card.Description>
-          <Button labelPosition="right" icon onClick={isSelected ? deselectTrack : selectTrack}>
-            select
-            <Icon color={isSelected ? 'green' : 'black'} name="circle" />
-          </Button>
-          <Button size="small" circular icon onClick={() => toggleMuteTrackThunk(projectId, track)} >
-            <Icon color={track.isMuted ? 'red' : 'grey'} name="mute" />
-          </Button>
-          <div style={styles.volumeControls}>
-            <Icon name="volume up" />
-            <input
-              type="range"
-              value={track.volume}
-              onChange={e => setTrackVolume(projectId, track, e.target.value)}
-              min="0"
-              max="100"
-              step="1"
-              style={styles.volumeSlider}
+    return (
+      <Card style={styles.trackControls}>
+        <Card.Content>
+          <Button
+            style={{ position: 'absolute', right: 0, top: 0, margin: 0 }}
+            size="mini"
+            icon="remove"
+            onClick={() => deleteTrack(projectId, track.id)}
+          />
+          <Card.Header>
+            <Input
+              type="text"
+              transparent
+              value={track.name || this.state.dirty ? track.name : `Track #${track.id}`}
+              onChange={e => this.handleChange(projectId, track, e.target.value)}
             />
-          </div>
-          <ReverbModal track={track} projectId={projectId} />
-          <EqualizerModal track={track} projectId={projectId} />
-          <CompressorModal track={track} projectId={projectId} />
-        </Card.Description>
-      </Card.Content>
-    </Card>
-  );
+          </Card.Header>
+          <Card.Description>
+            <Button labelPosition="right" icon onClick={isSelected ? deselectTrack : selectTrack}>
+            select
+              <Icon color={isSelected ? 'green' : 'black'} name="circle" />
+            </Button>
+            <Button
+              size="small"
+              circular
+              icon
+              onClick={() => toggleMuteTrackThunk(projectId, track)}
+            >
+              <Icon color={track.isMuted ? 'red' : 'grey'} name="mute" />
+            </Button>
+            <div style={styles.volumeControls}>
+              <Icon name="volume up" />
+              <input
+                type="range"
+                value={track.volume}
+                onChange={e => setTrackVolume(projectId, track, e.target.value)}
+                min="0"
+                max="100"
+                step="1"
+                style={styles.volumeSlider}
+              />
+            </div>
+            <ReverbModal track={track} projectId={projectId} />
+            <EqualizerModal track={track} projectId={projectId} />
+            <CompressorModal track={track} projectId={projectId} />
+          </Card.Description>
+        </Card.Content>
+      </Card>
+    );
   }
-  }
+}
 
 
 const mapState = (state, ownProps) => ({

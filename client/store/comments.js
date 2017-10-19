@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 
 /**
  * ACTION TYPES
@@ -25,48 +25,36 @@ export const setComments = comments => ({ type: SET_COMMENTS, comments });
  */
 
 // fetch all comments for a song
-export const fetchSongComments = (songId) => {
-  return (dispatch) => {
-    return axios.get(`/api/songs/${songId}/comments`)
-      .then(res => res.data)
-      .then(comments => dispatch(getSomeComments(comments)))
-      .catch(console.error.bind(console))
-  };
-};
+export const fetchSongComments = songId => dispatch => axios.get(`/api/songs/${songId}/comments`)
+  .then(res => res.data)
+  .then(comments => dispatch(getSomeComments(comments)))
+  .catch(console.error.bind(console));
 
 // fetch all comments for a user
-export const fetchUserComments = (userId) => {
-  return (dispatch) => {
-    return axios.get(`/api/users/${userId}/comments`)
-      .then(res => res.data)
-      .then(comments => dispatch(getSomeComments(comments)))
-      .catch(console.error.bind(console))
-  };
-};
+export const fetchUserComments = userId => dispatch => axios.get(`/api/users/${userId}/comments`)
+  .then(res => res.data)
+  .then(comments => dispatch(getSomeComments(comments)))
+  .catch(console.error.bind(console));
 
-export const postComment = (comment) => {
-  return (dispatch) => {
-    return axios.post('/api/comments', comment)
-      .then(res => res.data)
-      // Intentially returns the comment passed to postComment
-      // This avoids a ton of eager loading which would be complicated
-      // to implement and would not add much value to the code in other cases
-      .then(({ id }) => dispatch(getComment({ ...comment, id })))
-      .catch(console.error.bind(console));
-  };
-};
+export const postComment = comment => dispatch => axios.post('/api/comments', comment)
+  .then(res => res.data)
+  // Intentially returns the comment passed to postComment
+  // This avoids a ton of eager loading which would be complicated
+  // to implement and would not add much value to the code in other cases
+  .then(({ id }) => dispatch(getComment({ ...comment, id })))
+  .catch(console.error.bind(console));
 
-export const fetchCommentsAboutUser = (userId) => dispatch => {
+export const fetchCommentsAboutUser = userId => (dispatch) => {
   axios.get(`/api/users/${userId}/comments-about`)
     .then(res => res.data)
     .then(comments => dispatch(setComments(comments)))
     .catch(console.error);
-}
+};
 
-export const fetchComments = () => dispatch => {
-  axios.get(`/api/comments/`)
+export const fetchComments = () => (dispatch) => {
+  axios.get('/api/comments/')
     .then(res => res.data)
-    .then(comments => {
+    .then((comments) => {
       console.log('comments are', comments);
       return comments;
     })

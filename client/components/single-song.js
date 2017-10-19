@@ -28,10 +28,6 @@ class SingleSong extends React.Component {
       .catch(console.error);
   }
 
-  // componentWillReceiveProps(newProps) {
-  //   if (!newProps.song) this.props.loadData();
-  // }
-
   handleChange(event) {
     this.setState({ text: event.target.value });
   }
@@ -45,9 +41,7 @@ class SingleSong extends React.Component {
     comment.userId = this.props.user.id;
     comment.songId = this.props.song.id;
 
-    console.log(comment);
-
-    this.props.postComment(comment)
+    this.props.postComment(comment);
     this.setState({ text: '' });
   }
 
@@ -65,7 +59,7 @@ class SingleSong extends React.Component {
       <Grid centered>
         <Grid.Row style={styles.header} >
           <Grid.Column width={14} >
-            <Header size='huge' textAlign='center' style={styles.title}>
+            <Header size="huge" textAlign="center" style={styles.title}>
               {song.title}
             </Header>
             <div style={styles.waveform}>
@@ -99,38 +93,36 @@ class SingleSong extends React.Component {
           </Grid.Column>
           <Grid.Column width={7}>
             <Header dividing>Notes:</Header>
-            <Container fluid text textAlign='justified'>
+            <Container fluid text textAlign="justified">
               {song.notes}
             </Container>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
           <Grid.Column width={14}>
-            <Comment.Group style={styles.comments} size='large'>
-              <Header as='h3' dividing>Comments</Header>
+            <Comment.Group style={styles.comments} size="large">
+              <Header as="h3" dividing>Comments</Header>
               {user.id ?
                 <Form reply style={{ paddingBottom: '2em' }} onSubmit={this.handleCommentSubmit}>
                   <Form.TextArea onChange={this.handleChange} />
-                  <Button content='Add Comment' icon='edit' primary />
+                  <Button content="Add Comment" icon="edit" primary />
                 </Form>
                 :
                 <p>Log in or sign up to leave comments</p>
               }
 
               {
-                this.props.comments.map((comment) => {
-                  return (
-                    <Comment key={comment.id}>
-                      <Comment.Avatar src={comment.user.userImage} />
-                      <Comment.Content>
-                        <Comment.Author>
-                          {comment.user.username}
-                        </Comment.Author>
-                        {comment.text}
-                      </Comment.Content>
-                    </Comment>
-                  );
-                })
+                this.props.comments.map(comment => (
+                  <Comment key={comment.id}>
+                    <Comment.Avatar src={comment.user.userImage} />
+                    <Comment.Content>
+                      <Comment.Author>
+                        {comment.user.username}
+                      </Comment.Author>
+                      {comment.text}
+                    </Comment.Content>
+                  </Comment>
+                ))
               }
             </Comment.Group>
           </Grid.Column>
