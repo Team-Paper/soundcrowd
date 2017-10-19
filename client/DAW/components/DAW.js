@@ -8,7 +8,7 @@ import { Timeline, FileItem } from '../components';
  * COMPONENT
  */
 export const DAW = (props) => {
-  const { name, files, settings, projectId } = props;
+  const { name, files, projectId } = props;
   return (
     <Grid padded style={{ backgroundColor: '#eeeeee', height: '100%', marginTop: -14 }}>
       <Grid.Column width={3}>
@@ -35,7 +35,6 @@ export const DAW = (props) => {
 const mapState = (state, ownProps) => ({
   name: 'Current Project',
   files: Object.entries(state.files).map(entry => entry[1]),
-  settings: { tempo: 60, isMetronomeOn: false },
   projectId: +ownProps.match.params.id,
 });
 

@@ -54,16 +54,31 @@ class TrackControls extends React.Component {
     return (
       <Card style={styles.trackControls}>
         <Card.Content>
-          <Button style={{ position: 'absolute', right: 0, top: 0, margin: 0 }} size="mini" icon="remove" onClick={() => deleteTrack(projectId, track.id)} />
+          <Button
+            style={{ position: 'absolute', right: 0, top: 0, margin: 0 }}
+            size="mini"
+            icon="remove"
+            onClick={() => deleteTrack(projectId, track.id)}
+          />
           <Card.Header>
-            <Input type="text" transparent value={track.name || this.state.dirty ? track.name : `Track #${track.id}`} onChange={e => this.handleChange(projectId, track, e.target.value)} />
+            <Input
+              type="text"
+              transparent
+              value={track.name || this.state.dirty ? track.name : `Track #${track.id}`}
+              onChange={e => this.handleChange(projectId, track, e.target.value)}
+            />
           </Card.Header>
           <Card.Description>
             <Button labelPosition="right" icon onClick={isSelected ? deselectTrack : selectTrack}>
             select
               <Icon color={isSelected ? 'green' : 'black'} name="circle" />
             </Button>
-            <Button size="small" circular icon onClick={() => toggleMuteTrackThunk(projectId, track)} >
+            <Button
+              size="small"
+              circular
+              icon
+              onClick={() => toggleMuteTrackThunk(projectId, track)}
+            >
               <Icon color={track.isMuted ? 'red' : 'grey'} name="mute" />
             </Button>
             <div style={styles.volumeControls}>

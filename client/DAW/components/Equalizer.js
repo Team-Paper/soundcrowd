@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Header, Image, Modal, Checkbox, Select } from 'semantic-ui-react';
+import { Button, Modal, Checkbox } from 'semantic-ui-react';
 import { setTrackEQBandGain, toggleTrackEQ } from '../project-store/reducers/tracks';
 
 function EqualizerModal({ projectId, track, setTrackEQBandGain, toggleTrackEQ }) {
@@ -16,13 +16,26 @@ function EqualizerModal({ projectId, track, setTrackEQBandGain, toggleTrackEQ })
       <Modal.Content>
         <Modal.Description>
           <div>
-          On: <Checkbox toggle checked={!!track.eq.on} onChange={() => toggleTrackEQ(projectId, track)} />
+            On:
+            <Checkbox
+              toggle
+              checked={!!track.eq.on}
+              onChange={() => toggleTrackEQ(projectId, track)}
+            />
           </div>
           {
             Object.keys(track.eq.bands).map(key =>
               (<div style={styles.bandWrapper} key={`band-${key}`}>
                 <div style={styles.gainWrapper}>
-                  <input type="range" value={track.eq.bands[key].gain} onChange={e => setTrackEQBandGain(projectId, track, key, e.target.value)} style={styles.gain} max={20} min={-60} step={0.5} />
+                  <input
+                    type="range"
+                    value={track.eq.bands[key].gain}
+                    onChange={e => setTrackEQBandGain(projectId, track, key, e.target.value)}
+                    style={styles.gain}
+                    max={20}
+                    min={-60}
+                    step={0.5}
+                  />
                 </div>
                 <div>{track.eq.bands[key].f}</div>
               </div>),
@@ -34,10 +47,11 @@ function EqualizerModal({ projectId, track, setTrackEQBandGain, toggleTrackEQ })
   );
 }
 
-const mapState = (state, ownProps) => ({});
+const mapState = () => ({});
 
 const mapDispatch = dispatch => ({
-  setTrackEQBandGain: (projectId, track, band, newGain) => dispatch(setTrackEQBandGain(projectId, track, band, newGain)),
+  setTrackEQBandGain: (projectId, track, band, newGain) =>
+    dispatch(setTrackEQBandGain(projectId, track, band, newGain)),
   toggleTrackEQ: (projectId, track) => dispatch(toggleTrackEQ(projectId, track)),
 });
 

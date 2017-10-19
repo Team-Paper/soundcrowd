@@ -1,3 +1,6 @@
+/* global alert */
+/* eslint-disable no-alert */
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { Icon, Menu, Input } from 'semantic-ui-react';
@@ -6,7 +9,20 @@ import { MixdownModal } from '../components';
 import { setLengthThunk } from '../project-store/reducers/settings/length';
 
 const PlaybackControls = (props) => {
-  const { mixdown, isPlaying, isReady, resetTime, togglePlay, startRecord, stopRecord, isRecording, time, addTrack, setLengthThunk, length, projectId } = props;
+  const {
+    mixdown,
+    isPlaying,
+    isReady,
+    resetTime,
+    togglePlay,
+    startRecord,
+    stopRecord,
+    isRecording,
+    time,
+    addTrack,
+    setLengthThunk,
+    length,
+    projectId } = props;
   return (
     <Menu >
       <Menu.Item
