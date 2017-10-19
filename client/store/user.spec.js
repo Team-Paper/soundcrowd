@@ -44,7 +44,7 @@ describe('thunk creators', () => {
       return store.dispatch(logout())
         .then(() => {
           const actions = store.getActions();
-          expect(actions[0].type).to.be.equal('REMOVE_USER');
+          expect(actions[0].type).to.be.equal('LOGOUT_USER');
           expect(history.location.pathname).to.be.equal('/login');
         });
     });
