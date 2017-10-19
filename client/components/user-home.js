@@ -246,4 +246,4 @@ const mapDispatchPublicPage = (dispatch, ownProps) => {
 const UserHomeConnected = connect(mapStateMyPage, mapDispatchMyPage)(UserHome);
 const PublicPage = connect(mapStatePublicPage, mapDispatchPublicPage)(UserHome);
 
-export { UserHomeConnected, PublicPage };
+export { UserHome, UserHomeConnected, PublicPage };
