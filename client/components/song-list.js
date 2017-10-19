@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Item } from 'semantic-ui-react';
 import SongView from './song-view';
 
@@ -15,8 +14,4 @@ function SongList({ songs }) {
   );
 }
 
-const mapState = (state, ownProps) => ({});
-
-const mapDispatch = dispatch => ({});
-
-export default connect(mapState, mapDispatch)(SongList);
+export default SongList;
