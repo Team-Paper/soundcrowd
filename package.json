@@ -1,7 +1,7 @@
 {
   "name": "soundcrowd",
   "version": "1.0.0",
-  "description": "",
+  "description": "A real-time collaborative music production and social platform",
   "engines": {
     "node": ">= 7.0.0"
   },
