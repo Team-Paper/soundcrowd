@@ -6,7 +6,7 @@ Remote musical collaboration is hard. You often have to record clips, send them 
 
 ## Our Team
 
-Built by [Martin Gutfeldt](https://github.com/weblemur), [Greg Hanley](https://github.com/ghanley), [Tess Monical](https://github.com/omnomnomtea), and [Chris Skene](https://github.com/christophersk) as a capstone project at Fullstack Academy of Code.
+Built by [Amelia Gutfeldt](https://github.com/weblemur), [Greg Hanley](https://github.com/ghanley), [Tess Monical](https://github.com/omnomnomtea), and [Chris Skene](https://github.com/christophersk) as a capstone project at Fullstack Academy of Code.
 
 ## Awards
 
